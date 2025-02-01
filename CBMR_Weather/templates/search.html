@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title%} search {%endblock%}
+{% block content%}
+<h1> Search</h1><br>
+
+
+<table class="sortable">
+    <thead>
+    <tr>
+            <th>Date</th>
+            <th>Season</th>
+            <th>HS</th>
+            <th>HN24</th>
+            <th>HST</th>
+            <th>YTD</th>
+            <th>Sky Condition</th>
+            <th>Temperature</th>
+            <th>Wind Speed</th>
+            <th>Wind Direction</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for i in snow%}
+        <tr>
+            <td>{{i.date}}</td>
+            <td>{{i.season}}</td>
+            <td>{{i.hs}}</td>
+            <td>{{i.hn24}}</td>
+            <td>{{i.hst}}</td>
+            <td>{{i.ytd}}</td>
+            <td>{{i.sky}}</td>
+            <td>{{i.temperature}}</td>
+            <td>{{i.wind_mph}}</td>
+            <td>{{i.wind_direction}}</td>
+        </tr>
+    {%endfor%}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
