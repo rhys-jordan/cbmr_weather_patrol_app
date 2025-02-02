@@ -3,4 +3,79 @@
 {% block content%}
 <h1> AM FORM</h1><br>
 
+<label>Date:</label>
+<input type="date" id="date">
+<label>Time: </label> <input type="time" id="time">
+<label>Forecaster: </label> <input type="text" id="forecaster"><br>
+<label>HS:</label> <input type="number" id="hs">
+<label>HN24:</label><input type="number" id="hn24">
+<label>HST:</label> <input type="number" id="hst">
+<label>YTD:</label> <input type="number" id="ytd"><br>
+<label>Critical Information:</label><br>
+<textarea id="critical_information"></textarea><br>
+<h1>Pertinent Weather Observations past and future</h1><br>
+<table>
+    <thead>
+    <tr>
+        <th>Current</th>
+        <th> Past 24 hours</th>
+        <th>Future 24 hours</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><label>Sky: </label><input type="text" id="Sky"></td>
+        <td><label>HN24/ HST date cir</label> <input type="number" id="past_24_hn24/hst_date_cir"></td>
+        <td><label>Precip/Rate</label> <input type="number" id="future_precip/rate"></td>
+    </tr>
+    <tr>
+        <td><label>Precip/Rate</label> <input type="number" id="current_precip/rate"></td>
+        <td><label>HN24 SWE</label> <input type="number" id="past_24_hn24_swe"></td>
+        <td><label>Temp HIGH</label> <input type="number" id="future_temp_high"></td>
+    </tr>
+    <tr>
+        <td><label>Temp</label> <input type="number" id="current_temp"></td>
+        <td><label>Wind mph/direction</label> <input type="text" id="past_24_wind_mph/direction"></td>
+        <td><label>Temp LOW</label> <input type="number" id="future_temp_low"></td>
+    </tr>
+    <tr>
+        <td><label>Wind MPH</label> <input type="number" id="current_wind_mph"></td>
+        <td><label>Temp HIGH</label> <input type="number" id="past_24_temp_high"></td>
+        <td><label>Wind MPH</label> <input type="number" id="future_wind_mph"></td>
+    </tr>
+    <tr>
+        <td><label>Wind Direction</label> <input type="text" id="current_wind_direction"></td>
+        <td><label>Temp LOW</label> <input type="number" id="past_24_temp_low"></td>
+        <td><label>Wind Direction</label> <input type="text" id="future_wind_direction"></td>
+    </tr>
+</table>
+<h1>Weather Forecast:</h1><br>
+<textarea id="weather_forecast"></textarea><br>
+<h1>AVALANCHE DANGER in the BC/on other side of the rope</h1><br>
+<div id="problemsContainer">
+        <label>Avalanche problem 1</label>
+        <input type="text" id="avalanche_problem_1">
+        <label>Aspect/elevation</label>
+        <input type="text" id="aspect_elevation">
+        <label>Size/likelihood</label>
+        <input type="text" id="size_likelihood">
+        <label>Trend</label>
+        <input type="text" id="trend">
+    </div>
+    <button onclick="addProblem()">Add Problem</button>
+
+<h1>Avalanche Forecast and discussion, How it relates to our Mtn and Our Strategic Mindset</h1><br>
+<textarea id="avalanche_forecast_discussion"></textarea>
+
+<h1>Summary of Previous Day(s) Work</h1><br>
+<textarea id="summary_of_previous_work"></textarea>
+
+<h1>Mitigation Plan</h1><br>
+<textarea id="mitigation_plan"></textarea>
+
+<h1>Pertinent Terrain Opening/Closing</h1><br>
+<textarea id="pertinent_terrain_opening/closing"></textarea><br>
+
+<button type="submit" onclick="submit_past-data()">Submit</button>
+
 {% endblock %}
