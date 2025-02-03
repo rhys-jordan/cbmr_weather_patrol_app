@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import foreign
 from flask_login import LoginManager, UserMixin, login_user,logout_user,current_user,login_required
+from datetime import datetime
 
 app = Flask(__name__, static_url_path='/static')
 json= FlaskJSON(app)
@@ -86,16 +87,68 @@ def search():
 @login_required
 @app.route('/am-form', methods=['GET', 'POST'])
 def am_form():
-    return render_template('am-form.html')
+    if request.method=='POST':
+        print(request.form)
+        day= request.form['day']
+        month = request.form['month']
+        year = request.form['year']
+        date_str=year+'-'+month+'-'+day
+        date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        season=int(year[2]+year[3])
+        hs= int(request.form['hs'])
+        hn24 = int(request.form['hn24'])
+        hst = int(request.form['hst'])
+        ytd = int(request.form['ytd'])
+        sky = request.form['sky']
+        temp = int(request.form['current_temp'])
+        wind_mph= request.form['current_wind_mph']
+        wind_direction = request.form['current_wind_direction']
+        dateCheck = Snow.query.filter_by(date=date).first()
+        if(not dateCheck):
+            snow= Snow(date=date,season=season, hs=hs,hn24=hn24,hst=hst,ytd=ytd,sky=sky,temperature=temp,wind_mph=wind_mph,wind_direction=wind_direction)
+            db.session.add(snow)
+            db.session.commit()
+            return redirect('/search')
+        else:
+            print('Error')
+            #alert user that the date has already been inputted.
+    else:
+        return render_template('am-form.html')
 
 @login_required
 @app.route('/pm-form', methods=['GET', 'POST'])
 def pm_form():
-    return render_template('pm-form.html')
+        return render_template('pm-form.html')
 
 @login_required
 @app.route('/past-data', methods=['GET', 'POST'])
 def past_data():
-    return render_template('past-data.html')
+    if request.method=='POST':
+        print(request.form)
+        day= request.form['day']
+        month = request.form['month']
+        year = request.form['year']
+        date_str=year+'-'+month+'-'+day
+        date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        season=int(year[2]+year[3])
+        hs= int(request.form['hs'])
+        hn24 = int(request.form['hn24'])
+        hst = int(request.form['hst'])
+        ytd = int(request.form['ytd'])
+        sky = request.form['sky']
+        temp = int(request.form['current_temp'])
+        wind_mph= request.form['current_wind_mph']
+        wind_direction = request.form['current_wind_direction']
+        dateCheck = Snow.query.filter_by(date=date).first()
+        if(not dateCheck):
+            snow= Snow(date=date,season=season, hs=hs,hn24=hn24,hst=hst,ytd=ytd,sky=sky,temperature=temp,wind_mph=wind_mph,wind_direction=wind_direction)
+            db.session.add(snow)
+            db.session.commit()
+            return redirect('/search')
+        else:
+            print('Error')
+            #alert user that the date has already been inputted.
+    else:
+        return render_template('past-data.html')
 
 app.run()
