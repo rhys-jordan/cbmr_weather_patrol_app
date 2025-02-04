@@ -11,6 +11,9 @@ json= FlaskJSON(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CBMR_Weather.db'
 app.config['SECRET_KEY']="secretKey"
 
+
+#test 1
+
 db= SQLAlchemy(app)
 class Snow(db.Model):
     id = db.Column(db.Integer, primary_key=True)
