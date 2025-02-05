@@ -1,8 +1,21 @@
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table
+from reportlab.platypus import SimpleDocTemplate, Table, Image
 
+#Maybe use paragraph not table to format this
+def create_header():
+    img = Image('CB_Logo.jpg', width=100, height=50)
+    data = [[img, 'CBSP Morning Weather and Avalanche Report', '']]
+    t = Table(data, spaceAfter= 20)
+    t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
+                           ('SPAN', (1, 0), (2, 0)),
+
+                           ('ALIGN', (0, 0), (2, 0), 'CENTER'),
+                           ('VALIGN', (0, 0), (2, 0), 'MIDDLE')]))
+
+
+    return t
 
 #Possible send data table rather then hardcode
 def create_weather_observation_table():
@@ -59,7 +72,8 @@ def main():
     # container for the 'Flowable' objects
     elements = []
 
-
+    header = create_header()
+    elements.append(header)
     weather_obser = create_weather_observation_table()
     elements.append(weather_obser)
     weather_forecast = create_weather_forcast_table()
