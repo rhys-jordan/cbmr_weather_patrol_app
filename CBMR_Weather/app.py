@@ -12,7 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CBMR_Weather.db'
 app.config['SECRET_KEY']="secretKey"
 
 
-#test 1
+#testing 2
 
 db= SQLAlchemy(app)
 class Snow(db.Model):
