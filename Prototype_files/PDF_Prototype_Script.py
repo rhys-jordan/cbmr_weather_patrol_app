@@ -21,11 +21,11 @@ def create_header():
 def create_weather_observation_table():
     data = [['Pertinent Weather Observations Past and Future', '', '', '', '', ''],
             ['Current', '', 'PAST 24 hour', '', 'Future 24 hours', ''],
-            ['Sky', '01', 'HN24/ HST data clr', '03', 'Precip/Rate', ''],
-            ['Precip/Rate', '11', 'HN24 SWE', '13', 'Temp HIGH', ''],
-            ['Temp', '21', 'Wind mph/direction', '23', 'Temp LOW', ''],
-            ['Wind mph', '31', 'Temp HIGH', '33', 'Wind mph', ''],
-            ['Wind Direction', '31', 'Temp LOW', '33', 'Wind Direction', '']]
+            ['Sky', '', 'HN24/ HST data clr', '', 'Precip/Rate', ''],
+            ['Precip/Rate', '', 'HN24 SWE', '', 'Temp HIGH', ''],
+            ['Temp', '', 'Wind mph/direction', '', 'Temp LOW', ''],
+            ['Wind mph', '', 'Temp HIGH', '', 'Wind mph', ''],
+            ['Wind Direction', '', 'Temp LOW', '', 'Wind Direction', '']]
 
     t = Table(data, colWidths=[95 for x in range(6)],
               rowHeights=[45 for x in range(len(data))], spaceAfter= 20)
