@@ -2,22 +2,49 @@ from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, Image
+from reportlab.platypus import Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
 
-#Maybe use paragraph not table to format this
+
+styles = getSampleStyleSheet()
+
 def create_header():
     img = Image('CB_Logo.jpg', width=100, height=50)
     data = [[img, 'CBSP Morning Weather and Avalanche Report', '']]
-    t = Table(data, spaceAfter= 20)
+    t = Table(data)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
+                           ('FONTSIZE', (0, 0), (2, -1), 20),
                            ('SPAN', (1, 0), (2, 0)),
 
                            ('ALIGN', (0, 0), (2, 0), 'CENTER'),
                            ('VALIGN', (0, 0), (2, 0), 'MIDDLE')]))
+    return t
 
+def create_basic_info():
+    data = [['Date: ','Time: ','Forecaster: ']]
+    t = Table(data, spaceAfter= 20)
+    t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
+                           ('FONTSIZE', (0, 0), (2, -1), 13),
+
+                           ('ALIGN', (0, 0), (2, 0), 'CENTER'),
+                           ('VALIGN', (0, 0), (2, 0), 'MIDDLE')]))
+    return t
+
+def create_basic_stats():
+    data = [['HS: ', 'HN24: ', 'HST: ', 'YTD: ', 'Critical Info?', '']]
+    t = Table(data, colWidths=[95 for x in range(6)], spaceAfter=10 )
+    t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
+                           ('GRID', (0, 0), (6, 0), 1, colors.black),
+
+                           ('SPAN', (4, 0), (5, 0)),
+
+                           ('ALIGN', (0, 0), (3, 0), 'LEFT'),
+                           ('VALIGN', (0, 0), (2, 0), 'MIDDLE')]))
 
     return t
 
-#Possible send data table rather then hardcode
+#Possible send data table rather than hardcode
+#Make things paragraphs
 def create_weather_observation_table():
     data = [['Pertinent Weather Observations Past and Future', '', '', '', '', ''],
             ['Current', '', 'PAST 24 hour', '', 'Future 24 hours', ''],
@@ -28,7 +55,7 @@ def create_weather_observation_table():
             ['Wind Direction', '', 'Temp LOW', '', 'Wind Direction', '']]
 
     t = Table(data, colWidths=[95 for x in range(6)],
-              rowHeights=[45 for x in range(len(data))], spaceAfter= 20)
+              rowHeights=[20 for x in range(len(data))], spaceAfter= 20)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (1, -1), colors.black),
                            ('GRID', (0, 0), (5, 6), 1, colors.black),
 
@@ -52,11 +79,12 @@ def create_weather_observation_table():
 
 
 def create_weather_forcast_table():
+    #make paragph with data to put into table
     data2 = [['Weather Forecast'],
-            ['Blah blah blah blah blah']]
+            ['']]
 
     t = Table(data2, colWidths=[570 for x in range(1)],
-              rowHeights=[45 for x in range(len(data2))])
+              rowHeights=[20 for x in range(len(data2))], spaceAfter= 20)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (1, -1), colors.black),
                            ('GRID', (0, 0), (0, 1), 1, colors.black),
 
@@ -64,21 +92,80 @@ def create_weather_forcast_table():
                            ('VALIGN', (0, 0), (0, 0), 'MIDDLE')]))
     return t
 
+#Needs to accommodate varying avalanche dangers'
+def create_avalanche_danger_table():
+    ava_prob = Paragraph('Avalanche Problem 1', styles['Normal'])
+    aspect_elevation = Paragraph('Aspect/   Elevation', styles['Normal'])
+    size_likelihood = Paragraph('Size/  Likelihood', styles['Normal'])
+    trend = Paragraph('Trend', styles['Normal'])
 
+    data = [['Avalanche Danger in the BC/on the other side of the rope', '', '', '', '', '', '',''],
+            [ava_prob, '', aspect_elevation, '',size_likelihood , '', trend, '']]
+
+    t = Table(data, colWidths=[71 for x in range(len(data[0]))],
+              rowHeights=[30 for x in range(len(data))], spaceAfter= 20)
+    t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
+                           ('GRID', (0, 0), (8, 1), 1, colors.black),
+                           ('SPAN', (0, 0), (7, 0)),
+                           ('ALIGN', (0, 0), (8, 0), 'CENTER'),
+                           ('VALIGN', (0, 0), (8, 0), 'MIDDLE'),
+                           ]))
+    return t
+
+def create_discuss_box(heading, summary):
+    sum_paragraph = Paragraph(summary, styles['Normal'])
+    data = [[heading],
+             [sum_paragraph]]
+
+    t = Table(data, colWidths=[570 for x in range(1)], spaceAfter=20)
+    t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (1, -1), colors.black),
+                           ('GRID', (0, 0), (0, 1), 1, colors.black),
+
+                           ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                           ('VALIGN', (0, 0), (0, 0), 'MIDDLE')]))
+    return t
 
 def main():
-    doc = SimpleDocTemplate("prototype_pdf_AM_report.pdf", pagesize=letter)
+    doc = SimpleDocTemplate("prototype_pdf_AM_report.pdf",
+                            pagesize=letter,
+                            rightMargin=72,
+                            leftMargin=72,
+                            topMargin=18,
+                            bottomMargin=18)
 
     # container for the 'Flowable' objects
     elements = []
+    string_test = (
+        "gjkfgkjsafgkjfhgb kjsgdfjhsdg gjfhgdfjsakgf jshfksjhdfg ksjfghkdj skjfghskjdgah kjdshfkj ksajdfghkjsda kjdshfgkjsd kjdhfwioquefh ksjdfgkd oeifkfasj daksujfghksa "
+        "kdjafk fkdsafjhkjdsafh jkfhdkjahkj kjhsdgfk lkjhfdka jfghljdfghkjsdagh dskjfgksfjgskdjd ksajhdkjshdfiweio fewfhbuwiefghksa,je kwuefhdkiewFHKE KSJDHFWIKUEO")
 
     header = create_header()
-    elements.append(header)
+    basic_info = create_basic_info()
+    basic_stats = create_basic_stats()
+    crit_info = create_discuss_box('Critical Information?', '')
     weather_obser = create_weather_observation_table()
-    elements.append(weather_obser)
-    weather_forecast = create_weather_forcast_table()
+    weather_forecast = create_discuss_box('Weather Forecast', '')
+    ava_danger = create_avalanche_danger_table()
+    ava_forecast = create_discuss_box('Avalanche Forecast and discussion, How it relates to our Mtn and Our Strategic Mindset', '')
+    sum_prev_work = create_discuss_box('Summary of Previous Day(s) Work', '')
+    mitigation_plan = create_discuss_box('Mitigation Plan', '')
+    terrain_opening = create_discuss_box('Pertinent Terrain Opening/Closing', '')
 
+
+
+
+    elements.append(header)
+    elements.append(basic_info)
+    elements.append(basic_stats)
+    elements.append(weather_obser)
     elements.append(weather_forecast)
+    elements.append(ava_danger)
+    elements.append(ava_forecast)
+    elements.append(sum_prev_work)
+    elements.append(mitigation_plan)
+    elements.append(terrain_opening)
+
+
 
     # write the document to disk
     doc.build(elements)
