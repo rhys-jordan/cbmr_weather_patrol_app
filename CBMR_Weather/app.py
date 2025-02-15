@@ -123,7 +123,7 @@ def am_form():
 @login_required
 @app.route('/pm-form', methods=['GET', 'POST'])
 def pm_form():
-        now = datetime.now()
+
         return render_template('pm-form.html', now=now)
 
 @login_required
