@@ -15,7 +15,7 @@ db= SQLAlchemy(app)
 class Snow(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
-    season = db.Column(db.Integer, nullable=False)
+    season = db.Column(db.String, nullable=False) #Season ie 24-25
     hs = db.Column(db.Float, nullable=True)  # Snow height (HS)
     hn24 = db.Column(db.Float, nullable=True)  # 24-hour new snow (HN24)
     hst = db.Column(db.Float, nullable=True)  # Total storm snow (HST)
