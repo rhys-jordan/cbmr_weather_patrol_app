@@ -46,7 +46,10 @@ def load_user(uid):
 
 @app.route("/")
 def home():
-    return render_template('home.html')
+    if current_user.is_authenticated:
+        return render_template("home.html")
+    else:
+        return render_template('loginform_user.html')
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -58,7 +61,7 @@ def handle_post_login():
 
         if user and user.password == password:
             login_user(user)
-            return redirect("/")
+            return render_template("home.html")
         else:
             return render_template('login_error_user.html')
     return render_template('loginform_user.html')
@@ -105,7 +108,7 @@ def am_form():
         wind_direction = request.form['current_wind_direction']
         dateCheck = Snow.query.filter_by(date=date).first()
         if(not dateCheck):
-            snow= Snow(date=date,season=season, hs=hs,hn24=hn24,hst=hst,ytd=ytd,sky=sky,temperature=temp,wind_mph=wind_mph,wind_direction=wind_direction)
+            snow= Snow(date=str(date),season=season, hs=hs,hn24=hn24,hst=hst,ytd=ytd,sky=sky,temperature=temp,wind_mph=wind_mph,wind_direction=wind_direction)
             db.session.add(snow)
             db.session.commit()
             return redirect('/search')
@@ -113,24 +116,25 @@ def am_form():
             print('Error')
             #alert user that the date has already been inputted.
     else:
-        return render_template('am-form.html')
+        now = datetime.now()
+        now = now.strftime("%Y-%m-%d %H:%M:%S")
+        return render_template('am-form.html', now=now)
 
 @login_required
 @app.route('/pm-form', methods=['GET', 'POST'])
 def pm_form():
-        return render_template('pm-form.html')
+        now = datetime.now()
+        return render_template('pm-form.html', now=now)
 
 @login_required
 @app.route('/past-data', methods=['GET', 'POST'])
 def past_data():
     if request.method=='POST':
         print(request.form)
-        day= request.form['day']
-        month = request.form['month']
-        year = request.form['year']
-        date_str=year+'-'+month+'-'+day
-        date = datetime.strptime(date_str, '%Y-%m-%d').date()
-        season=int(year[2]+year[3])
+        datetime_str= request.form['datetime']
+        date = datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M').date()
+        print(date)
+        season=25
         hs= int(request.form['hs'])
         hn24 = int(request.form['hn24'])
         hst = int(request.form['hst'])
@@ -140,15 +144,17 @@ def past_data():
         wind_mph= request.form['current_wind_mph']
         wind_direction = request.form['current_wind_direction']
         dateCheck = Snow.query.filter_by(date=date).first()
-        if(not dateCheck):
-            snow= Snow(date=date,season=season, hs=hs,hn24=hn24,hst=hst,ytd=ytd,sky=sky,temperature=temp,wind_mph=wind_mph,wind_direction=wind_direction)
-            db.session.add(snow)
-            db.session.commit()
-            return redirect('/search')
-        else:
-            print('Error')
+        # if(not dateCheck):
+        #     snow= Snow(date=date,season=season, hs=hs,hn24=hn24,hst=hst,ytd=ytd,sky=sky,temperature=temp,wind_mph=wind_mph,wind_direction=wind_direction)
+        #     db.session.add(snow)
+        #     db.session.commit()
+        #     return redirect('/search')
+        # else:
+        #     print('Error')
             #alert user that the date has already been inputted.
     else:
-        return render_template('past-data.html')
+        now = datetime.now()
+        now = now.strftime("%Y-%m-%dT%H:%M")
+        return render_template('past-data.html', now=now)
 
 app.run()

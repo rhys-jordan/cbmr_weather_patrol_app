@@ -3,13 +3,7 @@
 {% block content%}
 <h1> AM FORM</h1><br>
 <form action="/am-form" method="post">
-    <label>Day:</label>
-    <input type="number" id="day" name="day">
-    <label>Month:</label>
-    <input type="number" id="month" name="month">
-    <label>Year:</label>
-    <input type="number" id="year" name="year">
-    <label>Time: </label> <input type="time" id="time" name="time">
+    <label>Date: </label> <input type="datetime-local" id="datetime" value='{{now}}'>
     <label>Forecaster: </label> <input type="text" id="forecaster" name="forecaster"><br>
     <label>HS:</label> <input type="number" id="hs" name="hs">
     <label>HN24:</label><input type="number" id="hn24" name="hn24">
