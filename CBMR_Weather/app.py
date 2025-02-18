@@ -139,4 +139,10 @@ def am_form():
         future_wind_direction = request.form.get('future_wind_direction', None)
 
         hs = float(hs) if hs else None
-     
+        return render_template('am-form.html')
+    else:
+        return render_template('am-form.html')
+
+
+
+app.run()
