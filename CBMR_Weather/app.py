@@ -6,6 +6,9 @@ from sqlalchemy.orm import foreign
 from flask_login import LoginManager, UserMixin, login_user,logout_user,current_user,login_required
 from datetime import datetime
 
+
+
+
 app = Flask(__name__, static_url_path='/static')
 json= FlaskJSON(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CBMR_Weather.db'
@@ -111,6 +114,9 @@ def am_form():
             snow= Snow(date=date,season=season, hs=hs,hn24=hn24,hst=hst,ytd=ytd,sky=sky,temperature=temp,wind_mph=wind_mph,wind_direction=wind_direction)
             db.session.add(snow)
             db.session.commit()
+
+            ##generate pdf
+
             return redirect('/search')
         else:
             print('Error')

@@ -125,6 +125,8 @@ def create_discuss_box(heading, summary):
                            ('VALIGN', (0, 0), (0, 0), 'MIDDLE')]))
     return t
 
+
+
 def main():
     doc = SimpleDocTemplate("prototype_pdf_AM_report.pdf",
                             pagesize=letter,
