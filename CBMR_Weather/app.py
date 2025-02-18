@@ -6,30 +6,44 @@ from sqlalchemy.orm import foreign
 from flask_login import LoginManager, UserMixin, login_user,logout_user,current_user,login_required
 from datetime import datetime
 
-
-
-
 app = Flask(__name__, static_url_path='/static')
 json= FlaskJSON(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CBMR_Weather.db'
 app.config['SECRET_KEY']="secretKey"
 
-
-#testing 2
-
 db= SQLAlchemy(app)
 class Snow(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date, nullable=False)
-    season = db.Column(db.Integer, nullable=False)
-    hs = db.Column(db.Float, nullable=True)  # Snow height (HS)
-    hn24 = db.Column(db.Float, nullable=True)  # 24-hour new snow (HN24)
-    hst = db.Column(db.Float, nullable=True)  # Total storm snow (HST)
-    ytd = db.Column(db.Float, nullable=True)  # Year-to-date snow (YTD)
-    sky = db.Column(db.String, nullable=True)  # Sky condition
-    temperature = db.Column(db.Float, nullable=True)  # Temperature in degrees
-    wind_mph = db.Column(db.String, nullable=True)  # Wind speed words
-    wind_direction = db.Column(db.String, nullable=True)  # Wind direction
+    date = db.Column(db.DateTime, nullable=False)
+    forecaster=db.Column(db.String)
+    season = db.Column(db.String) #Season ie 24-25
+    hs = db.Column(db.Float)  # Snow height (HS)
+    hn24 = db.Column(db.Float)  # 24-hour new snow (HN24)
+    hst = db.Column(db.Float)  # Total storm snow (HST)
+    ytd = db.Column(db.Float)  # Year-to-date snow (YTD)
+    sky = db.Column(db.String)  # Sky condition
+    temperature = db.Column(db.Float)  # Temperature in degrees
+    wind_mph = db.Column(db.String)  # Wind speed words
+    wind_direction = db.Column(db.String)  # Wind direction
+    critical_info= db.Column(db.String)
+    weather_forecast=db.Column(db.String)
+    avalanche_problems=db.Column(db.String)
+    avalanche_forecast_discussion=db.Column(db.String)
+    summary_previous_day=db.Column(db.String)
+    mitigation_plan=db.Column(db.String)
+    pertinent_terrain_info=db.Column(db.String)
+    current_precip_rate = db.Column(db.Float)  # Precipitation rate (current)
+    past_24_hn24_hst_date_cir = db.Column(db.Float)  # HN24 / HST date cir (past 24 hours)
+    future_precip_rate = db.Column(db.Float)  # Precipitation rate (future)
+    past_24_hn24_swe = db.Column(db.Float)  # HN24 SWE (past 24 hours)
+    future_temp_high = db.Column(db.Float)  # Temp high (future)
+    past_24_wind_mph_direction = db.Column(db.String)  # Wind mph/direction (past 24 hours)
+    future_temp_low = db.Column(db.Float)  # Temp low (future)
+    past_24_temp_high = db.Column(db.Float)  # Temp high (past 24 hours)
+    future_wind_mph = db.Column(db.String)  # Wind mph (future)
+    past_24_temp_low = db.Column(db.Float)  # Temp low (past 24 hours)
+    future_wind_direction = db.Column(db.String)  # Wind direction (future)
+
 
 
 
@@ -52,7 +66,10 @@ def load_user(uid):
 
 @app.route("/")
 def home():
-    return render_template('home.html')
+    if current_user.is_authenticated:
+        return render_template("home.html")
+    else:
+        return render_template('loginform_user.html')
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -64,7 +81,7 @@ def handle_post_login():
 
         if user and user.password == password:
             login_user(user)
-            return redirect("/")
+            return render_template("home.html")
         else:
             return render_template('login_error_user.html')
     return render_template('loginform_user.html')
@@ -93,71 +110,33 @@ def search():
 @login_required
 @app.route('/am-form', methods=['GET', 'POST'])
 def am_form():
-    if request.method=='POST':
-        print(request.form)
-        day= request.form['day']
-        month = request.form['month']
-        year = request.form['year']
-        date_str=year+'-'+month+'-'+day
-        date = datetime.strptime(date_str, '%Y-%m-%d').date()
-        season=int(year[2]+year[3])
-        hs= int(request.form['hs'])
-        hn24 = int(request.form['hn24'])
-        hst = int(request.form['hst'])
-        ytd = int(request.form['ytd'])
-        sky = request.form['sky']
-        temp = int(request.form['current_temp'])
-        wind_mph= request.form['current_wind_mph']
-        wind_direction = request.form['current_wind_direction']
-        dateCheck = Snow.query.filter_by(date=date).first()
-        if(not dateCheck):
-            snow= Snow(date=date,season=season, hs=hs,hn24=hn24,hst=hst,ytd=ytd,sky=sky,temperature=temp,wind_mph=wind_mph,wind_direction=wind_direction)
-            db.session.add(snow)
-            db.session.commit()
-
-            ##generate pdf
-
-            return redirect('/search')
+    if request.method == 'POST':
+        print(request.form)  # Debugging print statement
+        datetime_str = request.form.get('datetime')
+        print(datetime_str)
+        date = datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M')
+        print('line 107')
+        if date.month < 7:
+            season = str(date.year - 1)[2:] + "-" + str(date.year)[2:]  # Example: "24-25"
         else:
-            print('Error')
-            #alert user that the date has already been inputted.
-    else:
-        return render_template('am-form.html')
+            season = str(date.year)[2:] + "-" + str(date.year + 1)[2:]  # Example: "24-25"
+        forecaster = request.form.get('forecaster', None)
+        hs = request.form.get('hs', None)
+        hn24 = request.form.get('hn24', None)
+        hst = request.form.get('hst', None)
+        ytd = request.form.get('ytd', None)
+        temperature = request.form.get('current_temp', None)
+        current_precip_rate = request.form.get('current_precip_rate', None)
+        past_24_hn24_hst_date_cir = request.form.get('past_24_hn24_hst_date_cir', None)
+        future_precip_rate = request.form.get('future_precip_rate', None)
+        past_24_hn24_swe = request.form.get('past_24_hn24_swe', None)
+        future_temp_high = request.form.get('future_temp_high', None)
+        past_24_wind_mph_direction = request.form.get('past_24_wind_mph_direction', None)
+        future_temp_low = request.form.get('future_temp_low', None)
+        past_24_temp_high = request.form.get('past_24_temp_high', None)
+        future_wind_mph = request.form.get('future_wind_mph', None)
+        past_24_temp_low = request.form.get('past_24_temp_low', None)
+        future_wind_direction = request.form.get('future_wind_direction', None)
 
-@login_required
-@app.route('/pm-form', methods=['GET', 'POST'])
-def pm_form():
-        return render_template('pm-form.html')
-
-@login_required
-@app.route('/past-data', methods=['GET', 'POST'])
-def past_data():
-    if request.method=='POST':
-        print(request.form)
-        day= request.form['day']
-        month = request.form['month']
-        year = request.form['year']
-        date_str=year+'-'+month+'-'+day
-        date = datetime.strptime(date_str, '%Y-%m-%d').date()
-        season=int(year[2]+year[3])
-        hs= int(request.form['hs'])
-        hn24 = int(request.form['hn24'])
-        hst = int(request.form['hst'])
-        ytd = int(request.form['ytd'])
-        sky = request.form['sky']
-        temp = int(request.form['current_temp'])
-        wind_mph= request.form['current_wind_mph']
-        wind_direction = request.form['current_wind_direction']
-        dateCheck = Snow.query.filter_by(date=date).first()
-        if(not dateCheck):
-            snow= Snow(date=date,season=season, hs=hs,hn24=hn24,hst=hst,ytd=ytd,sky=sky,temperature=temp,wind_mph=wind_mph,wind_direction=wind_direction)
-            db.session.add(snow)
-            db.session.commit()
-            return redirect('/search')
-        else:
-            print('Error')
-            #alert user that the date has already been inputted.
-    else:
-        return render_template('past-data.html')
-
-app.run()
+        hs = float(hs) if hs else None
+     
