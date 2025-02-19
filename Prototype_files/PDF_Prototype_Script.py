@@ -27,7 +27,7 @@ def create_header():
     return t
 
 def create_basic_info():
-    #TODO have to get time?
+    #TODO have to get time
     command = 'SELECT date, forecaster FROM snow WHERE date = "' + str(pdf_date) + '"'
     cursor.execute(command)
     results = cursor.fetchall()
@@ -45,7 +45,6 @@ def create_basic_info():
     return t
 
 def create_basic_stats():
-    #TODO make crit infor paragraph
     command = 'SELECT hs,hn24,hst,ytd, critical_info FROM snow WHERE date = "' + str(pdf_date) + '"'
     cursor.execute(command)
     results = cursor.fetchall()
@@ -53,7 +52,7 @@ def create_basic_stats():
     hn24 = 'HS24: ' + str(results[0][1])
     hst = 'HST: ' + str(results[0][2])
     ytd = 'YTD: ' + str(results[0][3])
-    crit_info = 'Critical Info? ' +  results[0][4]
+    crit_info = Paragraph('Critical Info? ' +  results[0][4], styles['Normal'])
     data = [[hs, hn24, hst, ytd, crit_info, '']]
 
     t = Table(data, colWidths=[95 for x in range(6)], spaceAfter=10 )
@@ -139,7 +138,20 @@ def create_weather_forcast_table():
                            ('VALIGN', (0, 0), (0, 0), 'MIDDLE')]))
     return t
 
-#Needs to accommodate varying avalanche dangers'
+
+def get_avalanche_danger_data():
+    command = ('SELECT sky, current_precip_rate, temperature, wind_mph, wind_direction '
+               'FROM snow'
+               ' WHERE date = "') + str(pdf_date) + '"'
+    cursor.execute(command)
+    results_current = cursor.fetchall()
+
+
+
+
+
+#TODO Needs to accommodate varying number of avalanche dangers
+#TODO pull avalanche problems from database
 def create_avalanche_danger_table():
     ava_prob = Paragraph('Avalanche Problem 1', styles['Normal'])
     aspect_elevation = Paragraph('Aspect/   Elevation', styles['Normal'])
@@ -159,6 +171,8 @@ def create_avalanche_danger_table():
                            ]))
     return t
 
+
+
 def create_discuss_box(heading, summary):
     sum_paragraph = Paragraph(summary, styles['Normal'])
     data = [[heading],
@@ -174,6 +188,18 @@ def create_discuss_box(heading, summary):
 
 
 
+
+def get_information(category_name):
+    command = 'SELECT ' + category_name + ' FROM snow WHERE date = "' + str(pdf_date) + '"'
+    cursor.execute(command)
+    results = cursor.fetchall()
+    if(results[0][0] != None):
+        return results[0][0]
+    else:
+        return ''
+
+
+
 def main():
     doc = SimpleDocTemplate("prototype_pdf_AM_report.pdf",
                             pagesize=letter,
@@ -184,12 +210,8 @@ def main():
 
     # container for the 'Flowable' objects
     elements = []
-    string_test = (
-        "gjkfgkjsafgkjfhgb kjsgdfjhsdg gjfhgdfjsakgf jshfksjhdfg ksjfghkdj skjfghskjdgah kjdshfkj ksajdfghkjsda kjdshfgkjsd kjdhfwioquefh ksjdfgkd oeifkfasj daksujfghksa "
-        "kdjafk fkdsafjhkjdsafh jkfhdkjahkj kjhsdgfk lkjhfdka jfghljdfghkjsdagh dskjfgksfjgskdjd ksajhdkjshdfiweio fewfhbuwiefghksa,je kwuefhdkiewFHKE KSJDHFWIKUEO")
 
     header = create_header()
-
 
     basic_info = create_basic_info()
     basic_stats = create_basic_stats()
@@ -197,12 +219,14 @@ def main():
     crit_info = create_discuss_box('Critical Information?', '')
 
     weather_obser = create_weather_observation_table()
-    weather_forecast = create_discuss_box('Weather Forecast', '')
+
+
+    weather_forecast = create_discuss_box('Weather Forecast', get_information('weather_forecast'))
     ava_danger = create_avalanche_danger_table()
-    ava_forecast = create_discuss_box('Avalanche Forecast and discussion, How it relates to our Mtn and Our Strategic Mindset', '')
-    sum_prev_work = create_discuss_box('Summary of Previous Day(s) Work', '')
-    mitigation_plan = create_discuss_box('Mitigation Plan', '')
-    terrain_opening = create_discuss_box('Pertinent Terrain Opening/Closing', '')
+    ava_forecast = create_discuss_box('Avalanche Forecast and discussion, How it relates to our Mtn and Our Strategic Mindset', get_information('avalanche_forecast_discussion'))
+    sum_prev_work = create_discuss_box('Summary of Previous Day(s) Work', get_information('summary_previous_day'))
+    mitigation_plan = create_discuss_box('Mitigation Plan', get_information('mitigation_plan'))
+    terrain_opening = create_discuss_box('Pertinent Terrain Opening/Closing', get_information('pertinent_terrain_info'))
 
 
 
@@ -222,6 +246,7 @@ def main():
 
     # write the document to disk
     doc.build(elements)
+    connection.close()
 
 
 if __name__ == '__main__':
