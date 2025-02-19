@@ -6,6 +6,8 @@ from sqlalchemy.orm import foreign
 from flask_login import LoginManager, UserMixin, login_user,logout_user,current_user,login_required
 from datetime import datetime
 
+from generate_pdf import generate_pdf
+
 app = Flask(__name__, static_url_path='/static')
 json= FlaskJSON(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CBMR_Weather.db'
@@ -139,6 +141,7 @@ def am_form():
         future_wind_direction = request.form.get('future_wind_direction', None)
 
         hs = float(hs) if hs else None
+        generate_pdf('2/19/2025')
         return render_template('am-form.html')
     else:
         return render_template('am-form.html')
