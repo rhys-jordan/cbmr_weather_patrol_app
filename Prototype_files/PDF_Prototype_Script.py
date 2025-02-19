@@ -30,6 +30,7 @@ def create_basic_info():
     #TODO have to get time
     command = 'SELECT date, forecaster FROM snow WHERE date = "' + str(pdf_date) + '"'
     cursor.execute(command)
+    print(command)
     results = cursor.fetchall()
 
     date = 'Date: ' + results[0][0]
