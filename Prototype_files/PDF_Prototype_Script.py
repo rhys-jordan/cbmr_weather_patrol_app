@@ -5,6 +5,12 @@ from reportlab.platypus import SimpleDocTemplate, Table, Image
 from reportlab.platypus import Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 
+import sqlite3
+
+connection = sqlite3.connect("..\\CBMR_Weather\\instance\\CBMR_Weather.db")
+cursor = connection.cursor()
+
+pdf_date =  "2/18/2025"
 
 styles = getSampleStyleSheet()
 
@@ -21,7 +27,15 @@ def create_header():
     return t
 
 def create_basic_info():
-    data = [['Date: ','Time: ','Forecaster: ']]
+    #TODO have to get time?
+    command = 'SELECT date, forecaster FROM snow WHERE date = "' + str(pdf_date) + '"'
+    cursor.execute(command)
+    results = cursor.fetchall()
+
+    date = 'Date: ' + results[0][0]
+    forecaster = 'Forecaster: ' + results[0][1]
+
+    data = [[date,'Time: ',forecaster]]
     t = Table(data, spaceAfter= 20)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
                            ('FONTSIZE', (0, 0), (2, -1), 13),
@@ -31,7 +45,17 @@ def create_basic_info():
     return t
 
 def create_basic_stats():
-    data = [['HS: ', 'HN24: ', 'HST: ', 'YTD: ', 'Critical Info?', '']]
+    #TODO make crit infor paragraph
+    command = 'SELECT hs,hn24,hst,ytd, critical_info FROM snow WHERE date = "' + str(pdf_date) + '"'
+    cursor.execute(command)
+    results = cursor.fetchall()
+    hs = 'HS: ' + str(results[0][0])
+    hn24 = 'HS24: ' + str(results[0][1])
+    hst = 'HST: ' + str(results[0][2])
+    ytd = 'YTD: ' + str(results[0][3])
+    crit_info = 'Critical Info? ' +  results[0][4]
+    data = [[hs, hn24, hst, ytd, crit_info, '']]
+
     t = Table(data, colWidths=[95 for x in range(6)], spaceAfter=10 )
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
                            ('GRID', (0, 0), (6, 0), 1, colors.black),
@@ -43,16 +67,39 @@ def create_basic_stats():
 
     return t
 
+
+def get_weather_obser_data():
+    command = ('SELECT sky, current_precip_rate, temperature, wind_mph, wind_direction '
+               'FROM snow'
+               ' WHERE date = "') + str(pdf_date) + '"'
+    cursor.execute(command)
+    results_current = cursor.fetchall()
+
+    command = ('SELECT past_24_hn24_hst_date_cir, past_24_hn24_swe, past_24_wind_mph_direction, past_24_temp_high, past_24_temp_low'
+               ' FROM snow '
+               'WHERE date = "') + str(pdf_date) + '"'
+    cursor.execute(command)
+    results_past = cursor.fetchall()
+
+    command = ('SELECT future_precip_rate, future_temp_high, future_temp_low, future_wind_mph, future_wind_direction'
+                  ' FROM snow '
+                  'WHERE date = "') + str(pdf_date) + '"'
+    cursor.execute(command)
+    results_future = cursor.fetchall()
+
+    data = [['Pertinent Weather Observations Past and Future', '', '', '', '', ''],
+            ['Current', '', 'PAST 24 hour', '', 'Future 24 hours', ''],
+            ['Sky', results_current[0][0], 'HN24/ HST data clr', results_past[0][0], 'Precip/Rate', results_future[0][0]],
+            ['Precip/Rate', str(results_current[0][1]), 'HN24 SWE',  str(results_past[0][1]), 'Temp HIGH', results_future[0][1]],
+            ['Temp', str(results_current[0][2]), 'Wind mph/direction',  results_past[0][2], 'Temp LOW', results_future[0][2]],
+            ['Wind mph', results_current[0][3], 'Temp HIGH',  str(results_past[0][3]), 'Wind mph', results_future[0][3]],
+            ['Wind Direction', results_current[0][4], 'Temp LOW',  str(results_past[0][4]), 'Wind Direction', results_future[0][4]]]
+    return data
+
 #Possible send data table rather than hardcode
 #Make things paragraphs
 def create_weather_observation_table():
-    data = [['Pertinent Weather Observations Past and Future', '', '', '', '', ''],
-            ['Current', '', 'PAST 24 hour', '', 'Future 24 hours', ''],
-            ['Sky', '', 'HN24/ HST data clr', '', 'Precip/Rate', ''],
-            ['Precip/Rate', '', 'HN24 SWE', '', 'Temp HIGH', ''],
-            ['Temp', '', 'Wind mph/direction', '', 'Temp LOW', ''],
-            ['Wind mph', '', 'Temp HIGH', '', 'Wind mph', ''],
-            ['Wind Direction', '', 'Temp LOW', '', 'Wind Direction', '']]
+    data = get_weather_obser_data()
 
     t = Table(data, colWidths=[95 for x in range(6)],
               rowHeights=[20 for x in range(len(data))], spaceAfter= 20)
@@ -142,9 +189,13 @@ def main():
         "kdjafk fkdsafjhkjdsafh jkfhdkjahkj kjhsdgfk lkjhfdka jfghljdfghkjsdagh dskjfgksfjgskdjd ksajhdkjshdfiweio fewfhbuwiefghksa,je kwuefhdkiewFHKE KSJDHFWIKUEO")
 
     header = create_header()
+
+
     basic_info = create_basic_info()
     basic_stats = create_basic_stats()
+
     crit_info = create_discuss_box('Critical Information?', '')
+
     weather_obser = create_weather_observation_table()
     weather_forecast = create_discuss_box('Weather Forecast', '')
     ava_danger = create_avalanche_danger_table()

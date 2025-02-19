@@ -1,5 +1,4 @@
-import sqlalchemy
-from sqlalchemy import create_engine, MetaData, text, Column, Integer, DateTime, String, Float
+
 
 import sqlite3
 
@@ -8,17 +7,16 @@ cursor = connection.cursor()
 
 
 
-#"C:\Users\rhysj\OneDrive\Desktop\cbmr_weather_patrol_app\CBMR_Weather\instance\CBMR_Weather.db"
 
 def main():
 
-    command = 'SELECT date FROM snow '
+    command = 'SELECT date, forecaster FROM snow WHERE date = "2/18/2025" '
     #print(division.columns.keys())
     #query = division.select()  # SELECT * FROM divisions
     #print(query)
     cursor.execute(command)
     results = cursor.fetchall()
-    print(results)
+    print(results[0][1])
     connection.close()
 
 
