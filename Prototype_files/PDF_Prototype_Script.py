@@ -52,7 +52,10 @@ def create_basic_stats():
     hn24 = 'HS24: ' + str(results[0][1])
     hst = 'HST: ' + str(results[0][2])
     ytd = 'YTD: ' + str(results[0][3])
-    crit_info = Paragraph('Critical Info? ' +  results[0][4], styles['Normal'])
+    if(results[0][4] != None):
+        crit_info = Paragraph('Critical Info? ' +  results[0][4], styles['Normal'])
+    else:
+        crit_info = Paragraph('Critical Info? ', styles['Normal'])
     data = [[hs, hn24, hst, ytd, crit_info, '']]
 
     t = Table(data, colWidths=[95 for x in range(6)], spaceAfter=10 )
