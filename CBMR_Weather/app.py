@@ -139,4 +139,61 @@ def am_form():
         future_wind_direction = request.form.get('future_wind_direction', None)
 
         hs = float(hs) if hs else None
-     
+        hn24 = float(hn24) if hn24 else None
+        hst = float(hst) if hst else None
+        ytd = float(ytd) if ytd else None
+        print('line 122')
+        temperature = float(temperature) if temperature else None
+        current_precip_rate = float(current_precip_rate) if current_precip_rate else None
+        past_24_hn24_hst_date_cir = float(past_24_hn24_hst_date_cir) if past_24_hn24_hst_date_cir else None
+        future_precip_rate = float(future_precip_rate) if future_precip_rate else None
+        past_24_hn24_swe = float(past_24_hn24_swe) if past_24_hn24_swe else None
+        future_temp_high = float(future_temp_high) if future_temp_high else None
+        future_temp_low = float(future_temp_low) if future_temp_low else None
+        past_24_temp_high = float(past_24_temp_high) if past_24_temp_high else None
+        past_24_temp_low = float(past_24_temp_low) if past_24_temp_low else None
+
+        sky = request.form.get('sky', None)
+        wind_mph = request.form.get('current_wind_mph', None)
+        wind_direction = request.form.get('current_wind_direction', None)
+        critical_info = request.form.get('critical_information', None)
+        weather_forecast = request.form.get('weather_forecast', None)
+        avalanche_problems = request.form.get('avalanche_problems', None)
+        avalanche_forecast_discussion = request.form.get('avalanche_forecast_discussion', None)
+        summary_previous_day = request.form.get('summary_previous_day', None)
+        mitigation_plan = request.form.get('mitigation_plan', None)
+        pertinent_terrain_info = request.form.get('pertinent_terrain_info', None)
+        print('line 134')
+        dateCheck = Snow.query.filter_by(date=date).first()
+        if not dateCheck:
+            snow = Snow(date=date, season=season, forecaster=forecaster, hs=hs, hn24=hn24, hst=hst, ytd=ytd, sky=sky, temperature=temperature, wind_mph=wind_mph, wind_direction=wind_direction, critical_info=critical_info, weather_forecast=weather_forecast, avalanche_problems=avalanche_problems, avalanche_forecast_discussion=avalanche_forecast_discussion, summary_previous_day=summary_previous_day, mitigation_plan=mitigation_plan, pertinent_terrain_info=pertinent_terrain_info, current_precip_rate=current_precip_rate, past_24_hn24_hst_date_cir=past_24_hn24_hst_date_cir, future_precip_rate=future_precip_rate, past_24_hn24_swe=past_24_hn24_swe, future_temp_high=future_temp_high, past_24_wind_mph_direction=past_24_wind_mph_direction, future_temp_low=future_temp_low, past_24_temp_high=past_24_temp_high, future_wind_mph=future_wind_mph, past_24_temp_low=past_24_temp_low, future_wind_direction=future_wind_direction)
+            db.session.add(snow)
+            db.session.commit()
+            return redirect('/search')
+        else:
+            print('Error: Data for this date already exists')
+
+    else:
+        now = datetime.now()
+        formatted_now = now.strftime("%Y-%m-%dT%H:%M")
+        return render_template('am-form.html', now=formatted_now)
+
+@login_required
+@app.route('/pm-form', methods=['GET', 'POST'])
+def pm_form():
+        return render_template('pm-form.html')
+
+@login_required
+@app.route('/past-data', methods=['GET', 'POST'])
+def past_data():
+    if request.method=='POST':
+        print(request.form)
+    else:
+        now = datetime.now()
+        now = now.strftime("%Y-%m-%dT%H:%M")
+        return render_template('past-data.html', now=now)
+
+app.run()
+
+
+

@@ -66,4 +66,16 @@
     <textarea id="avalanche_forecast_discussion" name="avalanche_forecast_discussion"></textarea>
 
     <h1>Summary of Previous Day(s) Work</h1><br>
-    <textarea id="summa
+    <textarea id="summary_of_previous_work" name="summary_previous_day"></textarea>
+
+    <h1>Mitigation Plan</h1><br>
+    <textarea id="mitigation_plan" name="mitigation_plan"></textarea>
+
+    <h1>Pertinent Terrain Opening/Closing</h1><br>
+    <textarea id="pertinent_terrain_opening/closing" name="pertinent_terrain_info"></textarea><br>
+
+    <button type="submit" name="action" value="submit_data">Enter Weather Data</button>
+    <button type="submit" onclick="submit_amForm()">Create AM Form</button>
+</form>
+
+{% endblock %}
