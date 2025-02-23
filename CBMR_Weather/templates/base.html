@@ -14,12 +14,12 @@
         {% if current_user.is_authenticated == False %}
         <li><a href='/login'>LOGIN</a></li>
         <li><a href='/read'>READ</a></li>
-        <li><a href='/search'>SEARCH</a></li>
+        <li><a href='/view'>VIEW</a></li>
         {% endif %}
         {% if current_user.is_authenticated %}
             <li><a href='/forms'>FORMS</a></li>
             <li><a href='/read'>READ</a></li>
-            <li><a href='/search'>SEARCH</a></li>
+            <li><a href='/view'>VIEW</a></li>
             <li><a href='/logout'>LOGOUT</a></li>
         {% endif %}
     </ul>

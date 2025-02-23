@@ -81,11 +81,11 @@ def forms():
 def read():
     return render_template('read.html')
 
-@app.route("/search",methods=['GET', 'POST'])
-def search():
+@app.route("/view",methods=['GET', 'POST'])
+def view():
     snow = Snow.query.all()
     print(snow)
-    return render_template('search.html', snow=snow)
+    return render_template('view.html', snow=snow)
 
 @login_required
 @app.route('/am-form', methods=['GET', 'POST'])
@@ -111,7 +111,7 @@ def am_form():
             snow= Snow(date=date,season=season, hs=hs,hn24=hn24,hst=hst,ytd=ytd,sky=sky,temperature=temp,wind_mph=wind_mph,wind_direction=wind_direction)
             db.session.add(snow)
             db.session.commit()
-            return redirect('/search')
+            return redirect('/view')
         else:
             print('Error')
             #alert user that the date has already been inputted.
@@ -147,11 +147,11 @@ def past_data():
             snow= Snow(date=date,season=season, hs=hs,hn24=hn24,hst=hst,ytd=ytd,sky=sky,temperature=temp,wind_mph=wind_mph,wind_direction=wind_direction)
             db.session.add(snow)
             db.session.commit()
-            return redirect('/search')
+            return redirect('/view')
         else:
             print('Error')
             #alert user that the date has already been inputted.
     else:
         return render_template('past-data.html')
 
-# app.run() this is destructive when put into python anywhere // please do not include app.run()
+#app.run() #this is destructive when put into python anywhere // please do not include app.run()
