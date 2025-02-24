@@ -1,20 +1,4 @@
-//seems to be functioning. Accessing problem info I am unsure if the id names are dynamic..
-problem_count=1;
-function addProblem() {
-            problem_count++;
-            const newDiv = document.createElement('div');
-
-            newDiv.innerHTML = `
-                <label>Avalanche problem ${problem_count}</label> <input type="text" id="avalanche_problem_${problem_count}">
-                <label>Aspect/elevation</label> <input type="text" id="aspect_elevation_${problem_count}">
-                <label>Size/likelihood</label> <input type="text" id="size_likelihood_${problem_count}">
-                <label>Trend</label> <input type="text" id="trend_${problem_count}">
-            `;
-
-            // Append the new div to the form or container
-            document.getElementById('problemsContainer').appendChild(newDiv);
-}
-
+//Code that could be helpful for Rhys pdf??
 function submit_amForm() {
     day = document.getElementById("day").value;
     month = document.getElementById("month").value;
@@ -53,8 +37,4 @@ function submit_amForm() {
     summary_of_previous_work = document.getElementById("summary_of_previous_work").value;
     mitigation_plan = document.getElementById("mitigation_plan").value;
     pertinent_terrain_opening_closing = document.getElementById("pertinent_terrain_opening/closing").value;
-}
-
-function download_pdf(filename){
-    document.getElementById('')
 }
