@@ -176,4 +176,4 @@ def past_data():
     else:
         return render_template('past-data.html')
 
-#app.run() #this is destructive when put into python anywhere // please do not include app.run()
+app.run() #this is destructive when put into python anywhere // please do not include app.run()

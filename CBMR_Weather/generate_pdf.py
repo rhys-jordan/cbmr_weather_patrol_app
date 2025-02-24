@@ -10,7 +10,7 @@ from flask import send_file
 
 import sqlite3
 
-#TODO idk about this false on threading, this may be dangerous and we could rin into problems.
+#TODO idk about this false on threading, this may be dangerous and we could run into problems.
 connection = sqlite3.connect(".\\instance\\CBMR_Weather.db", check_same_thread=False)
 cursor = connection.cursor()
 
@@ -131,7 +131,7 @@ def create_weather_observation_table():
 
 
 def create_weather_forcast_table():
-    #make paragph with data to put into table
+    #make paragraph with data to put into table
     data2 = [['Weather Forecast'],
             ['']]
 
