@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, send_file
+from flask import Flask, render_template, request, redirect
 from flask_json import FlaskJSON, json_response, as_json, JsonError
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.mysql import insert
@@ -12,6 +12,9 @@ app = Flask(__name__, static_url_path='/static')
 json= FlaskJSON(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CBMR_Weather.db'
 app.config['SECRET_KEY']="secretKey"
+
+
+#testing 2
 
 db= SQLAlchemy(app)
 class Snow(db.Model):
@@ -68,10 +71,7 @@ def load_user(uid):
 
 @app.route("/")
 def home():
-    if current_user.is_authenticated:
-        return render_template("home.html")
-    else:
-        return render_template('loginform_user.html')
+    return render_template('home.html')
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -83,7 +83,7 @@ def handle_post_login():
 
         if user and user.password == password:
             login_user(user)
-            return render_template("home.html")
+            return redirect("/")
         else:
             return render_template('login_error_user.html')
     return render_template('loginform_user.html')
@@ -103,50 +103,77 @@ def forms():
 def read():
     return render_template('read.html')
 
-@app.route("/search",methods=['GET', 'POST'])
-def search():
+@app.route("/view",methods=['GET', 'POST'])
+def view():
     snow = Snow.query.all()
     print(snow)
-    return render_template('search.html', snow=snow)
+    return render_template('view.html', snow=snow)
 
 @login_required
 @app.route('/am-form', methods=['GET', 'POST'])
 def am_form():
-    if request.method == 'POST':
-        print(request.form)  # Debugging print statement
-        datetime_str = request.form.get('datetime')
-        print(datetime_str)
-        date = datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M')
-        print('line 107')
-        if date.month < 7:
-            season = str(date.year - 1)[2:] + "-" + str(date.year)[2:]  # Example: "24-25"
+    if request.method=='POST':
+        print(request.form)
+        day= request.form['day']
+        month = request.form['month']
+        year = request.form['year']
+        date_str=year+'-'+month+'-'+day
+        date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        season=int(year[2]+year[3])
+        hs= int(request.form['hs'])
+        hn24 = int(request.form['hn24'])
+        hst = int(request.form['hst'])
+        ytd = int(request.form['ytd'])
+        sky = request.form['sky']
+        temp = int(request.form['current_temp'])
+        wind_mph= request.form['current_wind_mph']
+        wind_direction = request.form['current_wind_direction']
+        dateCheck = Snow.query.filter_by(date=date).first()
+        if(not dateCheck):
+            snow= Snow(date=date,season=season, hs=hs,hn24=hn24,hst=hst,ytd=ytd,sky=sky,temperature=temp,wind_mph=wind_mph,wind_direction=wind_direction)
+            db.session.add(snow)
+            db.session.commit()
+            return redirect('/view')
         else:
-            season = str(date.year)[2:] + "-" + str(date.year + 1)[2:]  # Example: "24-25"
-        forecaster = request.form.get('forecaster', None)
-        hs = request.form.get('hs', None)
-        hn24 = request.form.get('hn24', None)
-        hst = request.form.get('hst', None)
-        ytd = request.form.get('ytd', None)
-        temperature = request.form.get('current_temp', None)
-        current_precip_rate = request.form.get('current_precip_rate', None)
-        past_24_hn24_hst_date_cir = request.form.get('past_24_hn24_hst_date_cir', None)
-        future_precip_rate = request.form.get('future_precip_rate', None)
-        past_24_hn24_swe = request.form.get('past_24_hn24_swe', None)
-        future_temp_high = request.form.get('future_temp_high', None)
-        past_24_wind_mph_direction = request.form.get('past_24_wind_mph_direction', None)
-        future_temp_low = request.form.get('future_temp_low', None)
-        past_24_temp_high = request.form.get('past_24_temp_high', None)
-        future_wind_mph = request.form.get('future_wind_mph', None)
-        past_24_temp_low = request.form.get('past_24_temp_low', None)
-        future_wind_direction = request.form.get('future_wind_direction', None)
-
-        hs = float(hs) if hs else None
-        pdf_file = generate_pdf('2/18/2025')
-        #return render_template('am-form.html'),
-        return send_file(pdf_file,as_attachment=True)
+            print('Error')
+            #alert user that the date has already been inputted.
     else:
         return render_template('am-form.html')
 
+@login_required
+@app.route('/pm-form', methods=['GET', 'POST'])
+def pm_form():
+        return render_template('pm-form.html')
 
+@login_required
+@app.route('/past-data', methods=['GET', 'POST'])
+def past_data():
+    if request.method=='POST':
+        print(request.form)
+        day= request.form['day']
+        month = request.form['month']
+        year = request.form['year']
+        date_str=year+'-'+month+'-'+day
+        date = datetime.strptime(date_str, '%Y-%m-%d').date()
+        season=int(year[2]+year[3])
+        hs= int(request.form['hs'])
+        hn24 = int(request.form['hn24'])
+        hst = int(request.form['hst'])
+        ytd = int(request.form['ytd'])
+        sky = request.form['sky']
+        temp = int(request.form['current_temp'])
+        wind_mph= request.form['current_wind_mph']
+        wind_direction = request.form['current_wind_direction']
+        dateCheck = Snow.query.filter_by(date=date).first()
+        if(not dateCheck):
+            snow= Snow(date=date,season=season, hs=hs,hn24=hn24,hst=hst,ytd=ytd,sky=sky,temperature=temp,wind_mph=wind_mph,wind_direction=wind_direction)
+            db.session.add(snow)
+            db.session.commit()
+            return redirect('/view')
+        else:
+            print('Error')
+            #alert user that the date has already been inputted.
+    else:
+        return render_template('past-data.html')
 
-app.run()
+#app.run() #this is destructive when put into python anywhere // please do not include app.run()
