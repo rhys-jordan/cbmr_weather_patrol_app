@@ -54,3 +54,7 @@ function submit_amForm() {
     mitigation_plan = document.getElementById("mitigation_plan").value;
     pertinent_terrain_opening_closing = document.getElementById("pertinent_terrain_opening/closing").value;
 }
+
+function download_pdf(filename){
+    document.getElementById('')
+}

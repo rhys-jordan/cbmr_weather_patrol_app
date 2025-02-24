@@ -4,6 +4,9 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, Image
 from reportlab.platypus import Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
+from io import StringIO
+
+from flask import send_file
 
 import sqlite3
 
@@ -49,7 +52,7 @@ def create_basic_stats():
     cursor.execute(command)
     results = cursor.fetchall()
     hs = 'HS: ' + str(results[0][0])
-    hn24 = 'HS24: ' + str(results[0][1])
+    hn24 = 'HN24: ' + str(results[0][1])
     hst = 'HST: ' + str(results[0][2])
     ytd = 'YTD: ' + str(results[0][3])
     if(results[0][4] != None):
@@ -150,9 +153,6 @@ def get_avalanche_danger_data():
     results_current = cursor.fetchall()
 
 
-
-
-
 #TODO Needs to accommodate varying number of avalanche dangers
 #TODO pull avalanche problems from database
 def create_avalanche_danger_table():
@@ -223,6 +223,7 @@ def generate_pdf(date):
 
     filename_date = make_file_name()
     pdf_file_name = 'CBMR_' + filename_date + '.pdf'
+
     doc = SimpleDocTemplate(pdf_file_name,
                             pagesize=letter,
                             rightMargin=72,
@@ -261,6 +262,8 @@ def generate_pdf(date):
     doc.build(elements)
 
     connection.close()
+
+    return pdf_file_name
 
 def main():
     generate_pdf('2/19/2025')

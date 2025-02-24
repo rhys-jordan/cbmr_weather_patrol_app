@@ -1,11 +1,11 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, send_file
 from flask_json import FlaskJSON, json_response, as_json, JsonError
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import foreign
 from flask_login import LoginManager, UserMixin, login_user,logout_user,current_user,login_required
 from datetime import datetime
-
+from io import StringIO
 from generate_pdf import generate_pdf
 
 app = Flask(__name__, static_url_path='/static')
@@ -141,8 +141,9 @@ def am_form():
         future_wind_direction = request.form.get('future_wind_direction', None)
 
         hs = float(hs) if hs else None
-        generate_pdf('2/19/2025')
-        return render_template('am-form.html')
+        pdf_file = generate_pdf('2/18/2025')
+        #return render_template('am-form.html'),
+        return send_file(pdf_file,as_attachment=True)
     else:
         return render_template('am-form.html')
 
