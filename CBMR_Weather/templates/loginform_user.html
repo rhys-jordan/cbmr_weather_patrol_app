@@ -1,6 +1,7 @@
-{% extends "base.html" %}
+{% extends "home.html" %}
 {% block title%} Login {%endblock%}
 {% block content %}
+{{super()}}
 <form action="/login" method="post">
         <label> Username:</label>
         <input type="text" required="required" name="username" value={{username}}><br>

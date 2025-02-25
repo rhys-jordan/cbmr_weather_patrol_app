@@ -77,16 +77,18 @@ def load_user(uid):
 
 @app.route("/")
 def home():
-    return render_template('home.html')
+    if current_user.is_authenticated:
+        return render_template('home.html')
+    else:
+        return render_template('loginform_user.html')
 
-
+#
 @app.route("/login", methods=['GET', 'POST'])
 def handle_post_login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-
         if user and user.password == password:
             login_user(user)
             return redirect("/")
