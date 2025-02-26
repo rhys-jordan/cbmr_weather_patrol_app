@@ -5,12 +5,11 @@ from reportlab.platypus import SimpleDocTemplate, Table, Image
 from reportlab.platypus import Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 from io import StringIO
-
 from flask import send_file
 
 import sqlite3
 
-#TODO idk about this false on threading, this may be dangerous and we could run into problems.
+#idk about this false on threading, this may be dangerous and we could run into problems.
 connection = sqlite3.connect(".\\instance\\CBMR_Weather.db", check_same_thread=False)
 cursor = connection.cursor()
 
@@ -31,14 +30,21 @@ def create_header():
     return t
 
 def create_basic_info():
-    #TODO have to get time
-    command = 'SELECT date, forecaster FROM snow WHERE date = "' + str(pdf_date) + '"'
+    command = 'SELECT date, forecaster, time FROM snow WHERE date = "' + str(pdf_date) + '"'
     cursor.execute(command)
     results = cursor.fetchall()
-    date = 'Date: ' + results[0][0]
+    date_components = results[0][0].split('-')
+    date = 'Date: ' + date_components[1] + '/' + date_components[2] + '/' + date_components[0]
     forecaster = 'Forecaster: ' + results[0][1]
+    hour = int(results[0][2].split(':')[0])
+    min = results[0][2].split(':')[1]
+    if(hour > 12):
+        hour = hour - 12
+        time = 'Time: ' + str(hour) + ':' + min + " PM"
+    else:
+        time = 'Time: ' + str(hour) + ':' + min + " AM"
 
-    data = [[date,'Time: ',forecaster]]
+    data = [[date,time,forecaster]]
     t = Table(data, spaceAfter= 20)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
                            ('FONTSIZE', (0, 0), (2, -1), 13),
@@ -203,15 +209,20 @@ def get_information(category_name):
 
 
 def make_file_name():
-    split_date = pdf_date.split("/")
-    filename = "_".join(split_date)
+    str_date = str(pdf_date)
+
+    date_components = str_date.split('-')
+    filename = date_components[1] + '_' + date_components[2] + '_' + date_components[0]
+
+    #split_date = str_date.split("-")
+    #filename = "_".join(split_date)
     return filename
 
 
-#TODO download the pdf to their device
 def generate_pdf(date):
     global pdf_date
     pdf_date = date
+    print(pdf_date)
 
     cursor = connection.cursor()
     command = 'SELECT date FROM snow WHERE date = "' + str(pdf_date) + '"'
@@ -265,8 +276,9 @@ def generate_pdf(date):
 
     return pdf_file_name
 
+
 def main():
-    generate_pdf('2/19/2025')
+    generate_pdf('2025-01-26')
 
 
 if __name__ == '__main__':
