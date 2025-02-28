@@ -118,7 +118,7 @@ def handle_post_login():
             return render_template('login_error_user.html')
     return render_template('loginform_user.html')
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()
@@ -217,15 +217,11 @@ def am_form():
             return send_file(pdf_filename, as_attachment=True)
             #return redirect('/view')
         else:
-            return redirect('/view')
+            return render_template('confirm.html', flash_message=True)
     else:
         now = datetime.now()
         formatted_now = now.strftime("%Y-%m-%dT%H:%M")
         return render_template('am-form.html', now=formatted_now)
-
-@app.route('/alert')
-def alert_message(message):
-  return jsonify({'message': True})
 
 @app.route('/pm-form', methods=['GET', 'POST'])
 @login_required
