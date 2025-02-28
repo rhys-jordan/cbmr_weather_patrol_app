@@ -3,8 +3,11 @@
 {% block content%}
 <h1> AM FORM</h1><br>
 <form action="/am-form" method="post">
-    <label>Date: </label> <input type="datetime-local" id="datetime" name="datetime" value='{{now}}'>
-    <label>Forecaster: </label> <input type="text" id="forecaster" name="forecaster"><br>
+    <div class = "row">
+        <label>Date: </label> <input type="datetime-local" id="datetime" name="datetime" value='{{now}}'>
+        <label>Forecaster: </label> <input type="text" id="forecaster" name="forecaster"><br>
+    </div>
+
     <label>HS:</label> <input type="number" id="hs" name="hs">
     <label>HN24:</label><input type="number" id="hn24" name="hn24">
     <label>HST:</label> <input type="number" id="hst" name="hst">
