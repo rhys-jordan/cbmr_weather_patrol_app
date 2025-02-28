@@ -213,13 +213,11 @@ def am_form():
             db.session.add(snow)
             db.session.commit()
             pdf_filename = generate_pdf(date)
-            #return redirect('/view'), send_file(pdf_filename, as_attachment=True)
+            # return redirect('/view'), send_file(pdf_filename, as_attachment=True)
             return send_file(pdf_filename, as_attachment=True)
-            return redirect('/view')
+            #return redirect('/view')
         else:
-            redirect('/alert')
-
-
+            return redirect('/view')
     else:
         now = datetime.now()
         formatted_now = now.strftime("%Y-%m-%dT%H:%M")
@@ -237,7 +235,6 @@ def pm_form():
 
 @app.route('/past-data', methods=['GET', 'POST'])
 @login_required
-@app.route('/past-data', methods=['GET', 'POST'])
 def past_data():
     return render_template('past-data.html')
 
