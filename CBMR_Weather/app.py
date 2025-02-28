@@ -1,4 +1,5 @@
 from calendar import month
+from crypt import methods
 
 from flask import Flask, render_template, request, redirect, jsonify
 from flask_json import FlaskJSON, json_response, as_json, JsonError
@@ -7,6 +8,8 @@ from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import foreign
 from flask_login import LoginManager, UserMixin, login_user,logout_user,current_user,login_required
 from datetime import datetime
+
+
 
 app = Flask(__name__, static_url_path='/static')
 json= FlaskJSON(app)
@@ -96,12 +99,11 @@ def handle_post_login():
             return render_template('login_error_user.html')
     return render_template('loginform_user.html')
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()
     return redirect("/")
-
 
 @app.route("/forms", methods=['GET', 'POST'])
 @login_required
@@ -192,15 +194,11 @@ def am_form():
             db.session.commit()
             return redirect('/view')
         else:
-            redirect('/alert')
+            return render_template('confirm.html', flash_message=True)
     else:
         now = datetime.now()
         formatted_now = now.strftime("%Y-%m-%dT%H:%M")
         return render_template('am-form.html', now=formatted_now)
-
-@app.route('/alert')
-def alert_message(message):
-  return jsonify({'message': True})
 
 @app.route('/pm-form', methods=['GET', 'POST'])
 @login_required

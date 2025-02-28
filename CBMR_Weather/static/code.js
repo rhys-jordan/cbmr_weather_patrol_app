@@ -38,3 +38,13 @@ function submit_amForm() {
     mitigation_plan = document.getElementById("mitigation_plan").value;
     pertinent_terrain_opening_closing = document.getElementById("pertinent_terrain_opening/closing").value;
 }
+
+
+function recheck() {
+    alert("this date exists please input a valid date or go to the Past-Data Form.")
+    window.location.href = "/view";
+}
+
+window.addEventListener('beforeunload', function(event) {
+    navigator.sendBeacon('/logout');
+});
