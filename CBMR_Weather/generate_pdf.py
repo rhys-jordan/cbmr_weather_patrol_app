@@ -234,8 +234,8 @@ def generate_pdf(date):
 
     filename_date = make_file_name()
     pdf_file_name = 'CBMR_' + filename_date + '.pdf'
-
-    doc = SimpleDocTemplate(pdf_file_name,
+    filepath = './past_pdfs/'
+    doc = SimpleDocTemplate(filepath+pdf_file_name,
                             pagesize=letter,
                             rightMargin=72,
                             leftMargin=72,
@@ -274,11 +274,11 @@ def generate_pdf(date):
 
     connection.close()
 
-    return pdf_file_name
+    return filepath+pdf_file_name
 
 
 def main():
-    generate_pdf('2025-01-26')
+    generate_pdf('2025-02-26')
 
 
 if __name__ == '__main__':

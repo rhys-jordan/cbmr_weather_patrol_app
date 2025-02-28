@@ -1,6 +1,6 @@
 from calendar import month
 
-from flask import Flask, render_template, request, redirect, send_file
+from flask import Flask, render_template, request, redirect, send_file, after_this_request
 from flask_json import FlaskJSON, json_response, as_json, JsonError
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.mysql import insert
@@ -8,14 +8,34 @@ from sqlalchemy.orm import foreign
 from flask_login import LoginManager, UserMixin, login_user,logout_user,current_user,login_required
 from datetime import datetime
 from generate_pdf import generate_pdf
+from job_delete_pdf_files import delete_files
+from flask_apscheduler import APScheduler
+
+
+class Config_jobs:
+    JOBS = [
+        {
+            "id": "job1",
+            "func": delete_files,
+            "trigger": "interval",
+            "hours": 24,
+        }
+    ]
+
+    SCHEDULER_API_ENABLED = True
+
 
 app = Flask(__name__, static_url_path='/static')
 json= FlaskJSON(app)
+app.config.from_object(Config_jobs)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CBMR_Weather.db'
 app.config['SECRET_KEY']="secretKey"
 
+scheduler = APScheduler()
+scheduler.init_app(app)
 
 db= SQLAlchemy(app)
+
 class Snow(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
@@ -210,4 +230,6 @@ def pm_form():
 def past_data():
     return render_template('past-data.html')
 
+
+scheduler.start()
 app.run() #this is destructive when put into python anywhere // please do not include app.run()
