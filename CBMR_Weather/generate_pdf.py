@@ -220,6 +220,9 @@ def make_file_name():
 
 
 def generate_pdf(date):
+    #connection = sqlite3.connect(".\\instance\\CBMR_Weather.db", check_same_thread=False)
+    #cursor = connection.cursor()
+
     global pdf_date
     pdf_date = date
     print(pdf_date)
@@ -272,7 +275,6 @@ def generate_pdf(date):
 
     doc.build(elements)
 
-    connection.close()
 
     return filepath+pdf_file_name
 
