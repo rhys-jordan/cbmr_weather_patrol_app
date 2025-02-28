@@ -1,6 +1,6 @@
 from calendar import month
 
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 from flask_json import FlaskJSON, json_response, as_json, JsonError
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.mysql import insert
@@ -82,7 +82,7 @@ def home():
     else:
         return render_template('loginform_user.html')
 
-#
+
 @app.route("/login", methods=['GET', 'POST'])
 def handle_post_login():
     if request.method == 'POST':
@@ -102,8 +102,9 @@ def logout():
     logout_user()
     return redirect("/")
 
-@login_required
+
 @app.route("/forms", methods=['GET', 'POST'])
+@login_required
 def forms():
     return render_template('forms.html')
 
@@ -116,8 +117,9 @@ def view():
     snow = Snow.query.all()
     return render_template('view.html', snow=snow)
 
-@login_required
+
 @app.route('/am-form', methods=['GET', 'POST'])
+@login_required
 def am_form():
     if request.method == 'POST':
         #time functions
@@ -189,22 +191,25 @@ def am_form():
             db.session.add(snow)
             db.session.commit()
             return redirect('/view')
-        else:#what should we do if current date is inputted?
-            print('Error: Data for this date already exists')
-            return redirect('/view')
-
+        else:
+            redirect('/alert')
     else:
         now = datetime.now()
         formatted_now = now.strftime("%Y-%m-%dT%H:%M")
         return render_template('am-form.html', now=formatted_now)
 
-@login_required
+@app.route('/alert')
+def alert_message(message):
+  return jsonify({'message': True})
+
 @app.route('/pm-form', methods=['GET', 'POST'])
+@login_required
 def pm_form():
         return render_template('pm-form.html')
 
-@login_required
+
 @app.route('/past-data', methods=['GET', 'POST'])
+@login_required
 def past_data():
         return render_template('past-data.html')
 
