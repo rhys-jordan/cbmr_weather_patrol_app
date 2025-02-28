@@ -213,9 +213,8 @@ def am_form():
             db.session.add(snow)
             db.session.commit()
             pdf_filename = generate_pdf(date)
-            # return redirect('/view'), send_file(pdf_filename, as_attachment=True)
+            #return redirect('/view'), send_file(pdf_filename, as_attachment=True)
             return send_file(pdf_filename, as_attachment=True)
-            #return redirect('/view')
         else:
             return render_template('confirm.html', flash_message=True)
     else:

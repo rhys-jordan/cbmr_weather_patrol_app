@@ -45,6 +45,8 @@ function recheck() {
     window.location.href = "/view";
 }
 
+/*
 window.addEventListener('beforeunload', function(event) {
     navigator.sendBeacon('/logout');
 });
+*/
