@@ -3,8 +3,11 @@
 {% block content%}
 <h1> AM FORM</h1><br>
 <form action="/am-form" method="post">
-    <label>Date: </label> <input type="datetime-local" id="datetime" name="datetime" value='{{now}}'>
-    <label>Forecaster: </label> <input type="text" id="forecaster" name="forecaster"><br>
+    <div class = "row">
+        <label>Date: </label> <input type="datetime-local" id="datetime" name="datetime" value='{{now}}'>
+        <label>Forecaster: </label> <input type="text" id="forecaster" name="forecaster"><br>
+    </div>
+
     <label>HS:</label> <input type="number" id="hs" name="hs">
     <label>HN24:</label><input type="number" id="hn24" name="hn24">
     <label>HST:</label> <input type="number" id="hst" name="hst">
@@ -74,8 +77,8 @@
     <h1>Pertinent Terrain Opening/Closing</h1><br>
     <textarea id="pertinent_terrain_opening/closing" name="pertinent_terrain_info"></textarea><br>
 
-    <button type="submit" name="action" value="submit_data">Enter Weather Data</button>
-    <button type="submit" onclick="submit_amForm()">Create AM Form</button>
+
+    <button type="submit" onclick="submit_amForm()">Generate PDF</button>
 </form>
 
 {% endblock %}

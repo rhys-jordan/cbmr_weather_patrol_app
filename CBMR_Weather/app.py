@@ -1,20 +1,42 @@
 from calendar import month
 
 from flask import Flask, render_template, request, redirect, jsonify
+from flask import Flask, render_template, request, redirect, send_file, after_this_request
 from flask_json import FlaskJSON, json_response, as_json, JsonError
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import foreign
 from flask_login import LoginManager, UserMixin, login_user,logout_user,current_user,login_required
 from datetime import datetime
+from generate_pdf import generate_pdf
+from job_delete_pdf_files import delete_files
+from flask_apscheduler import APScheduler
+
+
+class Config_jobs:
+    JOBS = [
+        {
+            "id": "job1",
+            "func": delete_files,
+            "trigger": "interval",
+            "hours": 24,
+        }
+    ]
+
+    SCHEDULER_API_ENABLED = True
+
 
 app = Flask(__name__, static_url_path='/static')
 json= FlaskJSON(app)
+app.config.from_object(Config_jobs)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CBMR_Weather.db'
 app.config['SECRET_KEY']="secretKey"
 
+scheduler = APScheduler()
+scheduler.init_app(app)
 
 db= SQLAlchemy(app)
+
 class Snow(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
@@ -190,9 +212,14 @@ def am_form():
             snow = Snow(dateTime=dateTime,date=date, day=day, month=month, year=year, time=time, season=season, forecaster=forecaster, hs=hs, hn24=hn24, hst=hst, ytd=ytd, sky=sky, temperature=temperature, wind_mph=wind_mph, wind_direction=wind_direction, critical_info=critical_info, weather_forecast=weather_forecast, avalanche_problems=avalanche_problems, avalanche_forecast_discussion=avalanche_forecast_discussion, summary_previous_day=summary_previous_day, mitigation_plan=mitigation_plan, pertinent_terrain_info=pertinent_terrain_info, current_precip_rate=current_precip_rate, past_24_hn24_hst_date_cir=past_24_hn24_hst_date_cir, future_precip_rate=future_precip_rate, past_24_hn24_swe=past_24_hn24_swe, future_temp_high=future_temp_high, past_24_wind_mph_direction=past_24_wind_mph_direction, future_temp_low=future_temp_low, past_24_temp_high=past_24_temp_high, future_wind_mph=future_wind_mph, past_24_temp_low=past_24_temp_low, future_wind_direction=future_wind_direction)
             db.session.add(snow)
             db.session.commit()
+            pdf_filename = generate_pdf(date)
+            #return redirect('/view'), send_file(pdf_filename, as_attachment=True)
+            return send_file(pdf_filename, as_attachment=True)
             return redirect('/view')
         else:
             redirect('/alert')
+
+
     else:
         now = datetime.now()
         formatted_now = now.strftime("%Y-%m-%dT%H:%M")
@@ -210,7 +237,10 @@ def pm_form():
 
 @app.route('/past-data', methods=['GET', 'POST'])
 @login_required
+@app.route('/past-data', methods=['GET', 'POST'])
 def past_data():
-        return render_template('past-data.html')
+    return render_template('past-data.html')
 
+
+scheduler.start()
 app.run() #this is destructive when put into python anywhere // please do not include app.run()
