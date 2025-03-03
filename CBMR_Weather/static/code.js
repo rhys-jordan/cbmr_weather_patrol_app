@@ -44,9 +44,3 @@ function recheck() {
     alert("this date exists please input a valid date or go to the Past-Data Form.")
     window.location.href = "/view";
 }
-
-/*
-window.addEventListener('beforeunload', function(event) {
-    navigator.sendBeacon('/logout');
-});
-*/

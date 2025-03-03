@@ -1,13 +1,13 @@
 from calendar import month
 
 from flask import Flask, render_template, request, redirect, jsonify
-from flask import Flask, render_template, request, redirect, send_file, after_this_request
+from flask import Flask, render_template, request, redirect, send_file, after_this_request, session
 from flask_json import FlaskJSON, json_response, as_json, JsonError
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import foreign
 from flask_login import LoginManager, UserMixin, login_user,logout_user,current_user,login_required
-from datetime import datetime
+from datetime import datetime, timedelta
 from generate_pdf import generate_pdf
 from job_delete_pdf_files import delete_files
 from flask_apscheduler import APScheduler
@@ -31,6 +31,7 @@ json= FlaskJSON(app)
 app.config.from_object(Config_jobs)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CBMR_Weather.db'
 app.config['SECRET_KEY']="secretKey"
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=120)
 
 scheduler = APScheduler()
 scheduler.init_app(app)
@@ -89,6 +90,7 @@ with app.app_context():
     db.create_all()
 
 login_manager = LoginManager(app)
+login_manager.login_view = "/"
 login_manager.init_app(app)
 
 
@@ -113,12 +115,13 @@ def handle_post_login():
         user = User.query.filter_by(username=username).first()
         if user and user.password == password:
             login_user(user)
+            session.permanent = True
             return redirect("/")
         else:
             return render_template('login_error_user.html')
     return render_template('loginform_user.html')
 
-@app.route('/logout', methods=['POST'])
+@app.route('/logout')
 @login_required
 def logout():
     logout_user()
