@@ -23,9 +23,10 @@ nav ul li a:hover{
     color: green;
 }
 
+
 h1 {
-            font-size: 3vw; /* Scales based on viewport width */
-        }
+            font-size: 3vw;/* Scales based on viewport width */
+       }
         p {
             font-size: 2vw;
         }
@@ -56,6 +57,7 @@ img.correct{
     height: 100%;
 }
 /* Ensure the table takes up the full width and centers on the page */
+
 table {
     width: 60%;
     margin: 0 auto;
@@ -102,4 +104,14 @@ table {
             padding: 8px;
             text-align: left;
         }
+.row {
+    padding: 10px;
+    display:block;
+}
 
+textarea {
+    width: 75%;
+    height: 150p;
+    margin: 0 auto;
+
+}
