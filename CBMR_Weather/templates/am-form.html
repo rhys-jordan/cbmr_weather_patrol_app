@@ -2,16 +2,17 @@
 {% block title%} AM-Form {%endblock%}
 {% block content%}
 <h1> AM FORM</h1><br>
-<form action="/am-form" method="post">
-    <div class = "row">
+<form action="/am-form" method="post" onkeydown="return event.key != 'Enter';">
+    <div class="row">
         <label>Date: </label> <input type="datetime-local" id="datetime" name="datetime" value='{{now}}'>
         <label>Forecaster: </label> <input type="text" id="forecaster" name="forecaster"><br>
     </div>
-
-    <label>HS:</label> <input type="number" id="hs" name="hs">
-    <label>HN24:</label><input type="number" id="hn24" name="hn24">
-    <label>HST:</label> <input type="number" id="hst" name="hst">
-    <label>YTD:</label> <input type="number" id="ytd" name="ytd"><br>
+    <div class = "row">
+        <label>HS:</label> <input type="number" id="hs" name="hs">
+        <label>HN24:</label><input type="number" id="hn24" name="hn24">
+        <label>HST:</label> <input type="number" id="hst" name="hst">
+        <label>YTD:</label> <input type="number" id="ytd" name="ytd"><br>
+    </div>
     <label>Critical Information:</label><br>
     <textarea id="critical_information" name="critical_information"></textarea><br>
     <h1>Pertinent Weather Observations past and future</h1><br>
