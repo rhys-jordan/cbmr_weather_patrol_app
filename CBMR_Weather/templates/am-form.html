@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 {% block title%} AM-Form {%endblock%}
 {% block content%}
+
 <h1> AM FORM</h1><br>
-<form action="/am-form" method="post" onkeydown="return event.key != 'Enter';">
+
+
+<a href="https://cbavalanchecenter.org/" target="_blank">CBAC</a>&emsp;&emsp;<a href="https://avalanche.state.co.us/" target="_blank">CAIC</a>&emsp;&emsp;<a href="https://forecast.weather.gov/MapClick.php?lon=-106.96337126428263&lat=38.90990956937884" target="_blank">NWS</a>&emsp;&emsp;<a href="https://cbavalanchecenter.org/forecasts/#/weather" target="_blank">CBAC Weather</a>
+
+
+<br><form action="/am-form" method="post" onkeydown="return event.key != 'Enter';">
     <div class="row">
         <label>Date: </label> <input type="datetime-local" id="datetime" name="datetime" value='{{now}}'>
         <label>Forecaster: </label> <input type="text" id="forecaster" name="forecaster"><br>

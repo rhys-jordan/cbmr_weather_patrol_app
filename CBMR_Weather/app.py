@@ -4,8 +4,9 @@ from flask import Flask, render_template, request, redirect, jsonify
 from flask import Flask, render_template, request, redirect, send_file, after_this_request, session
 from flask_json import FlaskJSON, json_response, as_json, JsonError
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import ForeignKey
 from sqlalchemy.dialects.mysql import insert
-from sqlalchemy.orm import foreign
+from sqlalchemy.orm import foreign, relationship
 from flask_login import LoginManager, UserMixin, login_user,logout_user,current_user,login_required
 from datetime import datetime, timedelta
 from generate_pdf import generate_pdf
@@ -79,12 +80,25 @@ class Snow(db.Model):
     summary_previous_day=db.Column(db.String)
     mitigation_plan=db.Column(db.String)
     pertinent_terrain_info=db.Column(db.String)
+    #Avalanche Table Foreign Key
+    children = relationship("Avalanche", back_populates="Snow")
+
 
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), unique=True, nullable=False)
     password = db.Column(db.String(40), nullable=False)
+
+class Avalanche(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    danger = db.Column(db.String(12), nullable=False)
+    problem = db.Column(db.String(40), nullable=False)
+    size = db.Column(db.Float, nullable=False)
+    likelihood = db.Column(db.String, nullable=False)
+    aspect = db.Column(db.String, nullable=False)
+    Snow_id = db.Column(db.Integer, ForeignKey('snow.id'))
+    parent = relationship("Snow", back_populates="Avalanche")
 
 with app.app_context():
     db.create_all()
@@ -224,6 +238,7 @@ def am_form():
         now = datetime.now()
         formatted_now = now.strftime("%Y-%m-%dT%H:%M")
         return render_template('am-form.html', now=formatted_now)
+
 
 @app.route('/pm-form', methods=['GET', 'POST'])
 @login_required
