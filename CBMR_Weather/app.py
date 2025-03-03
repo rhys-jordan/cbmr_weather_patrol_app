@@ -81,7 +81,7 @@ class Snow(db.Model):
     mitigation_plan=db.Column(db.String)
     pertinent_terrain_info=db.Column(db.String)
     #Avalanche Table Foreign Key
-    children = relationship("Avalanche", back_populates="Snow")
+    children = relationship("Avalanche", back_populates="parent")
 
 
 
@@ -92,13 +92,13 @@ class User(UserMixin, db.Model):
 
 class Avalanche(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    danger = db.Column(db.String(12), nullable=False)
-    problem = db.Column(db.String(40), nullable=False)
-    size = db.Column(db.Float, nullable=False)
-    likelihood = db.Column(db.String, nullable=False)
-    aspect = db.Column(db.String, nullable=False)
+    danger = db.Column(db.String(12))
+    problem = db.Column(db.String(40))
+    size = db.Column(db.Float)
+    likelihood = db.Column(db.String)
+    aspect = db.Column(db.String)
     Snow_id = db.Column(db.Integer, ForeignKey('snow.id'))
-    parent = relationship("Snow", back_populates="Avalanche")
+    parent = relationship("Snow", back_populates="children")
 
 with app.app_context():
     db.create_all()
