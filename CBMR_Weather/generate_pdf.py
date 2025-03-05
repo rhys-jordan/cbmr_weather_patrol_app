@@ -35,7 +35,7 @@ def create_basic_info():
     results = cursor.fetchall()
     date_components = results[0][0].split('-')
     date = 'Date: ' + date_components[1] + '/' + date_components[2] + '/' + date_components[0]
-    forecaster = 'Forecaster: ' + results[0][1]
+    forecaster = 'Forecaster: ' + str(results[0][1])
     hour = int(results[0][2].split(':')[0])
     min = results[0][2].split(':')[1]
     if(hour > 12):
@@ -152,16 +152,22 @@ def create_weather_forcast_table():
 
 
 def get_avalanche_danger_data():
-    command = ('SELECT sky, current_precip_rate, temperature, wind_mph, wind_direction '
-               'FROM snow'
-               ' WHERE date = "') + str(pdf_date) + '"'
+    command = ('SELECT danger, problem, size, likelihood, aspect FROM avalanche '
+               'WHERE Snow_id in '
+               '(SELECT snow.id '
+               'FROM snow '
+               'WHERE date = "'+ str(pdf_date) + '")')
     cursor.execute(command)
-    results_current = cursor.fetchall()
+    results_future = cursor.fetchall()
+    for i in range(len(results_future)):
+        print(results_future[i])
+    print(len(results_future))
 
 
 #TODO Needs to accommodate varying number of avalanche dangers
 #TODO pull avalanche problems from database
 def create_avalanche_danger_table():
+    get_avalanche_danger_data()
     ava_prob = Paragraph('Avalanche Problem 1', styles['Normal'])
     aspect_elevation = Paragraph('Aspect/   Elevation', styles['Normal'])
     size_likelihood = Paragraph('Size/  Likelihood', styles['Normal'])
@@ -280,7 +286,8 @@ def generate_pdf(date):
 
 
 def main():
-    generate_pdf('2025-02-26')
+    generate_pdf('2025-03-04')
+    connection.close()
 
 
 if __name__ == '__main__':
