@@ -8,9 +8,11 @@ from io import StringIO
 from flask import send_file
 
 import sqlite3
+import os
 
 #idk about this false on threading, this may be dangerous and we could run into problems.
-connection = sqlite3.connect(".\\instance\\CBMR_Weather.db", check_same_thread=False)
+db_path = os.path.join("instance", "CBMR_Weather.db")
+connection = sqlite3.connect(db_path, check_same_thread=False)
 cursor = connection.cursor()
 
 pdf_date =  ''
