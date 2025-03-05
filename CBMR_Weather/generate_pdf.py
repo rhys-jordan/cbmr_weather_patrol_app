@@ -246,6 +246,8 @@ def generate_pdf(date):
     filename_date = make_file_name()
     pdf_file_name = 'CBMR_' + filename_date + '.pdf'
     filepath = './past_pdfs/'
+    #added to ensure directory exists
+    os.makedirs(filepath, exist_ok=True)
     doc = SimpleDocTemplate(filepath+pdf_file_name,
                             pagesize=letter,
                             rightMargin=72,
