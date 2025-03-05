@@ -154,7 +154,7 @@ def create_weather_forcast_table():
 
 
 def get_avalanche_danger_data():
-    command = ('SELECT problem, size_likelihood, aspect_elevation, trend FROM avalanche '
+    command = ('SELECT problem, aspect_elevation, size_likelihood, trend FROM avalanche '
                'WHERE Snow_id in '
                '(SELECT snow.id '
                'FROM snow '
@@ -165,8 +165,6 @@ def get_avalanche_danger_data():
 
 
 
-#TODO Needs to accommodate varying number of avalanche dangers
-#TODO pull avalanche problems from database
 def create_avalanche_danger_table(ava_results):
     data = [['Avalanche Danger in the BC/on the other side of the rope', '', '', '', '', '', '', '']]
     for i in range(len(ava_results)):
@@ -175,10 +173,12 @@ def create_avalanche_danger_table(ava_results):
         aspect_elevation = Paragraph('Aspect/   Elevation', styles['Normal'])
         size_likelihood = Paragraph('Size/  Likelihood', styles['Normal'])
         trend = Paragraph('Trend', styles['Normal'])
-        data.append([ava_prob, ava_results[i][0], aspect_elevation, ava_results[i][1],size_likelihood , ava_results[i][2], trend, ''])
+        data.append([ava_prob, ava_results[i][0], aspect_elevation, ava_results[i][1],size_likelihood , ava_results[i][2], trend, ava_results[i][2]])
 
 
-    t = Table(data, colWidths=[71 for x in range(len(data[0]))],
+    #t = Table(data, colWidths=[71 for x in range(len(data[0]))],
+              #rowHeights=[30 for x in range(len(data))], spaceAfter= 20)
+    t = Table(data, colWidths=[65,110,65,65,65,65,65,65],
               rowHeights=[30 for x in range(len(data))], spaceAfter= 20)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
                            ('GRID', (0, 0), (8, len(ava_results)), 1, colors.black),
