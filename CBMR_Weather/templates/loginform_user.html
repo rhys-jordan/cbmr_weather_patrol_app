@@ -2,13 +2,12 @@
 {% block title%} Login {%endblock%}
 {% block content %}
 {{super()}}
-<div id="loginForm_container">
-        <form id="loginForm" action="/login" method="post">
-                <label> Username:</label>
-                <input type="text" required="required" name="username" value={{username}}><br>
-                <label> Password:</label>
-                <input type="password" required="required" name="password" value={{password}}><br>
-                <button type="submit" name="action" value="submit_query">Login</button>
-        </form>
-</div>
+<form action="/login" method="post">
+        <label> Username:</label>
+        <input type="text" required="required" name="username" value={{username}}><br>
+        <label> Password:</label>
+        <input type="password" required="required" name="password" value={{password}}><br>
+        <button type="submit" name="action" value="submit_query">Login</button>
+</form>
+
 {% endblock %}

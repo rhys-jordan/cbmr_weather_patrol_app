@@ -1,20 +1,18 @@
 nav {
-    background-color: black;
-    width: 100%;
+background-color: black;
+    width: 50%;
 }
 
 nav ul {
     list-style-type: none;
-    padding:20px;
+    padding: 10px;
     margin: 0px;
-    font-size: 2vw;
-    text-align: left;
 
 }
 
 nav ul li {
     display: inline;
-    padding: 10px;
+    padding: 5px;
 }
 
 nav ul li a:link, nav ul li a:visited{
@@ -25,11 +23,7 @@ nav ul li a:hover{
     color: green;
 }
 
-input{
-    margin: 5px auto;
-    height: 25px;
-    font-size: 20px;
-}
+
 h1 {
             font-size: 3vw;/* Scales based on viewport width */
        }
@@ -62,141 +56,62 @@ img.correct{
     width: 100%;
     height: 100%;
 }
+/* Ensure the table takes up the full width and centers on the page */
+
+table {
+    width: 60%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+
+td {
+    width: 25%;
+    padding: 5px;
+    text-align: center;
+}
+
 img {
     width: 10%;
     aspect-ratio: 1 / 1;
     display: block;
 }
+#date {
+    font-size: 50px;
 
-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+   }
+#button {
+    font-size: 50px;
+
 }
-button:hover{
-    color: green;
+#info {
+    font-size: 50px;
 }
 
+select {
+            width: 300px;
+            height: 100px;
+            font-size: 50px;
+
+}
 table {
-    border-collapse: collapse;
-    width: 95%;
-}
+            border-collapse: collapse;
+            width: 100%;
+        }
 
-th, td {
-      border: 1px solid black;
-      padding: 8px;
-      text-align: left;
-}
-
-table tr th {
-    text-align: center;
-}
-table tr td label {
-    padding: 5px;
-    margin-left: auto;
-    display: block;
-}
-
-table tr td input{
-    width: 98%;
-    height: 25px;
-    font-size: 20px;
-}
-
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
 .row {
     padding: 10px;
     display:block;
 }
 
 textarea {
-    width: 95%;
-    height: 200px;
+    width: 75%;
+    height: 150p;
     margin: 0 auto;
-    font-size: 20px;
-
-}
-
-a:hover {
-  color: Green;
-  text-decoration: underline;
-}
-a{
-    color: Blue;
-    font-size:30px;
-    font-weight: bold;
-}
-
-form {
-  width: 100%;
-  margin: 20px auto;
-  text-align: left;
-  font-size:1.5vw;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #f9f9f9;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-  padding-left: 20px;
-  padding-right: 20px;
-}
-
-
-
-#problemsContainer {
-    width: 95%;
-    display: flex;
-    align-items: center;
-    flex-wrap: nowrap;
-    gap: 10px;
-    overflow-x: auto;
-}
-
-#problemsContainer label {
-    white-space: nowrap;
-}
-
-#problemsContainer input {
-    flex: 1;
-    min-width: 100px;
-    padding: 5px;
-}
-
-#loginForm_container{
-  width: 25%;
-  margin: 20px auto;
-  text-align: center;
-  font-size:1.5vw;
-  padding: 20px;
-}
-
-#loginForm_container form{
-    text-align: center;
-}
-
-#loginForm_container button{
-    margin-top: 10px;
-    text-align: center;
-    font-size: 1.5vw;
-}
-
-#title{
-    width 50%;
-    font-size: 3vw;
-    text-align: center;
-    text-decoration: underline;
-}
-
-#submitButton{
-    margin-top: 10px;
-    text-align: center;
-    font-size: 2vw;
-}
-
-#links{
-    width 50%;
-    font-size: 3vw;
-    text-align: center;
 
 }

@@ -1,4 +1,3 @@
-//Code that could be helpful for Rhys pdf??
 function submit_amForm() {
     day = document.getElementById("day").value;
     month = document.getElementById("month").value;
@@ -28,10 +27,12 @@ function submit_amForm() {
     weather_forecast = document.getElementById("weather_forecast").value;
 
     //need this to dynamically collect more based on the number of values used
+    
+    avalanche_danger = document.getElementById("avalanche_danger").value;
     avalanche_problem_1 = document.getElementById("avalanche_problem_1").value;
-    aspect_elevation_1 = document.getElementById("aspect_elevation").value;
-    size_likelihood_1 = document.getElementById("size_likelihood").value;
-    trend_1 = document.getElementById("trend").value;
+    aspect_elevation = document.getElementById("aspect_elevation").value;
+    size_likelihood = document.getElementById("size_likelihood").value;
+    trend = document.getElementById("trend").value;
 
     avalanche_forecast_discussion = document.getElementById("avalanche_forecast_discussion").value;
     summary_of_previous_work = document.getElementById("summary_of_previous_work").value;
@@ -40,7 +41,27 @@ function submit_amForm() {
 }
 
 
+function addProblem2() {
+
+    document.getElementById("problem_2").hidden = false;
+    document.getElementById("problem_2_button").hidden = true;
+    document.getElementById("problem_3_button").hidden = false;
+
+
+}
+
+
+function addProblem3() {
+
+    document.getElementById("problem_3").hidden = false;
+    document.getElementById("problem_3_button").hidden = true;
+
+
+}
+
+
 function recheck() {
     alert("this date exists please input a valid date or go to the Past-Data Form.")
     window.location.href = "/view";
 }
+
