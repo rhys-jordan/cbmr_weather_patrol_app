@@ -72,17 +72,17 @@ class Snow(db.Model):
     future_temp_low = db.Column(db.Float)  # Temp low (future)
     future_wind_mph = db.Column(db.String)  # Wind mph (future)
     future_wind_direction = db.Column(db.String)  # Wind direction (future)
+    #Avalanche
+    avalanche_danger = db.Column(db.String)
     #Other
-    critical_info= db.Column(db.String)
-    weather_forecast=db.Column(db.String)
-    avalanche_problems=db.Column(db.String)
+    critical_info = db.Column(db.String)
+    weather_forecast = db.Column(db.String)
     avalanche_forecast_discussion=db.Column(db.String)
     summary_previous_day=db.Column(db.String)
     mitigation_plan=db.Column(db.String)
     pertinent_terrain_info=db.Column(db.String)
     #Avalanche Table Foreign Key
     children = relationship("Avalanche", back_populates="parent")
-
 
 
 class User(UserMixin, db.Model):
@@ -92,16 +92,16 @@ class User(UserMixin, db.Model):
 
 class Avalanche(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    danger = db.Column(db.String(12))
-    problem = db.Column(db.String(40))
-    size = db.Column(db.Float)
-    likelihood = db.Column(db.String)
-    aspect = db.Column(db.String)
+    problem = db.Column(db.String)
+    size_likelihood = db.Column(db.String)
+    aspect_elevation = db.Column(db.String)
+    trend = db.Column(db.String)
     Snow_id = db.Column(db.Integer, ForeignKey('snow.id'))
     parent = relationship("Snow", back_populates="children")
 
 with app.app_context():
     db.create_all()
+
 
 login_manager = LoginManager(app)
 login_manager.login_view = "/"
@@ -215,10 +215,26 @@ def am_form():
         future_precip_rate = float(future_precip_rate) if future_precip_rate else None
         future_temp_high = float(future_temp_high) if future_temp_high else None
         future_temp_low = float(future_temp_low) if future_temp_low else None
+        #avalanche conversions
+        avalanche_danger = request.form.get('avalanche_danger', None)
+        # problem 1
+        avalanche_problem_1 = request.form.get('avalanche_problem_1', None)
+        aspect_elevation_1 = request.form.get('aspect_elevation_1', None)
+        size_likelihood_1 = request.form.get('size_likelihood_1', None)
+        trend_1 = request.form.get('trend_1', None)
+        # problem 2
+        avalanche_problem_2 = request.form.get('avalanche_problem_2', None)
+        aspect_elevation_2 = request.form.get('aspect_elevation_2', None)
+        size_likelihood_2 = request.form.get('size_likelihood_2', None)
+        trend_2 = request.form.get('trend_2', None)
+        #problem 3
+        avalanche_problem_3 = request.form.get('avalanche_problem_3', None)
+        aspect_elevation_3 = request.form.get('aspect_elevation_3', None)
+        size_likelihood_3 = request.form.get('size_likelihood_3', None)
+        trend_3 = request.form.get('trend_3', None)
         #text box conversions
         critical_info = request.form.get('critical_information', None)
         weather_forecast = request.form.get('weather_forecast', None)
-        avalanche_problems = request.form.get('avalanche_problems', None)
         avalanche_forecast_discussion = request.form.get('avalanche_forecast_discussion', None)
         summary_previous_day = request.form.get('summary_previous_day', None)
         mitigation_plan = request.form.get('mitigation_plan', None)
@@ -226,8 +242,23 @@ def am_form():
         #checking if data input has already happened
         dateCheck = Snow.query.filter_by(date=date).first()
         if not dateCheck:
-            snow = Snow(dateTime=dateTime,date=date, day=day, month=month, year=year, time=time, season=season, forecaster=forecaster, hs=hs, hn24=hn24, hst=hst, ytd=ytd, sky=sky, temperature=temperature, wind_mph=wind_mph, wind_direction=wind_direction, critical_info=critical_info, weather_forecast=weather_forecast, avalanche_problems=avalanche_problems, avalanche_forecast_discussion=avalanche_forecast_discussion, summary_previous_day=summary_previous_day, mitigation_plan=mitigation_plan, pertinent_terrain_info=pertinent_terrain_info, current_precip_rate=current_precip_rate, past_24_hn24_hst_date_cir=past_24_hn24_hst_date_cir, future_precip_rate=future_precip_rate, past_24_hn24_swe=past_24_hn24_swe, future_temp_high=future_temp_high, past_24_wind_mph_direction=past_24_wind_mph_direction, future_temp_low=future_temp_low, past_24_temp_high=past_24_temp_high, future_wind_mph=future_wind_mph, past_24_temp_low=past_24_temp_low, future_wind_direction=future_wind_direction)
+            print(avalanche_problem_1, avalanche_problem_2, avalanche_problem_3)
+            snow = Snow(dateTime=dateTime,date=date, day=day, month=month, year=year, time=time, season=season, forecaster=forecaster, hs=hs, hn24=hn24, hst=hst, ytd=ytd, sky=sky, temperature=temperature, wind_mph=wind_mph, wind_direction=wind_direction, critical_info=critical_info, weather_forecast=weather_forecast, avalanche_forecast_discussion=avalanche_forecast_discussion, summary_previous_day=summary_previous_day, mitigation_plan=mitigation_plan, pertinent_terrain_info=pertinent_terrain_info, current_precip_rate=current_precip_rate, past_24_hn24_hst_date_cir=past_24_hn24_hst_date_cir, future_precip_rate=future_precip_rate, past_24_hn24_swe=past_24_hn24_swe, future_temp_high=future_temp_high, past_24_wind_mph_direction=past_24_wind_mph_direction, future_temp_low=future_temp_low, past_24_temp_high=past_24_temp_high, future_wind_mph=future_wind_mph, past_24_temp_low=past_24_temp_low, future_wind_direction=future_wind_direction)
             db.session.add(snow)
+
+            id = Snow.query.filter_by(date=date).first().id
+            print(id)
+
+            if avalanche_problem_1 != "":
+                avy1 = Avalanche(problem=avalanche_problem_1, size_likelihood=size_likelihood_1, aspect_elevation=aspect_elevation_1, trend=trend_1, Snow_id=id)
+                db.session.add(avy1)
+            if avalanche_problem_2 != "":
+                avy2 = Avalanche(problem=avalanche_problem_2, size_likelihood=size_likelihood_2, aspect_elevation=aspect_elevation_2, trend=trend_2, Snow_id=id)
+                db.session.add(avy2)
+            if avalanche_problem_3 != "":
+                avy3 = Avalanche(problem=avalanche_problem_3, size_likelihood=size_likelihood_3, aspect_elevation=aspect_elevation_3, trend=trend_3, Snow_id=id)
+                db.session.add(avy3)
+
             db.session.commit()
             pdf_filename = generate_pdf(date)
             #return redirect('/view'), send_file(pdf_filename, as_attachment=True)

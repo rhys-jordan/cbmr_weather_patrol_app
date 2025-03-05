@@ -2,11 +2,11 @@
 {% block title%} AM-Form {%endblock%}
 {% block content%}
 
-<h1 id="title"> AM FORM</h1><br>
+<h1> AM FORM</h1><br>
 
-<div id="links">
-    <a href="https://cbavalanchecenter.org/" target="_blank">CBAC</a>&emsp;&emsp;<a href="https://avalanche.state.co.us/" target="_blank">CAIC</a>&emsp;&emsp;<a href="https://forecast.weather.gov/MapClick.php?lon=-106.96337126428263&lat=38.90990956937884" target="_blank">NWS</a>&emsp;&emsp;<a href="https://cbavalanchecenter.org/forecasts/#/weather" target="_blank">CBAC Weather</a>
-</div>
+
+<a href="https://cbavalanchecenter.org/" target="_blank">CBAC</a>&emsp;&emsp;<a href="https://avalanche.state.co.us/" target="_blank">CAIC</a>&emsp;&emsp;<a href="https://forecast.weather.gov/MapClick.php?lon=-106.96337126428263&lat=38.90990956937884" target="_blank">NWS</a>&emsp;&emsp;<a href="https://cbavalanchecenter.org/forecasts/#/weather" target="_blank">CBAC Weather</a>
+
 
 <br><form action="/am-form" method="post" onkeydown="return event.key != 'Enter';">
     <div class="row">
@@ -60,17 +60,175 @@
     <h1>Weather Forecast:</h1><br>
     <textarea id="weather_forecast" name="weather_forecast"></textarea><br>
     <h1>AVALANCHE DANGER in the BC/on other side of the rope</h1><br>
-    <div id="problemsContainer">
-            <label>Avalanche problem 1</label>
-            <input type="text" id="avalanche_problem_1" name="avalanche_problems">
-            <label>Aspect/elevation</label>
-            <input type="text" id="aspect_elevation">
-            <label>Size/likelihood</label>
-            <input type="text" id="size_likelihood">
+
+    <label>Danger Rating</label>
+            <select id="avalanche_danger" name="avalanche_danger">
+                <option value="" hidden="true"></option>
+                <option value="low">Low</option>
+                <option value="moderate">Moderate</option>
+                <option value="considerable">Considerable</option>
+                <option value="high">High</option>
+                <option value="extreme">Extreme</option>
+            </select>
+
+    <div id="problem_1">
+            <label>Problem 1 </label>
+            <select id="avalanche_problem_1" name="avalanche_problem_1">
+                <option value="" hidden="true"></option>
+                <option value="persistent_slab">Persistent Slab</option>
+                <option value="deep_persistent_slab">Deep Persistent Slab</option>
+                <option value="storm_slab">Storm Slab</option>
+                <option value="wet_slab">Wet Slab</option>
+                <option value="wind_slab">Wind Slab</option>
+                <option value="dry_loose">Dry Loose</option>
+                <option value="wet_loose">Wet Loose</option>
+                <option value="glide">Glide</option>
+                <option value="cornice_fall">Cornice Fall</option>
+            </select>
+
+            <label>Aspect/Elevation</label>
+            <input type="text" id="aspect_elevation_1" name="aspect_elevation_1">
+
+            <label>Size/Likelihood</label>
+            <input type="text" id="size_likelihood_1" name="size_likelihood_1">
+
             <label>Trend</label>
-            <input type="text" id="trend">
-        </div>
-        <button onclick="addProblem()">Add Problem</button>
+            <input type="text" id="trend_1" name="trend_1">
+
+            <!-- <label>Size</label>
+            <select name="size1">
+                <option value="certain">Certain</option>
+                <option value="very likely">Very Likely</option>
+                <option value="likely">Likely</option>
+                <option value="possible">Possible</option>
+                <option value="unlikely">Unlikely</option>
+            </select>
+
+            <label>Likelihood</label>
+            <select name="size">
+                <option value="small">Small</option>
+                <option value="large">Large</option>
+                <option value="very large">Very Large</option>
+                <option value="historic">Historic</option>
+            </select>
+
+            <label>Trend (From Yesterday)</label>
+            <select name="trend">
+                <option value="increase_dramatic">Increase (Dramatic)</option>
+                <option value="increase">Increase</option>
+                <option value="none">No Change</option>
+                <option value="decrease">Decrease</option>
+                <option value="decrease_dramatic">Decrease (Dramatic)</option>
+            </select> -->
+
+    </div>
+
+    <div id="problem_2" hidden="true">
+        <label>Problem 2 </label>
+        <select id="avalanche_problem_2" name="avalanche_problem_2">
+            <option value="" hidden="true"></option>
+            <option value="persistent_slab">Persistent Slab</option>
+            <option value="deep_persistent_slab">Deep Persistent Slab</option>
+            <option value="storm_slab">Storm Slab</option>
+            <option value="wet_slab">Wet Slab</option>
+            <option value="wind_slab">Wind Slab</option>
+            <option value="dry_loose">Dry Loose</option>
+            <option value="wet_loose">Wet Loose</option>
+            <option value="glide">Glide</option>
+            <option value="cornice_fall">Cornice Fall</option>
+        </select>
+
+        <label>Aspect/Elevation</label>
+        <input type="text" id="aspect_elevation_2" name="aspect_elevation_2">
+
+        <label>Size/Likelihood</label>
+        <input type="text" id="size_likelihood_2" name="size_likelihood_2">
+
+        <label>Trend</label>
+        <input type="text" id="trend_2" name="trend_2">
+
+        <!-- <label>Size</label>
+        <select name="size1">
+            <option value="certain">Certain</option>
+            <option value="very likely">Very Likely</option>
+            <option value="likely">Likely</option>
+            <option value="possible">Possible</option>
+            <option value="unlikely">Unlikely</option>
+        </select>
+
+        <label>Likelihood</label>
+        <select name="size">
+            <option value="small">Small</option>
+            <option value="large">Large</option>
+            <option value="very large">Very Large</option>
+            <option value="historic">Historic</option>
+        </select>
+
+        <label>Trend (From Yesterday)</label>
+        <select name="trend">
+            <option value="increase_dramatic">Increase (Dramatic)</option>
+            <option value="increase">Increase</option>
+            <option value="none">No Change</option>
+            <option value="decrease">Decrease</option>
+            <option value="decrease_dramatic">Decrease (Dramatic)</option>
+        </select> -->
+
+    </div>
+
+    <div id="problem_3" hidden="true">
+        <label>Problem 3 </label>
+        <select id="avalanche_problem_3" name="avalanche_problem_3">
+            <option value="" hidden="true"></option>
+            <option value="persistent_slab">Persistent Slab</option>
+            <option value="deep_persistent_slab">Deep Persistent Slab</option>
+            <option value="storm_slab">Storm Slab</option>
+            <option value="wet_slab">Wet Slab</option>
+            <option value="wind_slab">Wind Slab</option>
+            <option value="dry_loose">Dry Loose</option>
+            <option value="wet_loose">Wet Loose</option>
+            <option value="glide">Glide</option>
+            <option value="cornice_fall">Cornice Fall</option>
+        </select>
+
+        <label>Aspect/Elevation</label>
+        <input type="text" id="aspect_elevation_3" name="aspect_elevation_3">
+
+        <label>Size/Likelihood</label>
+        <input type="text" id="size_likelihood_3" name="size_likelihood_3">
+
+        <label>Trend</label>
+        <input type="text" id="trend_3" name="trend_3">
+
+        <!-- <label>Size</label>
+        <select name="size1">
+            <option value="certain">Certain</option>
+            <option value="very likely">Very Likely</option>
+            <option value="likely">Likely</option>
+            <option value="possible">Possible</option>
+            <option value="unlikely">Unlikely</option>
+        </select>
+
+        <label>Likelihood</label>
+        <select name="size">
+            <option value="small">Small</option>
+            <option value="large">Large</option>
+            <option value="very large">Very Large</option>
+            <option value="historic">Historic</option>
+        </select>
+
+        <label>Trend (From Yesterday)</label>
+        <select name="trend">
+            <option value="increase_dramatic">Increase (Dramatic)</option>
+            <option value="increase">Increase</option>
+            <option value="none">No Change</option>
+            <option value="decrease">Decrease</option>
+            <option value="decrease_dramatic">Decrease (Dramatic)</option>
+        </select> -->
+
+    </div>
+
+    <button type="button" onclick="addProblem2()" id="problem_2_button">Add Second Problem</button>
+    <button type="button" onclick="addProblem3()" id="problem_3_button" hidden="true">Add Third Problem</button>
 
     <h1>Avalanche Forecast and discussion, How it relates to our Mtn and Our Strategic Mindset</h1><br>
     <textarea id="avalanche_forecast_discussion" name="avalanche_forecast_discussion"></textarea>
@@ -84,8 +242,7 @@
     <h1>Pertinent Terrain Opening/Closing</h1><br>
     <textarea id="pertinent_terrain_opening/closing" name="pertinent_terrain_info"></textarea><br>
 
-
-    <button id="submitButton" type="submit" onclick="submit_amForm()">Generate PDF</button>
+    <button type="submit" onclick="submit_amForm()">Generate PDF</button>
 </form>
 
 {% endblock %}

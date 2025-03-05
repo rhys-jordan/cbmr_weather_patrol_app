@@ -37,7 +37,7 @@ def create_basic_info():
     results = cursor.fetchall()
     date_components = results[0][0].split('-')
     date = 'Date: ' + date_components[1] + '/' + date_components[2] + '/' + date_components[0]
-    forecaster = 'Forecaster: ' + results[0][1]
+    forecaster = 'Forecaster: ' + str(results[0][1])
     hour = int(results[0][2].split(':')[0])
     min = results[0][2].split(':')[1]
     if(hour > 12):
@@ -154,28 +154,34 @@ def create_weather_forcast_table():
 
 
 def get_avalanche_danger_data():
-    command = ('SELECT sky, current_precip_rate, temperature, wind_mph, wind_direction '
-               'FROM snow'
-               ' WHERE date = "') + str(pdf_date) + '"'
+    command = ('SELECT problem, size_likelihood, aspect_elevation, trend FROM avalanche '
+               'WHERE Snow_id in '
+               '(SELECT snow.id '
+               'FROM snow '
+               'WHERE date = "'+ str(pdf_date) + '")')
     cursor.execute(command)
-    results_current = cursor.fetchall()
+    results_ava= cursor.fetchall()
+    return results_ava
+
 
 
 #TODO Needs to accommodate varying number of avalanche dangers
 #TODO pull avalanche problems from database
-def create_avalanche_danger_table():
-    ava_prob = Paragraph('Avalanche Problem 1', styles['Normal'])
-    aspect_elevation = Paragraph('Aspect/   Elevation', styles['Normal'])
-    size_likelihood = Paragraph('Size/  Likelihood', styles['Normal'])
-    trend = Paragraph('Trend', styles['Normal'])
+def create_avalanche_danger_table(ava_results):
+    data = [['Avalanche Danger in the BC/on the other side of the rope', '', '', '', '', '', '', '']]
+    for i in range(len(ava_results)):
+        ava_problem_name = 'Avalanche Problem ' + str(i + 1)
+        ava_prob = Paragraph(ava_problem_name, styles['Normal'])
+        aspect_elevation = Paragraph('Aspect/   Elevation', styles['Normal'])
+        size_likelihood = Paragraph('Size/  Likelihood', styles['Normal'])
+        trend = Paragraph('Trend', styles['Normal'])
+        data.append([ava_prob, ava_results[i][0], aspect_elevation, ava_results[i][1],size_likelihood , ava_results[i][2], trend, ''])
 
-    data = [['Avalanche Danger in the BC/on the other side of the rope', '', '', '', '', '', '',''],
-            [ava_prob, '', aspect_elevation, '',size_likelihood , '', trend, '']]
 
     t = Table(data, colWidths=[71 for x in range(len(data[0]))],
               rowHeights=[30 for x in range(len(data))], spaceAfter= 20)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
-                           ('GRID', (0, 0), (8, 1), 1, colors.black),
+                           ('GRID', (0, 0), (8, len(ava_results)), 1, colors.black),
                            ('SPAN', (0, 0), (7, 0)),
                            ('ALIGN', (0, 0), (8, 0), 'CENTER'),
                            ('VALIGN', (0, 0), (8, 0), 'MIDDLE'),
@@ -256,7 +262,16 @@ def generate_pdf(date):
     weather_obser = create_weather_observation_table()
 
     weather_forecast = create_discuss_box('Weather Forecast', get_information('weather_forecast'))
-    ava_danger = create_avalanche_danger_table()
+    elements.append(header)
+    elements.append(basic_info)
+    elements.append(basic_stats)
+    elements.append(weather_obser)
+    elements.append(weather_forecast)
+    ava_results = get_avalanche_danger_data()
+    #for i in range(len(ava_results)):
+    ava_danger = create_avalanche_danger_table(ava_results)
+    elements.append(ava_danger)
+
     ava_forecast = create_discuss_box(
         'Avalanche Forecast and discussion, How it relates to our Mtn and Our Strategic Mindset',
         get_information('avalanche_forecast_discussion'))
@@ -264,25 +279,21 @@ def generate_pdf(date):
     mitigation_plan = create_discuss_box('Mitigation Plan', get_information('mitigation_plan'))
     terrain_opening = create_discuss_box('Pertinent Terrain Opening/Closing', get_information('pertinent_terrain_info'))
 
-    elements.append(header)
-    elements.append(basic_info)
-    elements.append(basic_stats)
-    elements.append(weather_obser)
-    elements.append(weather_forecast)
-    elements.append(ava_danger)
+
     elements.append(ava_forecast)
     elements.append(sum_prev_work)
     elements.append(mitigation_plan)
     elements.append(terrain_opening)
 
     doc.build(elements)
-
+    #connection.close()
 
     return filepath+pdf_file_name
 
 
 def main():
-    generate_pdf('2025-02-26')
+    generate_pdf('2025-03-04')
+    #connection.close()
 
 
 if __name__ == '__main__':
