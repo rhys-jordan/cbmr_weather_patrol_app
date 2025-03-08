@@ -55,6 +55,15 @@ function addProblem3() {
 
     document.getElementById("problem_3").hidden = false;
     document.getElementById("problem_3_button").hidden = true;
+    document.getElementById("problem_4_button").hidden = false;
+
+
+}
+
+function addProblem4() {
+
+    document.getElementById("problem_4").hidden = false;
+    document.getElementById("problem_4_button").hidden = true;
 
 
 }

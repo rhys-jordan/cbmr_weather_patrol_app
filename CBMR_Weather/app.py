@@ -52,29 +52,37 @@ class Snow(db.Model):
     season = db.Column(db.String) #Season ie 24-25
     hs = db.Column(db.Float)  # Snow height (HS)
     hn24 = db.Column(db.Float)  # 24-hour new snow (HN24)
+    swe= db.Column(db.Float)
     hst = db.Column(db.Float)  # Total storm snow (HST)
-    ytd = db.Column(db.Float)  # Year-to-date snow (YTD)
+    ytd_snow = db.Column(db.Float)  # Year-to-date snow (YTD)
+    ytd_swe= db.Column(db.Float)
     #Current
     sky = db.Column(db.String)  # Sky condition
-    current_precip_rate = db.Column(db.Float)  # Precipitation rate (current)
+    current_precip_rate = db.Column(db.String)  # Precipitation rate (current)
     temperature = db.Column(db.Float)  # Temperature in degrees
     wind_mph = db.Column(db.String)  # Wind speed words
     wind_direction = db.Column(db.String)  # Wind direction
     #past 24 hr column
-    past_24_hn24_hst_date_cir = db.Column(db.Float)  # HN24 / HST date cir (past 24 hours)
-    past_24_hn24_swe = db.Column(db.Float)  # HN24 SWE (past 24 hours)
+    past_24_hn24= db.Column(db.Float)
+    past_24_hn24_swe = db.Column(db.Float)
+    past_24_hn24_percent= db.Column(db.Float)
+    past_24_hst=db.Column(db.Float)
+    past_24_date_cir = db.Column(db.Date)
+    past_24_settlement= db.Column(db.Float)
     past_24_wind_mph_direction = db.Column(db.String)  # Wind mph/direction (past 24 hours)
     past_24_temp_high = db.Column(db.Float)  # Temp high (past 24 hours)
     past_24_temp_low = db.Column(db.Float)  # Temp low (past 24 hours)
     #Future
-    future_precip_rate = db.Column(db.Float)  # Precipitation rate (future)
+    future_precip_rate = db.Column(db.String)   # Precipitation rate (future)
     future_temp_high = db.Column(db.Float)  # Temp high (future)
     future_temp_low = db.Column(db.Float)  # Temp low (future)
     future_wind_mph = db.Column(db.String)  # Wind mph (future)
     future_wind_direction = db.Column(db.String)  # Wind direction (future)
     #Avalanche
-    avalanche_danger = db.Column(db.String)
+    avalanche_danger_resort = db.Column(db.String)
+    avalanche_danger_backcountry = db.Column(db.String)
     #Other
+    observation_notes=db.Column(db.String)
     critical_info = db.Column(db.String)
     weather_forecast = db.Column(db.String)
     avalanche_forecast_discussion=db.Column(db.String)
@@ -85,6 +93,7 @@ class Snow(db.Model):
     children = relationship("Avalanche", back_populates="parent")
 
 
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), unique=True, nullable=False)
@@ -92,6 +101,7 @@ class User(UserMixin, db.Model):
 
 class Avalanche(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    location= db.Column(db.String)
     problem = db.Column(db.String)
     size_likelihood = db.Column(db.String)
     aspect_elevation = db.Column(db.String)
@@ -178,12 +188,19 @@ def am_form():
         hs = request.form.get('hs', None)
         hn24 = request.form.get('hn24', None)
         hst = request.form.get('hst', None)
-        ytd = request.form.get('ytd', None)
+        ytd_snow = request.form.get('ytd_snow', None)
+        swe= request.form.get('swe', None) #this is new!! need to add to database
+        ytd_swe=request.form.get('ytd_swe', None) #this is new!! need to add to database
         temperature = request.form.get('current_temp', None)
         current_precip_rate = request.form.get('current_precip_rate', None)
         #past
         past_24_hn24_hst_date_cir = request.form.get('past_24_hn24_hst_date_cir', None)
+        past_24_hst = request.form.get('past_24_hst', None)
+        past_24_date_cir = request.form.get('past_24_date_cir', None)
+        past_24_settlement = request.form.get('past_24_settlement', None)
+        past_24_hn24 = request.form.get('past_24_hn24', None)
         past_24_hn24_swe = request.form.get('past_24_hn24_swe', None)
+        past_24_hn24_percent= request.form.get('past_24_hn24_percent', None)
         past_24_wind_mph_direction = request.form.get('past_24_wind_mph_direction', None)
         past_24_temp_high = request.form.get('past_24_temp_high', None)
         past_24_temp_low = request.form.get('past_24_temp_low', None)
@@ -198,41 +215,56 @@ def am_form():
         hs = float(hs) if hs else None
         hn24 = float(hn24) if hn24 else None
         hst = float(hst) if hst else None
-        ytd = float(ytd) if ytd else None
+        ytd_snow = float(ytd_snow) if ytd_snow else None
+        ytd_swe = float(ytd_swe) if ytd_swe else None
+        swe= float(swe) if swe else None
 
         #current
         sky = request.form.get('sky', None)
-        current_precip_rate = float(current_precip_rate) if current_precip_rate else None
+        current_precip_rate = str(current_precip_rate) if current_precip_rate else None
         temperature = float(temperature) if temperature else None
         wind_mph = request.form.get('current_wind_mph', None)
         wind_direction = request.form.get('current_wind_direction', None)
         #past conversions
-        past_24_hn24_hst_date_cir = float(past_24_hn24_hst_date_cir) if past_24_hn24_hst_date_cir else None
+        past_24_hst = float(past_24_hst) if past_24_hst else None
+        past_24_date_cir = datetime.strptime(past_24_date_cir, '%Y-%m-%d')
+        past_24_settlement = float(past_24_settlement) if past_24_settlement else None
         past_24_hn24_swe = float(past_24_hn24_swe) if past_24_hn24_swe else None
+        past_24_hn24 = float(past_24_hn24) if past_24_hn24 else None
+        past_24_hn24_percent = float(past_24_hn24_percent) if past_24_hn24_percent else None
         past_24_temp_high = float(past_24_temp_high) if past_24_temp_high else None
         past_24_temp_low = float(past_24_temp_low) if past_24_temp_low else None
         #future conversions
-        future_precip_rate = float(future_precip_rate) if future_precip_rate else None
+        future_precip_rate = str(future_precip_rate) if future_precip_rate else None
         future_temp_high = float(future_temp_high) if future_temp_high else None
         future_temp_low = float(future_temp_low) if future_temp_low else None
         #avalanche conversions
-        avalanche_danger = request.form.get('avalanche_danger', None)
+
+        avalanche_danger_resort = request.form.get('avalanche_danger_resort', None)
+        avalanche_danger_backcountry = request.form.get('avalanche_danger_backcountry', None)
         # problem 1
         avalanche_problem_1 = request.form.get('avalanche_problem_1', None)
         aspect_elevation_1 = request.form.get('aspect_elevation_1', None)
         size_likelihood_1 = request.form.get('size_likelihood_1', None)
-        trend_1 = request.form.get('trend_1', None)
+        location1=request.form.get('location1', None)
         # problem 2
         avalanche_problem_2 = request.form.get('avalanche_problem_2', None)
         aspect_elevation_2 = request.form.get('aspect_elevation_2', None)
         size_likelihood_2 = request.form.get('size_likelihood_2', None)
-        trend_2 = request.form.get('trend_2', None)
+        location2 = request.form.get('location2', None)
         #problem 3
         avalanche_problem_3 = request.form.get('avalanche_problem_3', None)
         aspect_elevation_3 = request.form.get('aspect_elevation_3', None)
         size_likelihood_3 = request.form.get('size_likelihood_3', None)
-        trend_3 = request.form.get('trend_3', None)
+        location3 = request.form.get('location3', None)
+        # problem 4
+        avalanche_problem_4 = request.form.get('avalanche_problem_4', None)
+        aspect_elevation_4 = request.form.get('aspect_elevation_4', None)
+        size_likelihood_4 = request.form.get('size_likelihood_4', None)
+        location4 = request.form.get('location4', None)
+
         #text box conversions
+        observation_notes=request.form.get('observation_notes', None) #this is new!! need to add to database
         critical_info = request.form.get('critical_information', None)
         weather_forecast = request.form.get('weather_forecast', None)
         avalanche_forecast_discussion = request.form.get('avalanche_forecast_discussion', None)
@@ -242,22 +274,25 @@ def am_form():
         #checking if data input has already happened
         dateCheck = Snow.query.filter_by(date=date).first()
         if not dateCheck:
-            print(avalanche_problem_1, avalanche_problem_2, avalanche_problem_3)
-            snow = Snow(dateTime=dateTime,date=date, day=day, month=month, year=year, time=time, season=season, forecaster=forecaster, hs=hs, hn24=hn24, hst=hst, ytd=ytd, sky=sky, temperature=temperature, wind_mph=wind_mph, wind_direction=wind_direction, critical_info=critical_info, weather_forecast=weather_forecast, avalanche_forecast_discussion=avalanche_forecast_discussion, summary_previous_day=summary_previous_day, mitigation_plan=mitigation_plan, pertinent_terrain_info=pertinent_terrain_info, current_precip_rate=current_precip_rate, past_24_hn24_hst_date_cir=past_24_hn24_hst_date_cir, future_precip_rate=future_precip_rate, past_24_hn24_swe=past_24_hn24_swe, future_temp_high=future_temp_high, past_24_wind_mph_direction=past_24_wind_mph_direction, future_temp_low=future_temp_low, past_24_temp_high=past_24_temp_high, future_wind_mph=future_wind_mph, past_24_temp_low=past_24_temp_low, future_wind_direction=future_wind_direction)
+            print(avalanche_problem_1, avalanche_problem_2, avalanche_problem_3, avalanche_problem_4)
+            snow = Snow(dateTime=dateTime,date=date, day=day, month=month, year=year, time=time, season=season, forecaster=forecaster, hs=hs, hn24=hn24,swe=swe, hst=hst, ytd_snow=ytd_snow, ytd_swe=ytd_swe, sky=sky, temperature=temperature, wind_mph=wind_mph, wind_direction=wind_direction, observation_notes=observation_notes, critical_info=critical_info, weather_forecast=weather_forecast, avalanche_forecast_discussion=avalanche_forecast_discussion, summary_previous_day=summary_previous_day, mitigation_plan=mitigation_plan, pertinent_terrain_info=pertinent_terrain_info, current_precip_rate=current_precip_rate, past_24_hst=past_24_hst, past_24_settlement=past_24_settlement,past_24_date_cir=past_24_date_cir, future_precip_rate=future_precip_rate, past_24_hn24_swe=past_24_hn24_swe, past_24_hn24=past_24_hn24, past_24_hn24_percent=past_24_hn24_percent, future_temp_high=future_temp_high, past_24_wind_mph_direction=past_24_wind_mph_direction, future_temp_low=future_temp_low, past_24_temp_high=past_24_temp_high, future_wind_mph=future_wind_mph, past_24_temp_low=past_24_temp_low, future_wind_direction=future_wind_direction, avalanche_danger_resort=avalanche_danger_resort, avalanche_danger_backcountry=avalanche_danger_backcountry)
             db.session.add(snow)
 
             id = Snow.query.filter_by(date=date).first().id
             print(id)
 
             if avalanche_problem_1 != "":
-                avy1 = Avalanche(problem=avalanche_problem_1, size_likelihood=size_likelihood_1, aspect_elevation=aspect_elevation_1, trend=trend_1, Snow_id=id)
+                avy1 = Avalanche(problem=avalanche_problem_1, size_likelihood=size_likelihood_1, aspect_elevation=aspect_elevation_1, location=location1, Snow_id=id)
                 db.session.add(avy1)
             if avalanche_problem_2 != "":
-                avy2 = Avalanche(problem=avalanche_problem_2, size_likelihood=size_likelihood_2, aspect_elevation=aspect_elevation_2, trend=trend_2, Snow_id=id)
+                avy2 = Avalanche(problem=avalanche_problem_2, size_likelihood=size_likelihood_2, aspect_elevation=aspect_elevation_2, location=location2, Snow_id=id)
                 db.session.add(avy2)
             if avalanche_problem_3 != "":
-                avy3 = Avalanche(problem=avalanche_problem_3, size_likelihood=size_likelihood_3, aspect_elevation=aspect_elevation_3, trend=trend_3, Snow_id=id)
+                avy3 = Avalanche(problem=avalanche_problem_3, size_likelihood=size_likelihood_3, aspect_elevation=aspect_elevation_3,  location=location3, Snow_id=id)
                 db.session.add(avy3)
+            if avalanche_problem_4 != "":
+                avy4 = Avalanche(problem=avalanche_problem_4, size_likelihood=size_likelihood_4, aspect_elevation=aspect_elevation_4,  location=location4, Snow_id=id)
+                db.session.add(avy4)
 
             db.session.commit()
             pdf_filename = generate_pdf(date)
