@@ -74,3 +74,4 @@ function recheck() {
     window.location.href = "/view";
 }
 
+//
