@@ -103,9 +103,10 @@ class Avalanche(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     location= db.Column(db.String)
     problem = db.Column(db.String)
-    size_likelihood = db.Column(db.String)
-    aspect_elevation = db.Column(db.String)
-    trend = db.Column(db.String)
+    aspect = db.Column(db.String)
+    elevation = db.Column(db.String)
+    size = db.Column(db.String)
+    likelihood = db.Column(db.String)
     Snow_id = db.Column(db.Integer, ForeignKey('snow.id'))
     parent = relationship("Snow", back_populates="children")
 
@@ -227,6 +228,7 @@ def am_form():
         wind_direction = request.form.get('current_wind_direction', None)
         #past conversions
         past_24_hst = float(past_24_hst) if past_24_hst else None
+        #TODO let someone not enter a date
         past_24_date_cir = datetime.strptime(past_24_date_cir, '%Y-%m-%d')
         past_24_settlement = float(past_24_settlement) if past_24_settlement else None
         past_24_hn24_swe = float(past_24_hn24_swe) if past_24_hn24_swe else None
@@ -244,23 +246,31 @@ def am_form():
         avalanche_danger_backcountry = request.form.get('avalanche_danger_backcountry', None)
         # problem 1
         avalanche_problem_1 = request.form.get('avalanche_problem_1', None)
-        aspect_elevation_1 = request.form.get('aspect_elevation_1', None)
-        size_likelihood_1 = request.form.get('size_likelihood_1', None)
+        aspect_1 = request.form.get('aspect_1', None)
+        elevation_1 = request.form.get('elevation_1', None)
+        size_1 = request.form.get('size_1', None)
+        likelihood_1 = request.form.get('likelihood_1', None)
         location1=request.form.get('location1', None)
         # problem 2
         avalanche_problem_2 = request.form.get('avalanche_problem_2', None)
-        aspect_elevation_2 = request.form.get('aspect_elevation_2', None)
-        size_likelihood_2 = request.form.get('size_likelihood_2', None)
+        aspect_2 = request.form.get('aspect_2', None)
+        elevation_2 = request.form.get('elevation_2', None)
+        size_2 = request.form.get('size_2', None)
+        likelihood_2 = request.form.get('likelihood_2', None)
         location2 = request.form.get('location2', None)
         #problem 3
         avalanche_problem_3 = request.form.get('avalanche_problem_3', None)
-        aspect_elevation_3 = request.form.get('aspect_elevation_3', None)
-        size_likelihood_3 = request.form.get('size_likelihood_3', None)
+        aspect_3 = request.form.get('aspect_3', None)
+        elevation_3 = request.form.get('elevation_3', None)
+        size_3 = request.form.get('size_3', None)
+        likelihood_3 = request.form.get('likelihood_3', None)
         location3 = request.form.get('location3', None)
         # problem 4
         avalanche_problem_4 = request.form.get('avalanche_problem_4', None)
-        aspect_elevation_4 = request.form.get('aspect_elevation_4', None)
-        size_likelihood_4 = request.form.get('size_likelihood_4', None)
+        aspect_4 = request.form.get('aspect_4', None)
+        elevation_4 = request.form.get('elevation_4', None)
+        size_4 = request.form.get('size_4', None)
+        likelihood_4 = request.form.get('likelihood_4', None)
         location4 = request.form.get('location4', None)
 
         #text box conversions
@@ -282,22 +292,22 @@ def am_form():
             print(id)
 
             if avalanche_problem_1 != "":
-                avy1 = Avalanche(problem=avalanche_problem_1, size_likelihood=size_likelihood_1, aspect_elevation=aspect_elevation_1, location=location1, Snow_id=id)
+                avy1 = Avalanche(problem=avalanche_problem_1, size = size_1, likelihood = likelihood_1, aspect = aspect_1, elevation= elevation_1, location=location1, Snow_id=id)
                 db.session.add(avy1)
             if avalanche_problem_2 != "":
-                avy2 = Avalanche(problem=avalanche_problem_2, size_likelihood=size_likelihood_2, aspect_elevation=aspect_elevation_2, location=location2, Snow_id=id)
+                avy2 = Avalanche(problem=avalanche_problem_2, size = size_2, likelihood = likelihood_2, aspect = aspect_2, elevation = elevation_2, location=location2, Snow_id=id)
                 db.session.add(avy2)
             if avalanche_problem_3 != "":
-                avy3 = Avalanche(problem=avalanche_problem_3, size_likelihood=size_likelihood_3, aspect_elevation=aspect_elevation_3,  location=location3, Snow_id=id)
+                avy3 = Avalanche(problem=avalanche_problem_3, size = size_3,  likelihood= likelihood_3, aspect = aspect_3, elevation= elevation_3,  location=location3, Snow_id=id)
                 db.session.add(avy3)
             if avalanche_problem_4 != "":
-                avy4 = Avalanche(problem=avalanche_problem_4, size_likelihood=size_likelihood_4, aspect_elevation=aspect_elevation_4,  location=location4, Snow_id=id)
+                avy4 = Avalanche(problem=avalanche_problem_4, size = size_4,  likelihood= likelihood_4, aspect= aspect_4, elevation= elevation_4,  location=location4, Snow_id=id)
                 db.session.add(avy4)
 
             db.session.commit()
-            pdf_filename = generate_pdf(date)
-            #return redirect('/view'), send_file(pdf_filename, as_attachment=True)
-            return send_file(pdf_filename, as_attachment=True) #
+            #pdf_filename = generate_pdf(date)
+            return redirect('/view')
+            #return send_file(pdf_filename, as_attachment=True) #
         else:
             return render_template('confirm.html', flash_message=True)
     else:
