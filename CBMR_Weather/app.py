@@ -228,6 +228,7 @@ def am_form():
         wind_direction = request.form.get('current_wind_direction', None)
         #past conversions
         past_24_hst = float(past_24_hst) if past_24_hst else None
+
         #TODO let someone not enter a date
         past_24_date_cir = datetime.strptime(past_24_date_cir, '%Y-%m-%d')
         past_24_settlement = float(past_24_settlement) if past_24_settlement else None
@@ -305,6 +306,7 @@ def am_form():
                 db.session.add(avy4)
 
             db.session.commit()
+            #TODO fix pdf generation
             #pdf_filename = generate_pdf(date)
             return redirect('/view')
             #return send_file(pdf_filename, as_attachment=True) #

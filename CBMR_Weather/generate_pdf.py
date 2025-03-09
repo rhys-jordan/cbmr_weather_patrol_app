@@ -56,24 +56,26 @@ def create_basic_info():
     return t
 
 def create_basic_stats():
-    command = 'SELECT hs,hn24,hst,ytd, critical_info FROM snow WHERE date = "' + str(pdf_date) + '"'
+    command = 'SELECT hs,hn24,swe, hst, ytd_snow, ytd_swe, critical_info FROM snow WHERE date = "' + str(pdf_date) + '"'
     cursor.execute(command)
     results = cursor.fetchall()
     hs = 'HS: ' + str(results[0][0])
     hn24 = 'HN24: ' + str(results[0][1])
-    hst = 'HST: ' + str(results[0][2])
-    ytd = 'YTD: ' + str(results[0][3])
+    swe = 'SWE: ' + str(results[0][2])
+    hst = 'HST: ' + str(results[0][3])
+    ytd_snow = 'YTD Snow: ' + str(results[0][4])
+    ytd_swe = 'YTD SWE: ' + str(results[0][5])
     if(results[0][4] != None):
         crit_info = Paragraph('Critical Info? ' +  results[0][4], styles['Normal'])
     else:
         crit_info = Paragraph('Critical Info? ', styles['Normal'])
-    data = [[hs, hn24, hst, ytd, crit_info, '']]
+    data = [[hs, hn24, swe, hst, ytd_snow, ytd_swe]]
 
-    t = Table(data, colWidths=[95 for x in range(6)], spaceAfter=10 )
+    t = Table(data, colWidths=[95 for x in range(len(data[0]))], spaceAfter=10 )
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
-                           ('GRID', (0, 0), (6, 0), 1, colors.black),
+                           ('GRID', (0, 0), (len(data[0]), 0), 1, colors.black),
 
-                           ('SPAN', (4, 0), (5, 0)),
+
 
                            ('ALIGN', (0, 0), (3, 0), 'LEFT'),
                            ('VALIGN', (0, 0), (2, 0), 'MIDDLE')]))
@@ -81,13 +83,13 @@ def create_basic_stats():
     return t
 
 
-def get_weather_obser_data():
+def get_weather_obser_data1():
     command = ('SELECT sky, current_precip_rate, temperature, wind_mph, wind_direction '
                'FROM snow'
                ' WHERE date = "') + str(pdf_date) + '"'
     cursor.execute(command)
     results_current = cursor.fetchall()
-
+    #'past_24_hn24, past_24_hn24_swe, past_24_hn24_percent, past_24_hst, past_24_date_cir, past_24_settlement, past_24_wind_mph_direction, past_24_temp_high, past_24_temp_low'
     command = ('SELECT past_24_hn24_hst_date_cir, past_24_hn24_swe, past_24_wind_mph_direction, past_24_temp_high, past_24_temp_low'
                ' FROM snow '
                'WHERE date = "') + str(pdf_date) + '"'
@@ -109,31 +111,69 @@ def get_weather_obser_data():
             ['Wind Direction', results_current[0][4], 'Temp LOW',  str(results_past[0][4]), 'Wind Direction', results_future[0][4]]]
     return data
 
+def get_weather_obser_data():
+    command = ('SELECT sky, current_precip_rate, temperature, wind_mph, wind_direction '
+               'FROM snow'
+               ' WHERE date = "') + str(pdf_date) + '"'
+    cursor.execute(command)
+    results_current = cursor.fetchall()
+    #'past_24_hn24, past_24_hn24_swe, past_24_hn24_percent, past_24_hst, past_24_date_cir, past_24_settlement, past_24_wind_mph_direction, past_24_temp_high, past_24_temp_low'
+    command = ('SELECT past_24_hn24, past_24_hn24_swe, past_24_hn24_percent,'
+               ' past_24_hst, past_24_date_cir, past_24_settlement, '
+               'past_24_wind_mph_direction, past_24_temp_high, past_24_temp_low'
+               ' FROM snow '
+               'WHERE date = "') + str(pdf_date) + '"'
+    cursor.execute(command)
+    results_past = cursor.fetchall()
+
+    command = ('SELECT future_precip_rate, future_temp_high, future_temp_low, future_wind_mph, future_wind_direction'
+                  ' FROM snow '
+                  'WHERE date = "') + str(pdf_date) + '"'
+    cursor.execute(command)
+    results_future = cursor.fetchall()
+
+    data = [['Pertinent Weather Observations Past and Future', '', '', '', '', '', '', ''],
+            ['Current', '', 'PAST 24 hour', '', '', '', 'FUTURE 24 hours', ''],
+            ['Sky', results_current[0][0],              'HST', results_past[0][3], 'HN24', results_past[0][0],                  'Precip/Rate', results_future[0][0]],
+            ['Precip/Rate', str(results_current[0][1]), 'Date Cleared', str(results_past[0][4]),'HN24 SWE', results_past[0][1], 'Temp HIGH', results_future[0][1]],
+            ['Temp', str(results_current[0][2]),        'Settled',  results_past[0][5], 'HN24 %', results_past[0][2],           'Temp LOW', results_future[0][2]],
+            ['Wind mph', results_current[0][3],         'Wind mph/direction',  str(results_past[0][6]), '','',                  'Wind mph', results_future[0][3]],
+            ['Wind Direction', results_current[0][4],   'Temp HIGH',  str(results_past[0][7]),'', '',                           'Wind Direction', results_future[0][4]],
+            ['', '',                                    'Temp LOW',  str(results_past[0][8]),'','',                               '', '']]
+    return data
+
 #Possible send data table rather than hardcode
 #Make things paragraphs
 def create_weather_observation_table():
     data = get_weather_obser_data()
 
-    t = Table(data, colWidths=[95 for x in range(6)],
+    t = Table(data, colWidths=[72 for x in range(6)],
               rowHeights=[20 for x in range(len(data))], spaceAfter= 20)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (1, -1), colors.black),
-                           ('GRID', (0, 0), (5, 6), 1, colors.black),
+                           ('GRID', (0, 0), (7, 7), 1, colors.black),
+                           ('OUTLINE', (0, 0), (7, 7), 1.5, colors.black),
+                           ('OUTLINE', (0, 1), (1, 7), 1.5, colors.black),
+                           ('OUTLINE', (2, 1), (5, 7), 1.5, colors.black),
+                           ('OUTLINE', (6, 1), (7, 7), 1.5, colors.black),
 
-                           ('SPAN', (0, 0), (5, 0)),
-                           ('ALIGN', (0, 0), (5, 0), 'CENTER'),
-                           ('VALIGN', (0, 0), (5, 0), 'MIDDLE'),
+                           ('SPAN', (0, 0), (7, 0)),
+                           ('ALIGN', (0, 0), (7, 0), 'CENTER'),
+                           ('VALIGN', (0, 0), (7, 0), 'MIDDLE'),
 
                            ('SPAN', (0, 1), (1, 1)),
-                           ('ALIGN', (0, 1), (1, 1), 'CENTER'),
-                           ('VALIGN', (0, 1), (1, 1), 'MIDDLE'),
+                           ('SPAN', (2, 1), (5, 1)),
+                           ('SPAN', (6, 1), (7, 1)),
+                           ('ALIGN', (0, 1), (7, 1), 'CENTER'),
+                           ('VALIGN', (0, 1), (7, 1), 'MIDDLE'),
 
-                           ('SPAN', (2, 1), (3, 1)),
-                           ('ALIGN', (2, 1), (3, 1), 'CENTER'),
-                           ('VALIGN', (2, 1), (3, 1), 'MIDDLE'),
-
-                           ('SPAN', (4, 1), (5, 1)),
-                           ('ALIGN', (4, 1), (5, 1), 'CENTER'),
-                           ('VALIGN', (4, 1), (5, 1), 'MIDDLE')
+                           ('SPAN', (2, 5), (3, 5)),
+                           ('SPAN', (4, 5), (5, 5)),
+                           ('SPAN', (2, 6), (3, 6)),
+                           ('SPAN', (4, 6), (5, 6)),
+                           ('SPAN', (2, 7), (3, 7)),
+                           ('SPAN', (4, 7), (5, 7)),
+                           ('SPAN', (0, 7), (1, 7)),
+                           ('SPAN', (6, 7), (7, 7)),
                            ]))
     return t
 
@@ -267,12 +307,14 @@ def generate_pdf(date):
     elements.append(header)
     elements.append(basic_info)
     elements.append(basic_stats)
+    crit_info = create_discuss_box('Critical Information?', get_information('critical_info'))
+    elements.append(crit_info)
     elements.append(weather_obser)
     elements.append(weather_forecast)
-    ava_results = get_avalanche_danger_data()
+    #ava_results = get_avalanche_danger_data()
     #for i in range(len(ava_results)):
-    ava_danger = create_avalanche_danger_table(ava_results)
-    elements.append(ava_danger)
+    #ava_danger = create_avalanche_danger_table(ava_results)
+    #elements.append(ava_danger)
 
     ava_forecast = create_discuss_box(
         'Avalanche Forecast and discussion, How it relates to our Mtn and Our Strategic Mindset',
@@ -294,8 +336,8 @@ def generate_pdf(date):
 
 
 def main():
-    generate_pdf('2025-03-04')
-    #connection.close()
+    generate_pdf('2025-03-08')
+    connection.close()
 
 
 if __name__ == '__main__':
