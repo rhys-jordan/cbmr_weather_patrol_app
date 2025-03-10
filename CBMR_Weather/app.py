@@ -307,9 +307,9 @@ def am_form():
 
             db.session.commit()
             #TODO fix pdf generation
-            #pdf_filename = generate_pdf(date)
-            return redirect('/view')
-            #return send_file(pdf_filename, as_attachment=True) #
+            pdf_filename = generate_pdf(date)
+            #return redirect('/view')
+            return send_file(pdf_filename, as_attachment=True) #
         else:
             return render_template('confirm.html', flash_message=True)
     else:

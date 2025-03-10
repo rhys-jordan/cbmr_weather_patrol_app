@@ -19,6 +19,15 @@ pdf_date =  ''
 
 styles = getSampleStyleSheet()
 
+def get_information(category_name):
+    command = 'SELECT ' + category_name + ' FROM snow WHERE date = "' + str(pdf_date) + '"'
+    cursor.execute(command)
+    results = cursor.fetchall()
+    if(results[0][0] != None):
+        return results[0][0]
+    else:
+        return ''
+
 def create_header():
     img = Image('./static/CB_Logo.jpg', width=100, height=50)
     data = [[img, 'CBSP Morning Weather and Avalanche Report', '']]
@@ -65,17 +74,17 @@ def create_basic_stats():
     hst = 'HST: ' + str(results[0][3])
     ytd_snow = 'YTD Snow: ' + str(results[0][4])
     ytd_swe = 'YTD SWE: ' + str(results[0][5])
-    if(results[0][4] != None):
-        crit_info = Paragraph('Critical Info? ' +  str(results[0][4]), styles['Normal'])
+    if(results[0][6] != None):
+        crit_info = Paragraph('Critical Info? ' +  str(results[0][6]), styles['Normal'])
     else:
         crit_info = Paragraph('Critical Info? ', styles['Normal'])
-    data = [[hs, hn24, swe, hst, ytd_snow, ytd_swe]]
+    data = [[hs, hn24, swe, hst, ytd_snow, ytd_swe],
+            [crit_info]]
 
-    t = Table(data, colWidths=[95 for x in range(len(data[0]))], spaceAfter=10 )
+    t = Table(data, colWidths=[97 for x in range(len(data[0]))], spaceAfter=10 )
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
-                           ('GRID', (0, 0), (len(data[0]), 0), 1.5, colors.black),
-
-
+                           ('GRID', (0, 0), (len(data[0]), 1), 1.5, colors.black),
+                           ('SPAN', (0, 1), (5, 1)),
 
                            ('ALIGN', (0, 0), (3, 0), 'LEFT'),
                            ('VALIGN', (0, 0), (2, 0), 'MIDDLE')]))
@@ -88,7 +97,7 @@ def get_weather_obser_data():
                ' WHERE date = "') + str(pdf_date) + '"'
     cursor.execute(command)
     results_current = cursor.fetchall()
-    #'past_24_hn24, past_24_hn24_swe, past_24_hn24_percent, past_24_hst, past_24_date_cir, past_24_settlement, past_24_wind_mph_direction, past_24_temp_high, past_24_temp_low'
+
     command = ('SELECT past_24_hn24, past_24_hn24_swe, past_24_hn24_percent,'
                ' past_24_hst, past_24_date_cir, past_24_settlement, '
                'past_24_wind_mph_direction, past_24_temp_high, past_24_temp_low'
@@ -103,47 +112,75 @@ def get_weather_obser_data():
     cursor.execute(command)
     results_future = cursor.fetchall()
 
+    results_notes = get_information('observation_notes')
+    results_notes_para = Paragraph('Notes: ' + str(results_notes), styles['Normal'])
+    #print(results_notes_para)
+    #print(results_notes)
+
+
+
     data = [['Pertinent Weather Observations Past and Future', '', '', '', '', '', '', ''],
             ['Current', '', 'PAST 24 hour', '', '', '', 'FUTURE 24 hours', ''],
             ['Sky', results_current[0][0],              'HST', results_past[0][3], 'HN24', results_past[0][0],                  'Precip/Rate', results_future[0][0]],
             ['Precip/Rate', str(results_current[0][1]), 'Date Cleared', str(results_past[0][4]),'HN24 SWE', results_past[0][1], 'Temp HIGH', results_future[0][1]],
             ['Temp', str(results_current[0][2]),        'Settled',  results_past[0][5], 'HN24 %', results_past[0][2],           'Temp LOW', results_future[0][2]],
-            ['Wind mph', results_current[0][3],         'Wind mph/direction',  str(results_past[0][6]), '','',                  'Wind mph', results_future[0][3]],
-            ['Wind Direction', results_current[0][4],   'Temp HIGH',  str(results_past[0][7]),'', '',                           'Wind Direction', results_future[0][4]],
-            ['', '',                                    'Temp LOW',  str(results_past[0][8]),'','',                               '', '']]
+            ['Wind mph', results_current[0][3],         'Temp HIGH',  str(results_past[0][7]), 'Temp LOW',  str(results_past[0][8]), 'Wind mph', results_future[0][3]],
+            ['Wind Direction', results_current[0][4],   'Wind mph/direction',  str(results_past[0][6]),'', '',                           'Wind Direction', results_future[0][4]],
+            [results_notes_para]]
     return data
 
-#Make things paragraphs
-def create_weather_observation_table():
-    data = get_weather_obser_data()
 
-    t = Table(data, colWidths=[72 for x in range(6)],
-              rowHeights=[20 for x in range(len(data))], spaceAfter= 20)
-    t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (1, -1), colors.black),
-                           ('GRID', (0, 0), (7, 7), 1, colors.black),
-                           ('OUTLINE', (0, 0), (7, 7), 1.5, colors.black),
+'''
+('GRID', (0, 0), (7, 7), 1, colors.black)
+('OUTLINE', (0, 0), (7, 7), 1.5, colors.black),
                            ('OUTLINE', (0, 1), (1, 7), 1.5, colors.black),
                            ('OUTLINE', (2, 1), (5, 7), 1.5, colors.black),
                            ('OUTLINE', (6, 1), (7, 7), 1.5, colors.black),
+                           ('LINEBEFORE', (2, 1), (2, -2), 1, colors.pink),
+
+'''
+#Make things paragraphs
+def create_weather_observation_table():
+    data = get_weather_obser_data()
+    rowHeights = []
+    for x in range(len(data)):
+        rowHeights.append(20)
+    rowHeights.append(40)
+    t = Table(data, colWidths=[73 for x in range(len(data))],spaceAfter= 20)
+    t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (7, 7), colors.black),
+
+                           ('SPAN', (0, 1), (1, 1)),
+                           ('OUTLINE', (0, 0), (7, 0), 1.5, colors.black),
+                           ('GRID', (0, 1), (7, 1), 1.5, colors.black),
+
+                           ('OUTLINE', (0, 2), (1, 6), 1.5, colors.black),
+                           ('LINEBEFORE', (1, 2), (1, 6), 1, colors.black, None, (3,4)),
+                           ('LINEBELOW', (0, 2), (1, 6), 1, colors.black),
+
+                           ('OUTLINE', (2, 2), (5, 6), 1.5, colors.black),
+                           ('LINEBEFORE', (3, 2), (3, 6), 1, colors.black, None, (3, 4)),
+                           ('LINEBEFORE', (4, 2), (4, 6), 1, colors.black),
+                           ('LINEBEFORE', (5, 2), (5, 6), 1, colors.black, None, (3, 4)),
+                           ('LINEBELOW', (2, 2), (5, 6), 1, colors.black),
+
+                           ('OUTLINE', (6, 2), (7, 6), 1.5, colors.black),
+                           ('LINEBEFORE', (7, 2), (7, 6), 1, colors.black, None, (3, 4)),
+                           ('LINEBELOW', (6, 2), (7, 6), 1, colors.black),
 
                            ('SPAN', (0, 0), (7, 0)),
                            ('ALIGN', (0, 0), (7, 0), 'CENTER'),
                            ('VALIGN', (0, 0), (7, 0), 'MIDDLE'),
 
-                           ('SPAN', (0, 1), (1, 1)),
+                           ('GRID', (0, 7), (7, 7), 1.5, colors.black),
+                           ('SPAN', (0, 7), (7, 7)),
+
                            ('SPAN', (2, 1), (5, 1)),
                            ('SPAN', (6, 1), (7, 1)),
                            ('ALIGN', (0, 1), (7, 1), 'CENTER'),
                            ('VALIGN', (0, 1), (7, 1), 'MIDDLE'),
 
-                           ('SPAN', (2, 5), (3, 5)),
-                           ('SPAN', (4, 5), (5, 5)),
                            ('SPAN', (2, 6), (3, 6)),
-                           ('SPAN', (4, 6), (5, 6)),
-                           ('SPAN', (2, 7), (3, 7)),
-                           ('SPAN', (4, 7), (5, 7)),
-                           ('SPAN', (0, 7), (1, 7)),
-                           ('SPAN', (6, 7), (7, 7)),
+                           ('SPAN', (4, 6), (5, 6))
                            ]))
     return t
 
@@ -170,6 +207,30 @@ def get_avalanche_danger_ratings():
     results = cursor.fetchall()
     return results
 
+def create_avalanche_danger_ratings():
+    command = ('SELECT avalanche_danger_resort, avalanche_danger_backcountry'
+               ' FROM snow '
+               'WHERE date = "') + str(pdf_date) + '"'
+    cursor.execute(command)
+    results = cursor.fetchall()
+
+    data = [['Avalanche Dangers', '', '', ''],
+             ['Resort Danger', results[0][0],'Backcountry Danger',results[0][0]]]
+
+    t = Table(data, colWidths=[146 for x in range(4)],
+              rowHeights=[20 for x in range(len(data))], spaceAfter=10)
+    t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (1, -1), colors.black),
+                           ('GRID', (0, 0), (3, 1), 1.5, colors.black),
+                           ('SPAN', (0, 0), (3, 0)),
+
+                           ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                           ('VALIGN', (0, 0), (0, 0), 'MIDDLE')]))
+    return t
+
+
+
+
+
 def get_avalanche_danger_data():
     command = ('SELECT problem, location, aspect, elevation, size, likelihood FROM avalanche '
                'WHERE Snow_id in '
@@ -183,24 +244,20 @@ def get_avalanche_danger_data():
 
 
 def create_avalanche_danger_table(ava_results, ava_danger):
-    data = [['Avalanche Dangers', '', '', '', '', '', '', ''],
-            ['Resort Danger', '', ava_danger[0][0],'', '', 'Backcountry Danger', '', '',ava_danger[0][0],'', '','']]
+    data = [['Avalanche Problems','','','','','',''],
+            ['', 'Problem', 'Location', 'Aspect', 'Elevation', 'Size','Likelihood' ]]
+
 
     for i in range(len(ava_results)):
-        ava_problem_name = 'Prob ' + str(i + 1)
+        ava_problem_name = 'Problem ' + str(i + 1)
         ava_prob = Paragraph(ava_problem_name, styles['Normal'])
         ava_prob_data = Paragraph(ava_results[i][0], styles['Normal'])
 
-        location = Paragraph('Location', styles['Normal'])
-        aspect = Paragraph('Aspect', styles['Normal'])
-        elevation = Paragraph('Elevation', styles['Normal'])
         elevation_data = Paragraph(ava_results[i][3], styles['Normal'])
-        size = Paragraph('Size', styles['Normal'])
         size_data = Paragraph(ava_results[i][4], styles['Normal'])
-        likelihood = Paragraph('Likelihood', styles['Normal'])
         likelihood_data = Paragraph(ava_results[i][5], styles['Normal'])
-        data.append([ava_prob, ava_prob_data, location, ava_results[i][1], aspect, ava_results[i][2],
-                     elevation, elevation_data,size, size_data, likelihood ,  likelihood_data])
+        data.append([ava_prob, ava_prob_data, ava_results[i][1], ava_results[i][2],
+                     elevation_data, size_data, likelihood_data])
 
 
     #t = Table(data, colWidths=[65,110,65,65,65,65,65,65] colWidths=[71 for x in range(len(data[0]))],
@@ -208,17 +265,17 @@ def create_avalanche_danger_table(ava_results, ava_danger):
     row_heights = [20,20]
     for x in range(len(data)-2):
         row_heights.append(40)
-    t = Table(data, colWidths=[50,70,50,38,43,23,55,49,49,49,58,49],
-              rowHeights=row_heights, spaceAfter= 20)
+    t = Table(data, colWidths=[83.5 for x in range(len(data[0]))],
+              spaceAfter= 20)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
-                           ('GRID', (0, 0), (11, len(data)), 1.5, colors.black),
-                           ('SPAN', (0, 0), (11, 0)),
-                           ('SPAN', (0, 1), (1, 1)),
-                           ('SPAN', (2, 1), (4, 1)),
-                           ('SPAN', (5, 1), (7, 1)),
-                           ('SPAN', (8, 1), (11, 1)),
-                           ('ALIGN', (0, 0), (11, len(ava_results)), 'CENTER'),
-                           ('VALIGN', (0, 0), (11, len(ava_results)), 'MIDDLE'),
+                           ('GRID', (0, 0), (6, 1), 1.5, colors.black),
+                           ('OUTLINE', (0, 0), (6, len(data)), 1.5, colors.black),
+                           ('GRID', (0, 2), (6, len(data)), 1, colors.black),
+                           ('SPAN', (0, 0), (6, 0)),
+                           ('LINEBEFORE', (1, 0), (1, len(data)), 1.5, colors.black),
+
+                           ('ALIGN', (0, 0), (6, len(data)), 'CENTER'),
+                           ('VALIGN', (0, 0), (6, len(data)), 'MIDDLE'),
                            ]))
     return t
 
@@ -229,7 +286,7 @@ def create_discuss_box(heading, summary):
     data = [[heading],
              [sum_paragraph]]
 
-    t = Table(data, colWidths=[570 for x in range(1)], spaceAfter=20)
+    t = Table(data, colWidths=[584 for x in range(1)], spaceAfter=10)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (1, -1), colors.black),
                            ('GRID', (0, 0), (0, 1), 1.5, colors.black),
 
@@ -240,14 +297,6 @@ def create_discuss_box(heading, summary):
 
 
 
-def get_information(category_name):
-    command = 'SELECT ' + category_name + ' FROM snow WHERE date = "' + str(pdf_date) + '"'
-    cursor.execute(command)
-    results = cursor.fetchall()
-    if(results[0][0] != None):
-        return results[0][0]
-    else:
-        return ''
 
 
 def make_file_name():
@@ -262,12 +311,9 @@ def make_file_name():
 
 
 def generate_pdf(date):
-    #connection = sqlite3.connect(".\\instance\\CBMR_Weather.db", check_same_thread=False)
-    #cursor = connection.cursor()
 
     global pdf_date
     pdf_date = date
-    print(pdf_date)
 
     cursor = connection.cursor()
     command = 'SELECT date FROM snow WHERE date = "' + str(pdf_date) + '"'
@@ -301,10 +347,10 @@ def generate_pdf(date):
     elements.append(header)
     elements.append(basic_info)
     elements.append(basic_stats)
-    crit_info = create_discuss_box('Critical Information?', get_information('critical_info'))
-    elements.append(crit_info)
     elements.append(weather_obser)
     elements.append(weather_forecast)
+    ava_danger_rating = create_avalanche_danger_ratings()
+    elements.append(ava_danger_rating)
     ava_results = get_avalanche_danger_data()
     ava_danger_rate = get_avalanche_danger_ratings()
     ava_danger = create_avalanche_danger_table(ava_results, ava_danger_rate)
