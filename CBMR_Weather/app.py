@@ -230,7 +230,11 @@ def am_form():
         past_24_hst = float(past_24_hst) if past_24_hst else None
 
         #TODO let someone not enter a date
-        past_24_date_cir = datetime.strptime(past_24_date_cir, '%Y-%m-%d')
+        past_24_date_cir_raw = request.form.get('past_24_date_cir', '').strip()
+        if past_24_date_cir_raw:
+            past_24_date_cir = datetime.strptime(past_24_date_cir, '%Y-%m-%d')
+        else:
+            past_24_date_cir = datetime(1, 1, 1)
         past_24_settlement = float(past_24_settlement) if past_24_settlement else None
         past_24_hn24_swe = float(past_24_hn24_swe) if past_24_hn24_swe else None
         past_24_hn24 = float(past_24_hn24) if past_24_hn24 else None
