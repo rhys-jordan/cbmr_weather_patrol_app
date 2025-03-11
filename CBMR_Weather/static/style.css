@@ -96,19 +96,17 @@ table tr th {
 table tr td label {
     padding: 5px;
     margin-left: auto;
-    display: block;
+    font-size: 1.5vw;
+    width: auto;
+    height: auto;
 }
 
 table tr td input{
-    width: 98%;
-    height: 25px;
-    font-size: 20px;
+    width: auto;
+    height: auto;
+    font-size: 1.25vw;
 }
 
-.row {
-    padding: 10px;
-    display:block;
-}
 
 textarea {
     width: 95%;
@@ -129,10 +127,10 @@ a{
 }
 
 form {
-  width: 100%;
+  width: 95%;
   margin: 20px auto;
-  text-align: left;
-  font-size:1.5vw;
+  text-align: center;
+  font-size: 2vw;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -145,7 +143,7 @@ form {
 
 
 #problemsContainer {
-    width: 95%;
+    width: 90%;
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
@@ -199,4 +197,35 @@ form {
     font-size: 3vw;
     text-align: center;
 
+}
+.snow_row label{
+    width: 7vw;
+    text-align: center;
+}
+.snow_row input {
+    width: 7vw;
+    max-width: 100%;
+}
+.date_row input{
+    width: 5vw;
+    max-width: 95%;
+}
+.date_row label{
+    width: auto;
+    text-align: center;
+}
+
+#datetime, #forecaster{
+    width: auto;
+    font-size: 2vw;
+}
+
+/* css stuff */
+td.top_past{
+     color:green;
+     width: auto;
+     font-size: .75vw;
+}
+td.top_past label{
+    font-size: 1.5vw;
 }
