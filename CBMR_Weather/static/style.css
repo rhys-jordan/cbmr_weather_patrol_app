@@ -93,20 +93,23 @@ th, td {
 table tr th {
     text-align: center;
 }
-table tr td label {
-    padding: 5px;
-    margin-left: auto;
-    font-size: 1.5vw;
+table tr td label , table tr td input{
+    font-size: 1.25vw;
     width: auto;
     height: auto;
+    display: inline-block;
 }
 
 table tr td input{
     width: auto;
     height: auto;
-    font-size: 1.25vw;
+    font-size: .75vw;
 }
-
+table tr td select {
+    width: auto;
+    height: auto;
+    font-size: .75vw;
+}
 
 textarea {
     width: 95%;
@@ -218,14 +221,4 @@ form {
 #datetime, #forecaster{
     width: auto;
     font-size: 2vw;
-}
-
-/* css stuff */
-td.top_past{
-     color:green;
-     width: auto;
-     font-size: .75vw;
-}
-td.top_past label{
-    font-size: 1.5vw;
 }
