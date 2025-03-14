@@ -484,7 +484,7 @@ def past_data_request(inputDate):
         avalanche=Avalanche.query.filter_by(Snow_id=snowId).all()
         print("good!")
         print(snow)
-        return render_template('past-data.html', oldSnow=snow,avalanches=avalanche)
+        return render_template('past-data-request.html', oldSnow=snow,avalanches=avalanche)
 
 @app.route('/past-data', methods=['GET', 'POST'])
 @login_required
@@ -546,8 +546,6 @@ def past_data():
         wind_direction = request.form.get('current_wind_direction', None)
         #past conversions
         past_24_hst = float(past_24_hst) if past_24_hst else None
-
-        #TODO let someone not enter a date
         past_24_date_cir_raw = request.form.get('past_24_date_cir', '').strip()
         if past_24_date_cir_raw:
             past_24_date_cir = datetime.strptime(past_24_date_cir, '%Y-%m-%d')
