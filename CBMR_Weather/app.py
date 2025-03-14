@@ -228,8 +228,6 @@ def am_form():
         wind_direction = request.form.get('current_wind_direction', None)
         #past conversions
         past_24_hst = float(past_24_hst) if past_24_hst else None
-
-        #TODO let someone not enter a date
         past_24_date_cir_raw = request.form.get('past_24_date_cir', '').strip()
         if past_24_date_cir_raw:
             past_24_date_cir = datetime.strptime(past_24_date_cir, '%Y-%m-%d')
@@ -318,7 +316,13 @@ def am_form():
             return render_template('confirm.html', flash_message=True)
     else:
         now = datetime.now()
+        past = now - timedelta(days=1)
         formatted_now = now.strftime("%Y-%m-%dT%H:%M")
+        yesterday = past.strftime("%Y-%m-%dT%H:%M")
+        print(yesterday)
+        snow = Snow.query.filter_by(date=yesterday).first()
+        print(snow)
+        #snow = get_snow_data(formatted_now)
         return render_template('am-form.html', now=formatted_now)
 
 
