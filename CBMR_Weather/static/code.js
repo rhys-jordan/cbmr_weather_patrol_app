@@ -1,7 +1,7 @@
 function calculate_hn24_percent() {
     let hn24= document.getElementById("past_24_hn24").value;
     let swe = document.getElementById("past_24_hn24_swe").value;
-    let round_percent = (hn24/swe).toFixed(4);
+    let round_percent = (swe/hn24).toFixed(4) *100;
     document.getElementById("past_24_hn24_percent").value = Number(round_percent);
 }
 
