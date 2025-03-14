@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, jsonify
 from flask import Flask, render_template, request, redirect, send_file, after_this_request, session
 from flask_json import FlaskJSON, json_response, as_json, JsonError
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, desc
 from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import foreign, relationship
 from flask_login import LoginManager, UserMixin, login_user,logout_user,current_user,login_required
@@ -164,7 +164,8 @@ def read():
 
 @app.route("/view",methods=['GET', 'POST'])
 def view():
-    snow = Snow.query.all()
+    snow = Snow.query.order_by(desc(Snow.date)).all()
+
     return render_template('view.html', snow=snow)
 
 
