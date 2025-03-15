@@ -89,10 +89,10 @@ def create_discuss_box(heading, summary):
     return t
 
 
-def make_file_name():
-    str_date = str(pdf_date)
+def make_file_name(date_input):
 
-    date_components = str_date.split('-')
+    datetime = date_input.split('T')
+    date_components = datetime[0].split('-')
     filename = date_components[1] + '_' + date_components[2] + '_' + date_components[0]
 
     #split_date = str_date.split("-")
@@ -105,9 +105,12 @@ def generate_pdf_pm(date, forecaster, basic_stats_input, weather_fx_input, tonig
     global pdf_date
     pdf_date = date
 
-    filename_date = make_file_name()
+    filename_date = make_file_name(date)
     pdf_file_name = 'CBMR_PM_' + filename_date + '.pdf'
-    doc = SimpleDocTemplate(pdf_file_name,
+    filepath = '/home/CBMRPatrolApp/past_pdfs'
+    # added to ensure directory exists
+    os.makedirs(filepath, exist_ok=True)
+    doc = SimpleDocTemplate(filepath + pdf_file_name,
                             pagesize=letter,
                             rightMargin=72,
                             leftMargin=72,
