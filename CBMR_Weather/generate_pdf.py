@@ -63,7 +63,7 @@ def create_basic_info():
                            ('ALIGN', (0, 0), (2, 0), 'CENTER'),
                            ('VALIGN', (0, 0), (2, 0), 'MIDDLE')]))
     return t
-
+#
 def create_basic_stats():
     command = 'SELECT hs,hn24,swe, hst, ytd_snow, ytd_swe, critical_info FROM snow WHERE date = "' + str(pdf_date) + '"'
     cursor.execute(command)

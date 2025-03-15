@@ -23,7 +23,7 @@
     <tbody>
     {% for i in snow%}
         <tr>
-            <td>{{ i.date }}</td>
+            <td> <a href="/past-data/{{i.date}}">{{ i.date }}</a></td>
             <td>{{ i.season }}</td>
             <td>{{ i.hs }}</td>
             <td>{{ i.hn24 }}</td>
