@@ -336,7 +336,26 @@ def am_form():
 @app.route('/pm-form', methods=['GET', 'POST'])
 @login_required
 def pm_form():
-        return render_template('pm-form.html')
+    if request.method == 'POST':
+
+        #get infor from pm form and store here
+        #send info to pm form generate pdf
+        #send pdf
+
+        #push to main
+        #host on pA
+        #set up task to delete or delete on logout
+
+        print("generating pdf")
+        return render_template('confirm.html', flash_message=True)
+
+    else:
+        now = datetime.now()
+        formatted_now = now.strftime("%Y-%m-%dT%H:%M")
+        print(formatted_now)
+        snow = Snow.query.filter_by(date=now.strftime("%Y-%m-%d")).first()
+        print(snow.ytd_snow)
+        return render_template('pm-form.html', now=formatted_now, snow=snow) #, oldSnow=snow,avalanches=avalanche)
 
 
 @app.route('/past-data/<inputDate>', methods=['GET', 'POST'])

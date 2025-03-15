@@ -7,4 +7,45 @@
     <a href="https://cbavalanchecenter.org/" target="_blank">CBAC</a>&emsp;&emsp;<a href="https://avalanche.state.co.us/" target="_blank">CAIC</a>&emsp;&emsp;<a href="https://forecast.weather.gov/MapClick.php?lon=-106.96337126428263&lat=38.90990956937884" target="_blank">NWS</a>&emsp;&emsp;<a href="https://cbavalanchecenter.org/forecasts/#/weather" target="_blank">CBAC Weather</a>
 </div>
 
+<form method="post">
+    <div class= "date_row">
+        <label>Date: </label> <input type="datetime-local" id="datetime" name="datetime" value='{{now}}'>
+    </div>
+
+    <div class = "snow_row">
+        <label>HS:</label> <input type="number" id="hs" name="hs" value="{{snow.hs}}">
+        <label>HN24:</label><input type="number" id="hn24" name="hn24" value="{{snow.hn24}}">
+        <label>YTD Snow:</label> <input type="number" id="ytd_snow" name="ytd_snow" value="{{snow.ytd_snow}}">
+    </div>
+
+    <h1>Weather Forecast</h1><br>
+    <textarea id="weather_fx" name="weather_fx"></textarea>
+
+    <h1>Tonight</h1><br>
+    <textarea id="tonight" name="tonight"></textarea>
+
+    <h1>Tomorrow</h1><br>
+    <textarea id="tomorrow" name="tomorrow"></textarea>
+
+    <h1>Tomorrow Night</h1><br>
+    <textarea id="tomorrow_night" name="tomorrow_night"></textarea>
+
+    <h1>Mitigation</h1><br>
+    <textarea id="mitigation" name="mitigation"></textarea>
+
+    <h1>Uphill Access</h1><br>
+    <select id="uphill_access" name="uphill_access">
+        <option value="not_open">Not Open</option>
+        <option value="painter_boy">Open to Painter Boy</option>
+        <option value="paradise">Open to Paradise</option>
+
+    </select>
+
+    <br>
+
+    <button id="submitButton" type="submit">Generate PDF</button>
+
+</form>
+
+
 {% endblock %}
