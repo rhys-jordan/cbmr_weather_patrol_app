@@ -93,11 +93,11 @@ class Snow(db.Model):
     children = relationship("Avalanche", back_populates="parent")
 
 
-
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), unique=True, nullable=False)
     password = db.Column(db.String(40), nullable=False)
+
 
 class Avalanche(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -325,7 +325,14 @@ def am_form():
 @app.route('/pm-form', methods=['GET', 'POST'])
 @login_required
 def pm_form():
+    if request.method == 'POST':
+
         return render_template('pm-form.html')
+
+    else:
+        now = datetime.now()
+        formatted_now = now.strftime("%Y-%m-%dT%H:%M")
+        return render_template('pm-form.html', now=formatted_now)
 
 
 @app.route('/past-data', methods=['GET', 'POST'])
