@@ -15,12 +15,12 @@
         <label>Forecaster: </label> <input type="text" id="forecaster" name="forecaster"><br>
     </div>
     <div class = "snow_row">
-        <label>HS:</label> <input type="number" id="hs" name="hs">
-        <label>HN24:</label><input type="number" id="hn24" name="hn24">
-        <label>SWE:</label><input type="number" id="swe" name="swe">
-        <label>HST:</label> <input type="number" id="hst" name="hst">
-        <label>YTD Snow:</label> <input type="number" id="ytd_snow" name="ytd_snow">
-        <label>YTD SWE:</label> <input type="number" id="ytd_swe" name="ytd_swe"><br>
+        <label>HS:</label> <input type="number" id="hs" name="hs" step="any">
+        <label>HN24:</label><input type="number" id="hn24" name="hn24" step="any">
+        <label>SWE:</label><input type="number" id="swe" name="swe" step="any">
+        <label>HST:</label> <input type="number" id="hst" name="hst" step="any">
+        <label>YTD Snow:</label> <input type="number" id="ytd_snow" name="ytd_snow" step="any">
+        <label>YTD SWE:</label> <input type="number" id="ytd_swe" name="ytd_swe" step="any"><br>
     </div>
     <label>Critical Information:</label><br>
     <textarea id="critical_information" name="critical_information"></textarea><br>
@@ -50,11 +50,11 @@
             </td>
             <td class="top_past">
                 <label>HST</label>
-                <input type="number" name="past_24_hst" id="past_24_hst"><br>
+                <input type="number" name="past_24_hst" id="past_24_hst"  step="any"><br>
                 <label>Date Cleared</label>
                 <input type="date" name="past_24_date_cir" id="past_24_date_cir">
                 <label>Settlement</label>
-                <input type="number" name="past_24_settlement" id="past_24_settlement">
+                <input type="number" name="past_24_settlement" id="past_24_settlement"  step="any">
             </td>
             <td>
                 <label>Precip/Rate</label>
@@ -91,28 +91,56 @@
                 </select>
             </td>
             <td>
-                <label>HN24</label>
-                <input type="number" id="past_24_hn24" name="past_24_hn24">
-                <label>HN24 SWE</label><input type="number" id="past_24_hn24_swe" name="past_24_hn24_swe">
-                <label>HN24%</label><input type="number" step =".01" id="past_24_hn24_percent" name="past_24_hn24_percent">
+                <label>HN24</label><input type="number" id="past_24_hn24" step="any" name="past_24_hn24" oninput = "calculate_hn24_percent()">
+                <label>HN24 SWE</label><input type="number" id="past_24_hn24_swe" step="any" name="past_24_hn24_swe" oninput = "calculate_hn24_percent()">
+
+                <label>HN24%</label><input type="number" step ="any" id="past_24_hn24_percent" name="past_24_hn24_percent" readonly>
             </td>
             <td>
                 <label>Temp HIGH</label>
-                <input type="number" id="future_temp_high" name="future_temp_high">
+                <input type="number" id="future_temp_high" name="future_temp_high"  step="any">
             </td>
         </tr>
         <tr>
             <td>
                 <label>Temp</label>
-                <input type="number" id="current_temp" name="current_temp">
+                <input type="number" id="current_temp" name="current_temp" step="any">
             </td>
             <td>
-                <label>Wind mph/direction</label>
-                <input type="text" id="past_24_wind_mph_direction" name="past_24_wind_mph_direction">
+                <label>Wind MPH</label>
+                <select id="past_24_wind_mph" name="past_24_wind_mph">
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="calm">Calm (0 mi/hr)</option>
+                    <option value="light">Light (1-16 mi/hr)</option>
+                    <option value="moderate">Moderate (17-25 mi/hr)</option>
+                    <option value="strong">Strong (26-38 mi/hr)</option>
+                    <option value="extreme">Extreme (>38 mi/hr)</option>
+                </select>
+
+                <label>Wind Direction</label>
+                <select id="past_24_wind_direction" name="past_24_wind_direction">
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="N">N</option>
+                    <option value="NNE">NNE</option>
+                    <option value="NE">NE</option>
+                    <option value="ENE">ENE</option>
+                    <option value="E">E</option>
+                    <option value="ESE">ESE</option>
+                    <option value="SE">SE</option>
+                    <option value="SSE">SSE</option>
+                    <option value="S">S</option>
+                    <option value="SSW">SSW</option>
+                    <option value="SW">SW</option>
+                    <option value="WSW">WSW</option>
+                    <option value="W">W</option>
+                    <option value="WNW">WNW</option>
+                    <option value="NW">NW</option>
+                    <option value="NNW">NNW</option>
+                </select>
             </td>
             <td>
                 <label>Temp LOW</label>
-                <input type="number" id="future_temp_low" name="future_temp_low">
+                <input type="number" id="future_temp_low" name="future_temp_low" step="any">
             </td>
         </tr>
         <tr>
@@ -129,7 +157,7 @@
             </td>
             <td>
                 <label>Temp HIGH</label>
-                <input type="number" id="past_24_temp_high" name="past_24_temp_high">
+                <input type="number" id="past_24_temp_high" name="past_24_temp_high" step="any">
             </td>
             <td>
                 <label>Wind MPH</label>
@@ -168,7 +196,7 @@
             </td>
             <td>
                 <label>Temp LOW</label>
-                <input type="number" id="past_24_temp_low" name="past_24_temp_low">
+                <input type="number" id="past_24_temp_low" name="past_24_temp_low" step="any">
             </td>
             <td>
                 <label>Wind Direction</label>
@@ -242,28 +270,68 @@
                 <option value="Cornice Fall">Cornice Fall</option>
             </select>
 
-            <label>Aspect</label>
-            <select id="aspect_1" name="aspect_1">
-                <option value="" hidden="true"></option>
-                <option value="N">N (0)</option>
-                <option value="NE">NE (45)</option>
-                <option value="E">E (90) </option>
-                <option value="SE">SE (135)</option>
-                <option value="S">S (180)</option>
-                <option value="SW">SW (225)</option>
-                <option value="W">W (270)</option>
-                <option value="NW">NW (315)</option>
-            </select>
-            <label>Elevation</label>
-            <select id="elevation_1" name="elevation_1">
-                <option value="" hidden="true"></option>
-                <option value="Below Treeline">Below Treeline</option>
-                <option value="Near Treeline">Near Treeline</option>
-                <option value="Below Treeline">Above Treeline</option>
-            </select>
-            <label>Size</label>
+            <br><label>Aspect:</label>
+            <div id="aspect_1">
+                <label>
+                    <input type="checkbox" name="aspect_1[]" value="N">
+                    N (0)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_1[]" value="NE">
+                    NE (45)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_1[]" value="E">
+                    E (90)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_1[]" value="SE">
+                    SE (135)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_1[]" value="S">
+                    S (180)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_1[]" value="SW">
+                    SW (225)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_1[]" value="W">
+                    W (270)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_1[]" value="NW">
+                    NW (315)
+                </label>
+            </div>
+            <br><label>Elevation:</label>
+                <div id="elevation_1">
+                    <label>
+                        <input type="checkbox" name="elevation_1[]" value="BTL">
+                       Below Treeline
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="elevation_1[]" value="NTL">
+                        Near Treeline
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="elevation_1[]" value="ATL">
+                        Above Treeline
+                    </label>
+                </div>
+            <br><label>Size:</label>
             <input type="text" id="size_1" name="size_1">
-            <label>Likelihood</label>
+            <label>Likelihood:</label>
             <input type="text" id="likelihood_1" name="likelihood_1">
 
     </div>
@@ -289,29 +357,68 @@
             <option value="Glide">Glide</option>
             <option value="Cornice Fall">Cornice Fall</option>
         </select>
+         <br><label>Aspect:</label>
+            <div id="aspect_2">
+                <label>
+                    <input type="checkbox" name="aspect_2[]" value="N">
+                    N (0)
+                </label>
 
-         <label>Aspect</label>
-            <select id="aspect_2" name="aspect_2">
-                <option value="" hidden="true"></option>
-                <option value="N">N (0)</option>
-                <option value="NE">NE (45)</option>
-                <option value="E">E (90) </option>
-                <option value="SE">SE (135)</option>
-                <option value="S">S (180)</option>
-                <option value="SW">SW (225)</option>
-                <option value="W">W (270)</option>
-                <option value="NW">NW (315)</option>
-            </select>
-            <label>Elevation</label>
-            <select id="elevation_2" name="elevation_2">
-                <option value="" hidden="true"></option>
-                <option value="Below Treeline">Below Treeline</option>
-                <option value="Near Treeline">Near Treeline</option>
-                <option value="Above Treeline">Above Treeline</option>
-            </select>
-            <label>Size</label>
+                <label>
+                    <input type="checkbox" name="aspect_2[]" value="NE">
+                    NE (45)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_2[]" value="E">
+                    E (90)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_2[]" value="SE">
+                    SE (135)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_2[]" value="S">
+                    S (180)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_2[]" value="SW">
+                    SW (225)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_2[]" value="W">
+                    W (270)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_2[]" value="NW">
+                    NW (315)
+                </label>
+            </div>
+            <br><label>Elevation:</label>
+            <div id="elevation_2">
+                    <label>
+                        <input type="checkbox" name="elevation_2[]" value="BTL">
+                       Below Treeline
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="elevation_2[]" value="NTL">
+                        Near Treeline
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="elevation_2[]" value="ATL">
+                        Above Treeline
+                    </label>
+                </div>
+            <br><label>Size:</label>
             <input type="text" id="size_2" name="size_2">
-            <label>Likelihood</label>
+            <label>Likelihood:</label>
             <input type="text" id="likelihood_2" name="likelihood_2">
 
     </div>
@@ -337,29 +444,68 @@
             <option value="Glide">Glide</option>
             <option value="Cornice Fall">Cornice Fall</option>
         </select>
+         <br><label>Aspect:</label>
+            <div id="aspect_3">
+                <label>
+                    <input type="checkbox" name="aspect_3[]" value="N">
+                    N (0)
+                </label>
 
-         <label>Aspect</label>
-            <select id="aspect_3" name="aspect_3">
-                <option value="" hidden="true"></option>
-                <option value="N">N (0)</option>
-                <option value="NE">NE (45)</option>
-                <option value="E">E (90) </option>
-                <option value="SE">SE (135)</option>
-                <option value="S">S (180)</option>
-                <option value="SW">SW (225)</option>
-                <option value="W">W (270)</option>
-                <option value="NW">NW (315)</option>
-            </select>
-            <label>Elevation</label>
-            <select id="elevation_3" name="elevation_3">
-                <option value="" hidden="true"></option>
-                <option value="Below Treeline">Below Treeline</option>
-                <option value="Near Treeline">Near Treeline</option>
-                <option value="Above Treeline">Above Treeline</option>
-            </select>
-            <label>Size</label>
+                <label>
+                    <input type="checkbox" name="aspect_3[]" value="NE">
+                    NE (45)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_3[]" value="E">
+                    E (90)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_3[]" value="SE">
+                    SE (135)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_3[]" value="S">
+                    S (180)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_3[]" value="SW">
+                    SW (225)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_3[]" value="W">
+                    W (270)
+                </label>
+
+                <label>
+                    <input type="checkbox" name="aspect_3[]" value="NW">
+                    NW (315)
+                </label>
+            </div>
+           <br><label>Elevation:</label>
+                <div id="elevation_3">
+                    <label>
+                        <input type="checkbox" name="elevation_3[]" value="BTL">
+                       Below Treeline
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="elevation_3[]" value="NTL">
+                        Near Treeline
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="elevation_3[]" value="ATL">
+                        Above Treeline
+                    </label>
+                </div>
+            <br><label>Size:</label>
             <input type="text" id="size_3" name="size_3">
-            <label>Likelihood</label>
+            <label>Likelihood:</label>
             <input type="text" id="likelihood_3" name="likelihood_3">
 
     </div>
@@ -385,28 +531,69 @@
             <option value="Cornice Fall">Cornice Fall</option>
         </select>
 
-         <label>Aspect</label>
-            <select id="aspect_4" name="aspect_4">
-                <option value="" hidden="true"></option>
-                <option value="N">N (0)</option>
-                <option value="NE">NE (45)</option>
-                <option value="E">E (90) </option>
-                <option value="SE">SE (135)</option>
-                <option value="S">S (180)</option>
-                <option value="SW">SW (225)</option>
-                <option value="W">W (270)</option>
-                <option value="NW">NW (315)</option>
-            </select>
-            <label>Elevation</label>
-            <select id="elevation_4" name="elevation_4">
-                <option value="" hidden="true"></option>
-                <option value="Below Treeline">Below Treeline</option>
-                <option value="Near Treeline">Near Treeline</option>
-                <option value="Above Treeline">Above Treeline</option>
-            </select>
-            <label>Size</label>
+                <br><label>Aspect:</label>
+                <div id="aspect_4">
+                    <label>
+                        <input type="checkbox" name="aspect_4[]" value="N">
+                        N (0)
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="aspect_4[]" value="NE">
+                        NE (45)
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="aspect_4[]" value="E">
+                        E (90)
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="aspect_4[]" value="SE">
+                        SE (135)
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="aspect_4[]" value="S">
+                        S (180)
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="aspect_4[]" value="SW">
+                        SW (225)
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="aspect_4[]" value="W">
+                        W (270)
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="aspect_4[]" value="NW">
+                        NW (315)
+                    </label>
+                </div>
+
+            <br><label>Elevation:</label>
+            <div id="elevation_4">
+                    <label>
+                        <input type="checkbox" name="elevation_4[]" value="BTL">
+                       Below Treeline
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="elevation_4[]" value="NTL">
+                        Near Treeline
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="elevation_4[]" value="ATL">
+                        Above Treeline
+                    </label>
+                </div>
+            <br><label>Size:</label>
             <input type="text" id="size_4" name="size_4">
-            <label>Likelihood</label>
+            <label>Likelihood:</label>
             <input type="text" id="likelihood_4" name="likelihood_4">
 
 
