@@ -35,10 +35,8 @@ def create_basic_info(date_input, forecaster_input):
 
     datetime = date_input.split('T')
     date_components = datetime[0].split('-')
-    print('comp;', date_components)
     time_components = datetime[1]
     date = 'Date: ' + date_components[1] + '/' + date_components[2] + '/' + date_components[0]
-    print('date: ', date)
     forecaster = 'Forecaster: ' + forecaster_input
     hour = int(time_components.split(':')[0])
     min = time_components.split(':')[1]
