@@ -1,5 +1,6 @@
 from calendar import month
 
+import datetime
 from flask import Flask, render_template, request, redirect, jsonify
 from flask import Flask, render_template, request, redirect, send_file, after_this_request, session
 from flask_json import FlaskJSON, json_response, as_json, JsonError
@@ -10,6 +11,7 @@ from sqlalchemy.orm import foreign, relationship
 from flask_login import LoginManager, UserMixin, login_user,logout_user,current_user,login_required
 from datetime import datetime, timedelta
 from generate_pdf import generate_pdf
+from generate_pdf_pm import generate_pdf_pm
 from job_delete_pdf_files import delete_files
 from flask_apscheduler import APScheduler
 
@@ -338,7 +340,23 @@ def am_form():
 def pm_form():
     if request.method == 'POST':
 
-        #get infor from pm form and store here
+        date = request.form.get('datetime', None)
+        forecaster = request.form.get('forecaster', None)
+        hs = request.form.get('hs', None)
+        hn24 = request.form.get('hn24', None)
+        ytd_snow = request.form.get('ytd_snow', None)
+        weather_fx = request.form.get('weather_fx', None)
+        tonight = request.form.get('tonight', None)
+        tomorrow = request.form.get('tomorrow', None)
+        tomorrow_night = request.form.get('tomorrow_night', None)
+        mitigation = request.form.get('mitigation', None)
+        uphill_access = "Open to top of Paradise" if request.form.get('uphill_access', None) == "paradise" else "Open to Painter Boy" if "painter_boy" else "Not Open"
+        basic_stats = [hs, hn24, ytd_snow, uphill_access]
+
+        pdf_filename = generate_pdf_pm(date, forecaster, basic_stats, weather_fx, tonight, tomorrow, tomorrow_night, mitigation)
+        return send_file(pdf_filename, as_attachment=True)  #
+
+
         #send info to pm form generate pdf
         #send pdf
 
@@ -346,15 +364,10 @@ def pm_form():
         #host on pA
         #set up task to delete or delete on logout
 
-        print("generating pdf")
-        return render_template('confirm.html', flash_message=True)
-
     else:
         now = datetime.now()
         formatted_now = now.strftime("%Y-%m-%dT%H:%M")
-        print(formatted_now)
         snow = Snow.query.filter_by(date=now.strftime("%Y-%m-%d")).first()
-        print(snow.ytd_snow)
         return render_template('pm-form.html', now=formatted_now, snow=snow) #, oldSnow=snow,avalanches=avalanche)
 
 
