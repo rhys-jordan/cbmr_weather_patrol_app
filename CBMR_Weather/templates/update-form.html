@@ -1,25 +1,25 @@
 {% extends "base.html" %}
-{% block title%} Past-Data-Form {%endblock%}
+{% block title%} Update-Form {%endblock%}
 {% block content%}
 
-<h1 id="title"> Past Data</h1><br>
+<h1 id="title"> Update Data</h1><br>
 <div id="links">
     <a href="https://cbavalanchecenter.org/" target="_blank">CBAC</a>&emsp;&emsp;<a href="https://avalanche.state.co.us/" target="_blank">CAIC</a>&emsp;&emsp;<a href="https://forecast.weather.gov/MapClick.php?lon=-106.96337126428263&lat=38.90990956937884" target="_blank">NWS</a>&emsp;&emsp;<a href="https://cbavalanchecenter.org/forecasts/#/weather" target="_blank">CBAC Weather</a>
 </div>
 
 
-<br><form action="/past-data/{{oldSnow.dateTime}}" method="post" onkeydown="return event.key != 'Enter';">
+<br><form action="/update-form/{{oldSnow.dateTime}}" method="post" onkeydown="return event.key != 'Enter';">
     <div class= "date_row">
         <label>Date: </label> <input type="datetime-local" id="datetime" name="datetime" value='{{oldSnow.dateTime}}'>
         <label>Forecaster: </label> <input type="text" id="forecaster" name="forecaster" value='{{oldSnow.forecaster}}'><br>
     </div>
     <div class = "snow_row">
-        <label>HS:</label> <input type="number" id="hs" name="hs" value='{{oldSnow.hs}}'>
-        <label>HN24:</label><input type="number" id="hn24" name="hn24" value='{{oldSnow.hn24}}'>
-        <label>SWE:</label><input type="number" id="swe" name="swe" value='{{oldSnow.swe}}'>
-        <label>HST:</label> <input type="number" id="hst" name="hst" value='{{oldSnow.hst}}'>
-        <label>YTD Snow:</label> <input type="number" id="ytd_snow" name="ytd_snow" value='{{oldSnow.ytd_snow}}'>
-        <label>YTD SWE:</label> <input type="number" id="ytd_swe" name="ytd_swe" value='{{oldSnow.ytd_swe}}'><br>
+        <label>HS:</label> <input type="number" id="hs" name="hs" value='{{oldSnow.hs}}' step="any">
+        <label>HN24:</label><input type="number" id="hn24" name="hn24" value='{{oldSnow.hn24}}' step="any">
+        <label>SWE:</label><input type="number" id="swe" name="swe" value='{{oldSnow.swe}}' step="any">
+        <label>HST:</label> <input type="number" id="hst" name="hst" value='{{oldSnow.hst}} step="any"'>
+        <label>YTD Snow:</label> <input type="number" id="ytd_snow" name="ytd_snow" value='{{oldSnow.ytd_snow}}' step="any">
+        <label>YTD SWE:</label> <input type="number" id="ytd_swe" name="ytd_swe" value='{{oldSnow.ytd_swe}}' step="any"><br>
     </div>
     <label>Critical Information:</label><br>
     <textarea id="critical_information" name="critical_information">{{oldSnow.critical_info}}</textarea><br>
@@ -49,11 +49,11 @@
             </td>
             <td class="top_past">
                 <label>HST</label>
-                <input type="number" name="past_24_hst" id="past_24_hst" value='{{oldSnow.hst}}'><br>
+                <input type="number" name="past_24_hst" id="past_24_hst" value='{{oldSnow.hst}}' step="any"><br>
                 <label>Date Cleared</label>
-                <input type="date" name="past_24_date_cir" id="past_24_date_cir" value='{{oldSnow.past_24_date_cir}}'>
+                <input type="date" name="past_24_date_cir" id="past_24_date_cir" value='{{oldSnow.past_24_date_cir}}' step="any">
                 <label>Settlement</label>
-                <input type="number" name="past_24_settlement" id="past_24_settlement" value='{{oldSnow.past_24_settlement}}'>
+                <input type="number" name="past_24_settlement" id="past_24_settlement" value='{{oldSnow.past_24_settlement}}' step="any">
             </td>
             <td>
                 <label>Precip/Rate</label>
@@ -93,27 +93,55 @@
             </td>
             <td>
                 <label>HN24</label>
-                <input type="number" id="past_24_hn24" name="past_24_hn24" value='{{oldSnow.past_24_hn24}}'>
-                <label>HN24 SWE</label><input type="number" id="past_24_hn24_swe" name="past_24_hn24_swe" value='{{oldSnow.past_24_hn24_swe}}'>
-                <label>HN24%</label><input type="number" step =".01" id="past_24_hn24_percent" name="past_24_hn24_percent" value='{{oldSnow.past_24_hn24_percent}}'>
+                <input type="number" id="past_24_hn24" name="past_24_hn24" value='{{oldSnow.past_24_hn24}}' step="any" oninput = "calculate_hn24_percent()">
+                <label>HN24 SWE</label><input type="number" id="past_24_hn24_swe" name="past_24_hn24_swe" value='{{oldSnow.past_24_hn24_swe}}' step="any" oninput = "calculate_hn24_percent()">
+                <label>HN24%</label><input type="number" step =".01" id="past_24_hn24_percent" name="past_24_hn24_percent" value='{{oldSnow.past_24_hn24_percent}}' step="any" readonly>
             </td>
             <td>
                 <label>Temp HIGH</label>
-                <input type="number" id="future_temp_high" name="future_temp_high" value='{{oldSnow.future_temp_high}}'>
+                <input type="number" id="future_temp_high" name="future_temp_high" value='{{oldSnow.future_temp_high}}' step="any">
             </td>
         </tr>
         <tr>
             <td>
                 <label>Temp</label>
-                <input type="number" id="current_temp" name="current_temp" value='{{oldSnow.temperature}}'>
+                <input type="number" id="current_temp" name="current_temp" value='{{oldSnow.temperature}}' step="any">
             </td>
             <td>
-                <label>Wind mph/direction</label>
-                <input type="text" id="past_24_wind_mph_direction" name="past_24_wind_mph_direction" value='{{oldSnow.past_24_wind_mph_direction}}'>
+                <label>Wind MPH</label>
+                <select id="past_24_wind_mph" name="past_24_wind_mph">
+                    <option value='{{oldSnow.past_24_wind_mph}}'>{{oldSnow.past_24_wind_mph}}</option>
+                    <option value="calm">Calm (0 mi/hr)</option>
+                    <option value="light">Light (1-16 mi/hr)</option>
+                    <option value="moderate">Moderate (17-25 mi/hr)</option>
+                    <option value="strong">Strong (26-38 mi/hr)</option>
+                    <option value="extreme">Extreme (>38 mi/hr)</option>
+                </select>
+
+                <label>Wind Direction</label>
+                <select id="past_24_wind_direction" name="past_24_wind_direction">
+                    <option value='{{oldSnow.past_24_wind_direction}}'>{{oldSnow.past_24_wind_direction}}</option>
+                    <option value="N">N</option>
+                    <option value="NNE">NNE</option>
+                    <option value="NE">NE</option>
+                    <option value="ENE">ENE</option>
+                    <option value="E">E</option>
+                    <option value="ESE">ESE</option>
+                    <option value="SE">SE</option>
+                    <option value="SSE">SSE</option>
+                    <option value="S">S</option>
+                    <option value="SSW">SSW</option>
+                    <option value="SW">SW</option>
+                    <option value="WSW">WSW</option>
+                    <option value="W">W</option>
+                    <option value="WNW">WNW</option>
+                    <option value="NW">NW</option>
+                    <option value="NNW">NNW</option>
+                </select>
             </td>
             <td>
                 <label>Temp LOW</label>
-                <input type="number" id="future_temp_low" name="future_temp_low" value='{{oldSnow.future_temp_low}}'>
+                <input type="number" id="future_temp_low" name="future_temp_low" value='{{oldSnow.future_temp_low}}' step="any">
             </td>
         </tr>
         <tr>
@@ -130,7 +158,7 @@
             </td>
             <td>
                 <label>Temp HIGH</label>
-                <input type="number" id="past_24_temp_high" name="past_24_temp_high" value='{{oldSnow.past_24_temp_high}}'>
+                <input type="number" id="past_24_temp_high" name="past_24_temp_high" value='{{oldSnow.past_24_temp_high}}' step="any">
             </td>
             <td>
                 <label>Wind MPH</label>
@@ -169,7 +197,7 @@
             </td>
             <td>
                 <label>Temp LOW</label>
-                <input type="number" id="past_24_temp_low" name="past_24_temp_low" value='{{oldSnow.past_24_temp_low}}'>
+                <input type="number" id="past_24_temp_low" name="past_24_temp_low" value='{{oldSnow.past_24_temp_low}}' step="any">
             </td>
             <td>
                 <label>Wind Direction</label>
@@ -245,6 +273,7 @@
         <option value="Glide">Glide</option>
         <option value="Cornice Fall">Cornice Fall</option>
         </select>
+
 
         <label>Aspect</label>
         <select id="aspect_{{ loop.index }}" name="aspect_{{ loop.index }}">
@@ -491,12 +520,6 @@
     {% if num_problems < 4 %}
         <button type="button" onclick="addProblem4()" id="problem_4_button" {% if num_problems < 3 %} hidden="true" {% endif %}>Add Fourth Problem</button>
     {% endif %}
-
-
-
-<!--    <button type="button" onclick="addProblem2()" id="problem_2_button">Add Second Problem</button>-->
-<!--    <button type="button" onclick="addProblem3()" id="problem_3_button" hidden="true">Add Third Problem</button>-->
-<!--    <button type="button" onclick="addProblem4()" id="problem_4_button" hidden="true">Add Fourth Problem</button>-->
 
     <h1>Avalanche Forecast and discussion, How it relates to our Mtn and Our Strategic Mindset</h1><br>
     <textarea id="avalanche_forecast_discussion" name="avalanche_forecast_discussion">{{oldSnow.avalanche_forecast_discussion}}</textarea>
