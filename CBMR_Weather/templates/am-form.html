@@ -15,11 +15,11 @@
     </div>
     <div class = "snow_row">
         <label>HS:</label> <input type="number" id="hs" name="hs" step="any">
-        <label>HN24:</label><input type="number" id="hn24" name="hn24" step="any">
-        <label>SWE:</label><input type="number" id="swe" name="swe" step="any">
+        <label>HN24:</label><input type="number" id="hn24" name="hn24" step="any" oninput="calculate_ytd_snow({{ytd_snowPre}})">
+        <label>SWE:</label><input type="number" id="swe" name="swe" step="any" oninput="calculate_ytd_swe({{ytd_swePre}})">
         <label>HST:</label> <input type="number" id="hst" name="hst" step="any">
-        <label>YTD Snow:</label> <input type="number" id="ytd_snow" name="ytd_snow" step="any">
-        <label>YTD SWE:</label> <input type="number" id="ytd_swe" name="ytd_swe" step="any"><br>
+        <label>YTD Snow:</label> <input type="number" id="ytd_snow" name="ytd_snow" step="any" readonly>
+        <label>YTD SWE:</label> <input type="number" id="ytd_swe" name="ytd_swe" step="any" readonly><br>
     </div>
     <label>Critical Information:</label><br>
     <textarea id="critical_information" name="critical_information"></textarea><br>

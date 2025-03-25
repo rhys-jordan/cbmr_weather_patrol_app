@@ -4,6 +4,16 @@ function calculate_hn24_percent() {
     let round_percent = (swe/hn24).toFixed(4) *100;
     document.getElementById("past_24_hn24_percent").value = Number(round_percent);
 }
+function calculate_ytd_snow(snow) {
+    let hn24 = document.getElementById("hn24").value;
+    document.getElementById("ytd_snow").value = Number(hn24) + Number(snow);
+}
+
+function calculate_ytd_swe(snow) {
+    let swe = document.getElementById("swe").value;
+    document.getElementById("ytd_swe").value = Number(swe) + Number(snow);
+}
+
 
 function submit_amForm() {
     day = document.getElementById("day").value;
