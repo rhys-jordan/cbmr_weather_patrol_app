@@ -165,12 +165,23 @@ def forms():
 def read():
     return render_template('read.html')
 
+
 @app.route("/view",methods=['GET', 'POST'])
 def view():
     snow = Snow.query.order_by(desc(Snow.date)).all()
-
     return render_template('view.html', snow=snow)
 
+@app.route('/view/<inputDate>', methods=['GET', 'POST'])
+@login_required
+def delete_data(inputDate):
+    if request.method == 'GET':
+        dateCheck = Snow.query.filter_by(date=inputDate).first()
+        if dateCheck:
+            print("Delete Data from " + str(dateCheck))
+            #db.session.delete(dateCheck)
+            #db.session.commit()
+    snow = Snow.query.order_by(desc(Snow.date)).all()
+    return render_template('view.html', snow=snow)
 
 @app.route('/am-form', methods=['GET', 'POST'])
 @login_required
@@ -234,7 +245,6 @@ def am_form():
         #past conversions
         past_24_hst = float(past_24_hst) if past_24_hst else None
 
-        #TODO let someone not enter a date
         past_24_date_cir_raw = request.form.get('past_24_date_cir', '').strip()
         if past_24_date_cir_raw:
             past_24_date_cir = datetime.strptime(past_24_date_cir, '%Y-%m-%d')
@@ -323,7 +333,6 @@ def am_form():
                 db.session.add(avy4)
 
             db.session.commit()
-            #TODO fix pdf generation
             pdf_filename = generate_pdf(date)
             #return redirect('/view')
             return send_file(pdf_filename, as_attachment=True) #
@@ -440,7 +449,6 @@ def update_form(inputDate):
         #past conversions
         past_24_hst = float(past_24_hst) if past_24_hst else None
 
-        #TODO let someone not enter a date
         past_24_date_cir_raw = request.form.get('past_24_date_cir', '').strip()
         if past_24_date_cir_raw:
             past_24_date_cir = datetime.strptime(past_24_date_cir, '%Y-%m-%d')
@@ -676,7 +684,6 @@ def past_data():
                 db.session.add(avy4)
 
             db.session.commit()
-            #TODO fix pdf generation
             pdf_filename = generate_pdf(date)
             #return redirect('/view')
             return send_file(pdf_filename, as_attachment=True) #

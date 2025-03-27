@@ -17,6 +17,7 @@
         <th onclick="sortTable(7)">Temperature °F</th>
         <th onclick="sortTable(8)">Wind Speed</th>
         <th onclick="sortTable(9)">Wind Direction</th>
+        <th> </th>
 
     </tr>
     </thead>
@@ -33,6 +34,7 @@
             <td>{{ i.temperature }}</td>
             <td>{{ i.wind_mph }}</td>
             <td>{{ i.wind_direction }}</td>
+            <td onclick="confirm_data_delete()"> <a href="/view/{{i.date}}"> Delete </a></td>
         </tr>
     {%endfor%}
 

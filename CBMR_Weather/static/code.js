@@ -91,4 +91,8 @@ function recheck() {
     window.location.href = "/view";
 }
 
+function confirm_data_delete(){
+    //alert("Are you sure you want to delete the data for this date?")
+    return confirm("Are you sure you want to delete the data for this date?")
+}
 //
