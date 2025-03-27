@@ -266,3 +266,24 @@ td.top_past {
     display: flex;
     border: none;
 }
+
+.gust_pairing {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: nowrap; /* Prevent wrapping */
+}
+
+.gust_pairing label{
+    margin-right: 5px;
+    font-size: 1vw;
+    width: auto;
+    height: auto;
+}
+.gust_pairing input, .gust_pairing select {
+    align-items: right;
+    font-size: 1vw;
+    width: auto;
+    height: auto;
+}
