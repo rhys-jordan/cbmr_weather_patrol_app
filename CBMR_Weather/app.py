@@ -580,7 +580,8 @@ def past_data():
         past_24_hn24 = request.form.get('past_24_hn24', None)
         past_24_hn24_swe = request.form.get('past_24_hn24_swe', None)
         past_24_hn24_percent= request.form.get('past_24_hn24_percent', None)
-        past_24_wind_mph_direction = request.form.get('past_24_wind_mph_direction', None)
+        past_24_wind_mph = request.form.get('past_24_wind_mph', None)
+        past_24_wind_direction = request.form.get('past_24_wind_direction', None)
         past_24_temp_high = request.form.get('past_24_temp_high', None)
         past_24_temp_low = request.form.get('past_24_temp_low', None)
         #future
@@ -666,7 +667,22 @@ def past_data():
         dateCheck = Snow.query.filter_by(date=date).first()
         if not dateCheck:
             print(avalanche_problem_1, avalanche_problem_2, avalanche_problem_3, avalanche_problem_4)
-            snow = Snow(dateTime=dateTime,date=date, day=day, month=month, year=year, time=time, season=season, forecaster=forecaster, hs=hs, hn24=hn24,swe=swe, hst=hst, ytd_snow=ytd_snow, ytd_swe=ytd_swe, sky=sky, temperature=temperature, wind_mph=wind_mph, wind_direction=wind_direction, observation_notes=observation_notes, critical_info=critical_info, weather_forecast=weather_forecast, avalanche_forecast_discussion=avalanche_forecast_discussion, summary_previous_day=summary_previous_day, mitigation_plan=mitigation_plan, pertinent_terrain_info=pertinent_terrain_info, current_precip_rate=current_precip_rate, past_24_hst=past_24_hst, past_24_settlement=past_24_settlement,past_24_date_cir=past_24_date_cir, future_precip_rate=future_precip_rate, past_24_hn24_swe=past_24_hn24_swe, past_24_hn24=past_24_hn24, past_24_hn24_percent=past_24_hn24_percent, future_temp_high=future_temp_high, past_24_wind_mph_direction=past_24_wind_mph_direction, future_temp_low=future_temp_low, past_24_temp_high=past_24_temp_high, future_wind_mph=future_wind_mph, past_24_temp_low=past_24_temp_low, future_wind_direction=future_wind_direction, avalanche_danger_resort=avalanche_danger_resort, avalanche_danger_backcountry=avalanche_danger_backcountry)
+            snow = Snow(dateTime=dateTime, date=date, day=day, month=month, year=year, time=time, season=season,
+                        forecaster=forecaster, hs=hs, hn24=hn24, swe=swe, hst=hst, ytd_snow=ytd_snow, ytd_swe=ytd_swe,
+                        sky=sky, temperature=temperature, wind_mph=wind_mph, wind_direction=wind_direction,
+                        observation_notes=observation_notes, critical_info=critical_info,
+                        weather_forecast=weather_forecast, avalanche_forecast_discussion=avalanche_forecast_discussion,
+                        summary_previous_day=summary_previous_day, mitigation_plan=mitigation_plan,
+                        pertinent_terrain_info=pertinent_terrain_info, current_precip_rate=current_precip_rate,
+                        past_24_hst=past_24_hst, past_24_settlement=past_24_settlement,
+                        past_24_date_cir=past_24_date_cir, future_precip_rate=future_precip_rate,
+                        past_24_hn24_swe=past_24_hn24_swe, past_24_hn24=past_24_hn24,
+                        past_24_hn24_percent=past_24_hn24_percent, future_temp_high=future_temp_high,
+                        past_24_wind_mph=past_24_wind_mph, past_24_wind_direction=past_24_wind_direction,
+                        future_temp_low=future_temp_low, past_24_temp_high=past_24_temp_high,
+                        future_wind_mph=future_wind_mph, past_24_temp_low=past_24_temp_low,
+                        future_wind_direction=future_wind_direction, avalanche_danger_resort=avalanche_danger_resort,
+                        avalanche_danger_backcountry=avalanche_danger_backcountry)
             db.session.add(snow)
 
             id = Snow.query.filter_by(date=date).first().id
