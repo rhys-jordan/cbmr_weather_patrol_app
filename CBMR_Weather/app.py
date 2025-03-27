@@ -2,7 +2,7 @@ from calendar import month
 
 import datetime
 from flask import Flask, render_template, request, redirect, jsonify
-from flask import Flask, render_template, request, redirect, send_file, after_this_request, session
+from flask import Flask, render_template, request, redirect, send_file, after_this_request, session, url_for
 from flask_json import FlaskJSON, json_response, as_json, JsonError
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey, desc
@@ -177,11 +177,13 @@ def delete_data(inputDate):
     if request.method == 'GET':
         dateCheck = Snow.query.filter_by(date=inputDate).first()
         if dateCheck:
-            print("Delete Data from " + str(dateCheck))
-            #db.session.delete(dateCheck)
-            #db.session.commit()
+            #print("Delete Data from " + str(dateCheck))
+            db.session.delete(dateCheck)
+            db.session.commit()
     snow = Snow.query.order_by(desc(Snow.date)).all()
-    return render_template('view.html', snow=snow)
+    #return render_template('view.html', snow=snow)
+    return redirect(url_for('view', snow=snow))
+
 
 @app.route('/am-form', methods=['GET', 'POST'])
 @login_required
