@@ -9,9 +9,10 @@ function calculate_ytd_snow(snow) {
     document.getElementById("ytd_snow").value = Number(hn24) + Number(snow);
 }
 
-function calculate_ytd_swe(snow) {
+function calculate_ytd_swe(old_swe) {
     let swe = document.getElementById("swe").value;
-    document.getElementById("ytd_swe").value = Number(swe) + Number(snow);
+    let round_percent= (Number(swe) + Number(old_swe)).toFixed(2)
+    document.getElementById("ytd_swe").value = Number(round_percent);
 }
 
 

@@ -347,7 +347,7 @@ def am_form():
         dateBefore = day_before.strftime("%Y-%m-%d")
         snow = Snow.query.filter_by(date=dateBefore).first()
         if snow:
-            return render_template('am-form.html', now=formatted_now, ytd_snowPre=snow.ytd_snow,ytd_swePre=snow.ytd_swe)
+            return render_template('am-form.html', now=formatted_now, ytd_snowPre=snow.ytd_snow,ytd_swePre=snow.ytd_swe, )
         else:
             return render_template('am-form.html', now=formatted_now, ytd_snowPre=0,ytd_swePre=0)
 
