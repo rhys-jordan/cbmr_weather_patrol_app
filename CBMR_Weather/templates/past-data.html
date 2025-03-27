@@ -225,6 +225,19 @@
     <textarea id="observation_notes" name="observation_notes"></textarea><br>
     <h1>Weather Forecast:</h1><br>
     <textarea id="weather_forecast" name="weather_forecast"></textarea><br>
+    <label>PWL:</label><input type="checkbox" id="pwl_checkbox" name="pwl_checkbox" onclick="togglePwl()">
+    <div id="pwl_div" style="display: none;">
+    <label>Type:</label><select id="pwl" name="pwl">
+                <option value="" hidden="true"></option>
+                <option value="SH">Surface Hoar</option>
+                <option value="NSF">Near Surface Facets</option>
+                <option value="MF">Melt Freeze</option>
+                <option value="GP">Graupel</option>
+                <option value="RC">Rain Crust</option>
+                <option value="DH">Depth Hoar</option>
+            </select>
+    <label>Date:</label><input type="date" id="pwl_date" name="pwl_date">
+    </div>
     <h1>AVALANCHE DANGER in the BC/on other side of the rope</h1><br>
 
     <label>Danger Rating Resort</label>

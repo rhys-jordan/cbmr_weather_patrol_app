@@ -15,6 +15,19 @@ function calculate_ytd_swe(old_swe) {
     document.getElementById("ytd_swe").value = Number(round_percent);
 }
 
+function togglePwl() {
+    let checkbox = document.getElementById("pwl_checkbox");
+    let div = document.getElementById("pwl_div");
+
+    if (checkbox.checked) {
+        div.style.display = "block";  // Show the div
+    } else {
+        div.style.display = "none";   // Hide the div
+    }
+}
+document.addEventListener("DOMContentLoaded", function() {
+    togglePwl();  // Ensure visibility is correct based on checkbox state
+});
 
 function submit_amForm() {
     day = document.getElementById("day").value;
