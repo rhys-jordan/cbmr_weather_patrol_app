@@ -240,12 +240,12 @@ def create_avalanche_danger_ratings_pwl():
                'WHERE date = "') + str(pdf_date) + '"'
     cursor.execute(command)
     results = cursor.fetchall()
-
+    date = ' '
     if (results[0][3] != None):
         date_components = results[0][3].split('-')
         date = date_components[1] + '-' + date_components[2] + '-' + date_components[0]
         if date == '01-01-0001':
-            date = ''
+            date = ' '
 
     pwl_date = 'Date: ' + str(date)
     pwl_type = 'Type: ' + str(results[0][2])
@@ -314,7 +314,6 @@ def create_avalanche_danger_table(ava_results):
               #spaceAfter= 20)
     t = Table(data, colWidths=[71, 71,120,190,66,66],
           spaceAfter= 20)
-    print(data)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
                            ('GRID', (0, 0), (5, 1), 1.5, colors.black),
                            ('OUTLINE', (0, 0), (5, len(data)), 1.5, colors.black),

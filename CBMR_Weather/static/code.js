@@ -106,8 +106,6 @@ function recheck() {
 }
 
 function confirm_data_delete(date){
-    //alert("Are you sure you want to delete the data for this date?")
-    console.log(date)
     if (confirm("Are you sure you want to delete the data for this date?")) {
         window.location.href = "/view/" + date;
     }

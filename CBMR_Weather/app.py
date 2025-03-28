@@ -393,9 +393,8 @@ def am_form():
                 db.session.add(avy4)
 
             db.session.commit()
-            #pdf_filename = generate_pdf(date)
-            return redirect('/view')
-            #return send_file(pdf_filename, as_attachment=True) #
+            pdf_filename = generate_pdf(date)
+            return send_file(pdf_filename, as_attachment=True) #
         else:
             return render_template('confirm.html', flash_message=True)
     else:
