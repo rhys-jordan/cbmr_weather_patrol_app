@@ -27,15 +27,14 @@ nav ul li a:hover{
 
 input{
     margin: 5px auto;
-    height: 25px;
     font-size: 20px;
 }
 h1 {
-            font-size: 3vw;/* Scales based on viewport width */
-       }
-        p {
-            font-size: 2vw;
-        }
+    font-size: 3vw;/* Scales based on viewport width */
+}
+p {
+    font-size: 2vw;
+ }
 
 h2{ background-color: black;
 color: white}
@@ -86,7 +85,6 @@ table {
 
 th, td {
       border: 1px solid black;
-      padding: 8px;
       text-align: left;
 }
 
@@ -98,12 +96,16 @@ table tr td label , table tr td input{
     width: auto;
     height: auto;
     display: inline-block;
+
+}
+table tr td label {
+    padding: 8px;
 }
 
 table tr td input{
     width: auto;
     height: auto;
-    font-size: .75vw;
+    font-size: 1vw;
 }
 table tr td select {
     width: auto;
@@ -247,4 +249,41 @@ form {
     background-color: black;
     margin-bottom: 20px;
     margin-top: 20px;
+}
+
+#uphill_access{
+    width: auto;
+    height: auto;
+    font-size: 1vw;
+    margin: 25px;
+}
+
+#past_24_date_cir{
+    font-size: 1vw;
+}
+
+td.top_past {
+    display: flex;
+    border: none;
+}
+
+.gust_pairing {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: nowrap; /* Prevent wrapping */
+}
+
+.gust_pairing label{
+    margin-right: 5px;
+    font-size: 1vw;
+    width: auto;
+    height: auto;
+}
+.gust_pairing input, .gust_pairing select {
+    align-items: right;
+    font-size: 1vw;
+    width: auto;
+    height: auto;
 }

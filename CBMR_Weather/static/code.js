@@ -4,6 +4,30 @@ function calculate_hn24_percent() {
     let round_percent = (swe/hn24).toFixed(4) *100;
     document.getElementById("past_24_hn24_percent").value = Number(round_percent);
 }
+function calculate_ytd_snow(snow) {
+    let hn24 = document.getElementById("hn24").value;
+    document.getElementById("ytd_snow").value = Number(hn24) + Number(snow);
+}
+
+function calculate_ytd_swe(old_swe) {
+    let swe = document.getElementById("swe").value;
+    let round_percent= (Number(swe) + Number(old_swe)).toFixed(2)
+    document.getElementById("ytd_swe").value = Number(round_percent);
+}
+
+function togglePwl() {
+    let checkbox = document.getElementById("pwl_checkbox");
+    let div = document.getElementById("pwl_div");
+
+    if (checkbox.checked) {
+        div.style.display = "block";  // Show the div
+    } else {
+        div.style.display = "none";   // Hide the div
+    }
+}
+document.addEventListener("DOMContentLoaded", function() {
+    togglePwl();  // Ensure visibility is correct based on checkbox state
+});
 
 function submit_amForm() {
     day = document.getElementById("day").value;
@@ -81,4 +105,8 @@ function recheck() {
     window.location.href = "/view";
 }
 
+function confirm_data_delete(){
+    //alert("Are you sure you want to delete the data for this date?")
+    return confirm("Are you sure you want to delete the data for this date?")
+}
 //

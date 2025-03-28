@@ -2,7 +2,7 @@ from calendar import month
 
 import datetime
 from flask import Flask, render_template, request, redirect, jsonify
-from flask import Flask, render_template, request, redirect, send_file, after_this_request, session
+from flask import Flask, render_template, request, redirect, send_file, after_this_request, session, url_for
 from flask_json import FlaskJSON, json_response, as_json, JsonError
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey, desc
@@ -81,6 +81,19 @@ class Snow(db.Model):
     future_temp_low = db.Column(db.Float)  # Temp low (future)
     future_wind_mph = db.Column(db.String)  # Wind mph (future)
     future_wind_direction = db.Column(db.String)  # Wind direction (future)
+    pwl= db.Column(db.String)
+    pwl_date= db.Column(db.Date)
+    current_peak_gust_mph = db.Column(db.Float)  # Peak Gust MPH (current)
+    current_peak_gust_direction = db.Column(db.String)  # Peak Gust Direction (current)
+    current_peak_gust_time = db.Column(db.Time)  # Peak Gust Time (current)
+
+    past_24_peak_gust_mph = db.Column(db.Float)  # Peak Gust MPH (past 24 hours)
+    past_24_peak_gust_direction = db.Column(db.String)  # Peak Gust Direction (past 24 hours)
+    past_24_peak_gust_time = db.Column(db.Time)  # Peak Gust Time (past 24 hours)
+
+    future_peak_gust_mph = db.Column(db.Float)  # Peak Gust MPH (future)
+    future_peak_gust_direction = db.Column(db.String)  # Peak Gust Direction (future)
+    future_peak_gust_time = db.Column(db.Time)  # Peak Gust Time (future)
     #Avalanche
     avalanche_danger_resort = db.Column(db.String)
     avalanche_danger_backcountry = db.Column(db.String)
@@ -165,11 +178,24 @@ def forms():
 def read():
     return render_template('read.html')
 
+
 @app.route("/view",methods=['GET', 'POST'])
 def view():
     snow = Snow.query.order_by(desc(Snow.date)).all()
-
     return render_template('view.html', snow=snow)
+
+@app.route('/view/<inputDate>', methods=['GET', 'POST'])
+@login_required
+def delete_data(inputDate):
+    if request.method == 'GET':
+        dateCheck = Snow.query.filter_by(date=inputDate).first()
+        if dateCheck:
+            #print("Delete Data from " + str(dateCheck))
+            db.session.delete(dateCheck)
+            db.session.commit()
+    snow = Snow.query.order_by(desc(Snow.date)).all()
+    #return render_template('view.html', snow=snow)
+    return redirect(url_for('view', snow=snow))
 
 
 @app.route('/am-form', methods=['GET', 'POST'])
@@ -217,6 +243,41 @@ def am_form():
         future_wind_mph = request.form.get('future_wind_mph', None)
         future_wind_direction = request.form.get('future_wind_direction', None)
 
+
+        pwl=request.form.get('pwl', None)
+        pwl_date_raw = request.form.get('pwl_date')
+        if pwl_date_raw:
+            pwl_date = datetime.strptime(pwl_date_raw, '%Y-%m-%d')
+        else:
+            pwl_date = None
+
+        current_peak_gust_mph = request.form.get('current_peak_gust_mph', None)
+        current_peak_gust_mph = float(current_peak_gust_mph) if current_peak_gust_mph else None
+        current_peak_gust_direction = request.form.get('current_peak_gust_direction', None)
+        current_peak_gust_time_raw = request.form.get('current_peak_gust_time', None)
+        if current_peak_gust_time_raw:
+            current_peak_gust_time = datetime.strptime(current_peak_gust_time_raw, '%H:%M').time()
+        else:
+            current_peak_gust_time = None
+
+        past_24_peak_gust_mph = request.form.get('past_24_peak_gust_mph', None)
+        past_24_peak_gust_mph = float(past_24_peak_gust_mph) if past_24_peak_gust_mph else None
+        past_24_peak_gust_direction = request.form.get('past_24_peak_gust_direction', None)
+        past_24_peak_gust_time_raw = request.form.get('past_24_peak_gust_time', None)
+        if past_24_peak_gust_time_raw:
+            past_24_peak_gust_time = datetime.strptime(past_24_peak_gust_time_raw, '%H:%M').time()
+        else:
+            past_24_peak_gust_time = None
+
+        future_peak_gust_mph = request.form.get('future_peak_gust_mph', None)
+        future_peak_gust_mph = float(future_peak_gust_mph) if future_peak_gust_mph else None
+        future_peak_gust_direction = request.form.get('future_peak_gust_direction', None)
+        future_peak_gust_time_raw = request.form.get('future_peak_gust_time', None)
+        if future_peak_gust_time_raw:
+            future_peak_gust_time = datetime.strptime(future_peak_gust_time_raw, '%H:%M').time()
+        else:
+            future_peak_gust_time = None
+
         # formatting to types to match database
         hs = float(hs) if hs else None
         hn24 = float(hn24) if hn24 else None
@@ -234,7 +295,6 @@ def am_form():
         #past conversions
         past_24_hst = float(past_24_hst) if past_24_hst else None
 
-        #TODO let someone not enter a date
         past_24_date_cir_raw = request.form.get('past_24_date_cir', '').strip()
         if past_24_date_cir_raw:
             past_24_date_cir = datetime.strptime(past_24_date_cir, '%Y-%m-%d')
@@ -303,11 +363,10 @@ def am_form():
         dateCheck = Snow.query.filter_by(date=date).first()
         if not dateCheck:
             print(avalanche_problem_1, avalanche_problem_2, avalanche_problem_3, avalanche_problem_4)
-            snow = Snow(dateTime=dateTime,date=date, day=day, month=month, year=year, time=time, season=season, forecaster=forecaster, hs=hs, hn24=hn24,swe=swe, hst=hst, ytd_snow=ytd_snow, ytd_swe=ytd_swe, sky=sky, temperature=temperature, wind_mph=wind_mph, wind_direction=wind_direction, observation_notes=observation_notes, critical_info=critical_info, weather_forecast=weather_forecast, avalanche_forecast_discussion=avalanche_forecast_discussion, summary_previous_day=summary_previous_day, mitigation_plan=mitigation_plan, pertinent_terrain_info=pertinent_terrain_info, current_precip_rate=current_precip_rate, past_24_hst=past_24_hst, past_24_settlement=past_24_settlement,past_24_date_cir=past_24_date_cir, future_precip_rate=future_precip_rate, past_24_hn24_swe=past_24_hn24_swe, past_24_hn24=past_24_hn24, past_24_hn24_percent=past_24_hn24_percent, future_temp_high=future_temp_high, past_24_wind_mph=past_24_wind_mph, past_24_wind_direction=past_24_wind_direction, future_temp_low=future_temp_low, past_24_temp_high=past_24_temp_high, future_wind_mph=future_wind_mph, past_24_temp_low=past_24_temp_low, future_wind_direction=future_wind_direction, avalanche_danger_resort=avalanche_danger_resort, avalanche_danger_backcountry=avalanche_danger_backcountry)
+            snow = Snow(dateTime=dateTime,date=date, day=day, month=month, year=year, time=time, season=season, forecaster=forecaster, hs=hs, hn24=hn24,swe=swe, hst=hst, ytd_snow=ytd_snow, ytd_swe=ytd_swe, sky=sky, temperature=temperature, wind_mph=wind_mph, wind_direction=wind_direction, observation_notes=observation_notes, critical_info=critical_info, weather_forecast=weather_forecast, avalanche_forecast_discussion=avalanche_forecast_discussion, summary_previous_day=summary_previous_day, mitigation_plan=mitigation_plan, pertinent_terrain_info=pertinent_terrain_info, current_precip_rate=current_precip_rate, past_24_hst=past_24_hst, past_24_settlement=past_24_settlement,past_24_date_cir=past_24_date_cir, future_precip_rate=future_precip_rate, past_24_hn24_swe=past_24_hn24_swe, past_24_hn24=past_24_hn24, past_24_hn24_percent=past_24_hn24_percent, future_temp_high=future_temp_high, past_24_wind_mph=past_24_wind_mph, past_24_wind_direction=past_24_wind_direction, future_temp_low=future_temp_low, past_24_temp_high=past_24_temp_high, future_wind_mph=future_wind_mph, past_24_temp_low=past_24_temp_low, future_wind_direction=future_wind_direction, avalanche_danger_resort=avalanche_danger_resort, avalanche_danger_backcountry=avalanche_danger_backcountry,pwl=pwl,pwl_date=pwl_date,current_peak_gust_mph=current_peak_gust_mph,current_peak_gust_direction=current_peak_gust_direction,current_peak_gust_time=current_peak_gust_time,past_24_peak_gust_mph=past_24_peak_gust_mph,past_24_peak_gust_direction=past_24_peak_gust_direction,past_24_peak_gust_time=past_24_peak_gust_time,future_peak_gust_mph=future_peak_gust_mph,future_peak_gust_direction=future_peak_gust_direction,future_peak_gust_time=future_peak_gust_time)
             db.session.add(snow)
 
             id = Snow.query.filter_by(date=date).first().id
-            print(id)
 
             if avalanche_problem_1 != "":
                 avy1 = Avalanche(problem=avalanche_problem_1, size = size_1, likelihood = likelihood_1, aspect = aspect_1, elevation= elevation_1, location=location1, Snow_id=id)
@@ -323,7 +382,6 @@ def am_form():
                 db.session.add(avy4)
 
             db.session.commit()
-            #TODO fix pdf generation
             pdf_filename = generate_pdf(date)
             #return redirect('/view')
             return send_file(pdf_filename, as_attachment=True) #
@@ -332,7 +390,13 @@ def am_form():
     else:
         now = datetime.now()
         formatted_now = now.strftime("%Y-%m-%dT%H:%M")
-        return render_template('am-form.html', now=formatted_now)
+        day_before = now - timedelta(days=1)
+        dateBefore = day_before.strftime("%Y-%m-%d")
+        snow = Snow.query.filter_by(date=dateBefore).first()
+        if snow:
+            return render_template('am-form.html', now=formatted_now, ytd_snowPre=snow.ytd_snow,ytd_swePre=snow.ytd_swe,critical_info=snow.critical_info,observation_notes=snow.observation_notes,weather_forecast=snow.weather_forecast,avalanche_forecast_discussion=snow.avalanche_forecast_discussion,summary_previous_day=snow.summary_previous_day,mitigation_plan=snow.mitigation_plan,pertinent_terrain_info=snow.pertinent_terrain_info)
+        else:
+            return render_template('am-form.html', now=formatted_now, ytd_snowPre=0,ytd_swePre=0, critical_info="",observation_notes="",weather_forecast="",avalanche_forecast_discussion="",summary_previous_day="",mitigation_plan="",pertinent_terrain_info="")
 
 
 @app.route('/pm-form', methods=['GET', 'POST'])
@@ -371,9 +435,9 @@ def pm_form():
         return render_template('pm-form.html', now=formatted_now, snow=snow) #, oldSnow=snow,avalanches=avalanche)
 
 
-@app.route('/past-data/<inputDate>', methods=['GET', 'POST'])
+@app.route('/update-form/<inputDate>', methods=['GET', 'POST'])
 @login_required
-def past_data_request(inputDate):
+def update_form(inputDate):
     if request.method == 'POST':
         #time functions
         print('post')
@@ -406,7 +470,8 @@ def past_data_request(inputDate):
         past_24_hn24 = request.form.get('past_24_hn24', None)
         past_24_hn24_swe = request.form.get('past_24_hn24_swe', None)
         past_24_hn24_percent= request.form.get('past_24_hn24_percent', None)
-        past_24_wind_mph_direction = request.form.get('past_24_wind_mph_direction', None)
+        past_24_wind_mph = request.form.get('past_24_wind_mph', None)
+        past_24_wind_direction = request.form.get('past_24_wind_direction', None)
         past_24_temp_high = request.form.get('past_24_temp_high', None)
         past_24_temp_low = request.form.get('past_24_temp_low', None)
         #future
@@ -433,7 +498,6 @@ def past_data_request(inputDate):
         #past conversions
         past_24_hst = float(past_24_hst) if past_24_hst else None
 
-        #TODO let someone not enter a date
         past_24_date_cir_raw = request.form.get('past_24_date_cir', '').strip()
         if past_24_date_cir_raw:
             past_24_date_cir = datetime.strptime(past_24_date_cir, '%Y-%m-%d')
@@ -449,6 +513,41 @@ def past_data_request(inputDate):
         future_precip_rate = str(future_precip_rate) if future_precip_rate else None
         future_temp_high = float(future_temp_high) if future_temp_high else None
         future_temp_low = float(future_temp_low) if future_temp_low else None
+
+        pwl = request.form.get('pwl', None)
+        pwl_date_raw = request.form.get('pwl_date')
+        if pwl_date_raw:
+            pwl_date = datetime.strptime(pwl_date_raw, '%Y-%m-%d')
+        else:
+            pwl_date = None
+
+        current_peak_gust_mph = request.form.get('current_peak_gust_mph', None)
+        current_peak_gust_mph = float(current_peak_gust_mph) if current_peak_gust_mph else None
+        current_peak_gust_direction = request.form.get('current_peak_gust_direction', None)
+        current_peak_gust_time_raw = request.form.get('current_peak_gust_time', None)
+        if current_peak_gust_time_raw:
+            current_peak_gust_time = datetime.strptime(current_peak_gust_time_raw, '%H:%M').time()
+        else:
+            current_peak_gust_time = None
+
+        past_24_peak_gust_mph = request.form.get('past_24_peak_gust_mph', None)
+        past_24_peak_gust_mph = float(past_24_peak_gust_mph) if past_24_peak_gust_mph else None
+        past_24_peak_gust_direction = request.form.get('past_24_peak_gust_direction', None)
+        past_24_peak_gust_time_raw = request.form.get('past_24_peak_gust_time', None)
+        if past_24_peak_gust_time_raw:
+            past_24_peak_gust_time = datetime.strptime(past_24_peak_gust_time_raw, '%H:%M').time()
+        else:
+            past_24_peak_gust_time = None
+
+        future_peak_gust_mph = request.form.get('future_peak_gust_mph', None)
+        future_peak_gust_mph = float(future_peak_gust_mph) if future_peak_gust_mph else None
+        future_peak_gust_direction = request.form.get('future_peak_gust_direction', None)
+        future_peak_gust_time_raw = request.form.get('future_peak_gust_time', None)
+        if future_peak_gust_time_raw:
+            future_peak_gust_time = datetime.strptime(future_peak_gust_time_raw, '%H:%M').time()
+        else:
+            future_peak_gust_time = None
+
         #avalanche conversions
 
         avalanche_danger_resort = request.form.get('avalanche_danger_resort', None)
@@ -496,7 +595,7 @@ def past_data_request(inputDate):
             db.session.delete(dateCheck)
             db.session.commit()
         print(avalanche_problem_1, avalanche_problem_2, avalanche_problem_3, avalanche_problem_4)
-        snow = Snow(dateTime=dateTime,date=date, day=day, month=month, year=year, time=time, season=season, forecaster=forecaster, hs=hs, hn24=hn24,swe=swe, hst=hst, ytd_snow=ytd_snow, ytd_swe=ytd_swe, sky=sky, temperature=temperature, wind_mph=wind_mph, wind_direction=wind_direction, observation_notes=observation_notes, critical_info=critical_info, weather_forecast=weather_forecast, avalanche_forecast_discussion=avalanche_forecast_discussion, summary_previous_day=summary_previous_day, mitigation_plan=mitigation_plan, pertinent_terrain_info=pertinent_terrain_info, current_precip_rate=current_precip_rate, past_24_hst=past_24_hst, past_24_settlement=past_24_settlement,past_24_date_cir=past_24_date_cir, future_precip_rate=future_precip_rate, past_24_hn24_swe=past_24_hn24_swe, past_24_hn24=past_24_hn24, past_24_hn24_percent=past_24_hn24_percent, future_temp_high=future_temp_high, past_24_wind_mph_direction=past_24_wind_mph_direction, future_temp_low=future_temp_low, past_24_temp_high=past_24_temp_high, future_wind_mph=future_wind_mph, past_24_temp_low=past_24_temp_low, future_wind_direction=future_wind_direction, avalanche_danger_resort=avalanche_danger_resort, avalanche_danger_backcountry=avalanche_danger_backcountry)
+        snow = Snow(dateTime=dateTime,date=date, day=day, month=month, year=year, time=time, season=season, forecaster=forecaster, hs=hs, hn24=hn24,swe=swe, hst=hst, ytd_snow=ytd_snow, ytd_swe=ytd_swe, sky=sky, temperature=temperature, wind_mph=wind_mph, wind_direction=wind_direction, observation_notes=observation_notes, critical_info=critical_info, weather_forecast=weather_forecast, avalanche_forecast_discussion=avalanche_forecast_discussion, summary_previous_day=summary_previous_day, mitigation_plan=mitigation_plan, pertinent_terrain_info=pertinent_terrain_info, current_precip_rate=current_precip_rate, past_24_hst=past_24_hst, past_24_settlement=past_24_settlement,past_24_date_cir=past_24_date_cir, future_precip_rate=future_precip_rate, past_24_hn24_swe=past_24_hn24_swe, past_24_hn24=past_24_hn24, past_24_hn24_percent=past_24_hn24_percent, future_temp_high=future_temp_high, past_24_wind_mph=past_24_wind_mph, past_24_wind_direction=past_24_wind_direction, future_temp_low=future_temp_low, past_24_temp_high=past_24_temp_high, future_wind_mph=future_wind_mph, past_24_temp_low=past_24_temp_low, future_wind_direction=future_wind_direction, avalanche_danger_resort=avalanche_danger_resort, avalanche_danger_backcountry=avalanche_danger_backcountry,pwl=pwl,pwl_date=pwl_date,current_peak_gust_mph=current_peak_gust_mph,current_peak_gust_direction=current_peak_gust_direction,current_peak_gust_time=current_peak_gust_time,past_24_peak_gust_mph=past_24_peak_gust_mph,past_24_peak_gust_direction=past_24_peak_gust_direction,past_24_peak_gust_time=past_24_peak_gust_time,future_peak_gust_mph=future_peak_gust_mph,future_peak_gust_direction=future_peak_gust_direction,future_peak_gust_time=future_peak_gust_time)
         db.session.add(snow)
 
         id = Snow.query.filter_by(date=date).first().id
@@ -527,7 +626,7 @@ def past_data_request(inputDate):
         avalanche=Avalanche.query.filter_by(Snow_id=snowId).all()
         print("good!")
         print(snow)
-        return render_template('past-data-request.html', oldSnow=snow,avalanches=avalanche)
+        return render_template('update-form.html', oldSnow=snow,avalanches=avalanche)
 
 @app.route('/past-data', methods=['GET', 'POST'])
 @login_required
@@ -563,7 +662,8 @@ def past_data():
         past_24_hn24 = request.form.get('past_24_hn24', None)
         past_24_hn24_swe = request.form.get('past_24_hn24_swe', None)
         past_24_hn24_percent= request.form.get('past_24_hn24_percent', None)
-        past_24_wind_mph_direction = request.form.get('past_24_wind_mph_direction', None)
+        past_24_wind_mph = request.form.get('past_24_wind_mph', None)
+        past_24_wind_direction = request.form.get('past_24_wind_direction', None)
         past_24_temp_high = request.form.get('past_24_temp_high', None)
         past_24_temp_low = request.form.get('past_24_temp_low', None)
         #future
@@ -604,6 +704,41 @@ def past_data():
         future_precip_rate = str(future_precip_rate) if future_precip_rate else None
         future_temp_high = float(future_temp_high) if future_temp_high else None
         future_temp_low = float(future_temp_low) if future_temp_low else None
+
+        pwl = request.form.get('pwl', None)
+        pwl_date_raw = request.form.get('pwl_date')
+        if pwl_date_raw:
+            pwl_date = datetime.strptime(pwl_date_raw, '%Y-%m-%d')
+        else:
+            pwl_date = None
+
+        current_peak_gust_mph = request.form.get('current_peak_gust_mph', None)
+        current_peak_gust_mph = float(current_peak_gust_mph) if current_peak_gust_mph else None
+        current_peak_gust_direction = request.form.get('current_peak_gust_direction', None)
+        current_peak_gust_time_raw = request.form.get('current_peak_gust_time', None)
+        if current_peak_gust_time_raw:
+            current_peak_gust_time = datetime.strptime(current_peak_gust_time_raw, '%H:%M').time()
+        else:
+            current_peak_gust_time = None
+
+        past_24_peak_gust_mph = request.form.get('past_24_peak_gust_mph', None)
+        past_24_peak_gust_mph = float(past_24_peak_gust_mph) if past_24_peak_gust_mph else None
+        past_24_peak_gust_direction = request.form.get('past_24_peak_gust_direction', None)
+        past_24_peak_gust_time_raw = request.form.get('past_24_peak_gust_time', None)
+        if past_24_peak_gust_time_raw:
+            past_24_peak_gust_time = datetime.strptime(past_24_peak_gust_time_raw, '%H:%M').time()
+        else:
+            past_24_peak_gust_time = None
+
+        future_peak_gust_mph = request.form.get('future_peak_gust_mph', None)
+        future_peak_gust_mph = float(future_peak_gust_mph) if future_peak_gust_mph else None
+        future_peak_gust_direction = request.form.get('future_peak_gust_direction', None)
+        future_peak_gust_time_raw = request.form.get('future_peak_gust_time', None)
+        if future_peak_gust_time_raw:
+            future_peak_gust_time = datetime.strptime(future_peak_gust_time_raw, '%H:%M').time()
+        else:
+            future_peak_gust_time = None
+
         #avalanche conversions
 
         avalanche_danger_resort = request.form.get('avalanche_danger_resort', None)
@@ -649,7 +784,22 @@ def past_data():
         dateCheck = Snow.query.filter_by(date=date).first()
         if not dateCheck:
             print(avalanche_problem_1, avalanche_problem_2, avalanche_problem_3, avalanche_problem_4)
-            snow = Snow(dateTime=dateTime,date=date, day=day, month=month, year=year, time=time, season=season, forecaster=forecaster, hs=hs, hn24=hn24,swe=swe, hst=hst, ytd_snow=ytd_snow, ytd_swe=ytd_swe, sky=sky, temperature=temperature, wind_mph=wind_mph, wind_direction=wind_direction, observation_notes=observation_notes, critical_info=critical_info, weather_forecast=weather_forecast, avalanche_forecast_discussion=avalanche_forecast_discussion, summary_previous_day=summary_previous_day, mitigation_plan=mitigation_plan, pertinent_terrain_info=pertinent_terrain_info, current_precip_rate=current_precip_rate, past_24_hst=past_24_hst, past_24_settlement=past_24_settlement,past_24_date_cir=past_24_date_cir, future_precip_rate=future_precip_rate, past_24_hn24_swe=past_24_hn24_swe, past_24_hn24=past_24_hn24, past_24_hn24_percent=past_24_hn24_percent, future_temp_high=future_temp_high, past_24_wind_mph_direction=past_24_wind_mph_direction, future_temp_low=future_temp_low, past_24_temp_high=past_24_temp_high, future_wind_mph=future_wind_mph, past_24_temp_low=past_24_temp_low, future_wind_direction=future_wind_direction, avalanche_danger_resort=avalanche_danger_resort, avalanche_danger_backcountry=avalanche_danger_backcountry)
+            snow = Snow(dateTime=dateTime, date=date, day=day, month=month, year=year, time=time, season=season,
+                        forecaster=forecaster, hs=hs, hn24=hn24, swe=swe, hst=hst, ytd_snow=ytd_snow, ytd_swe=ytd_swe,
+                        sky=sky, temperature=temperature, wind_mph=wind_mph, wind_direction=wind_direction,
+                        observation_notes=observation_notes, critical_info=critical_info,
+                        weather_forecast=weather_forecast, avalanche_forecast_discussion=avalanche_forecast_discussion,
+                        summary_previous_day=summary_previous_day, mitigation_plan=mitigation_plan,
+                        pertinent_terrain_info=pertinent_terrain_info, current_precip_rate=current_precip_rate,
+                        past_24_hst=past_24_hst, past_24_settlement=past_24_settlement,
+                        past_24_date_cir=past_24_date_cir, future_precip_rate=future_precip_rate,
+                        past_24_hn24_swe=past_24_hn24_swe, past_24_hn24=past_24_hn24,
+                        past_24_hn24_percent=past_24_hn24_percent, future_temp_high=future_temp_high,
+                        past_24_wind_mph=past_24_wind_mph, past_24_wind_direction=past_24_wind_direction,
+                        future_temp_low=future_temp_low, past_24_temp_high=past_24_temp_high,
+                        future_wind_mph=future_wind_mph, past_24_temp_low=past_24_temp_low,
+                        future_wind_direction=future_wind_direction, avalanche_danger_resort=avalanche_danger_resort,
+                        avalanche_danger_backcountry=avalanche_danger_backcountry,pwl=pwl,pwl_date=pwl_date,current_peak_gust_mph=current_peak_gust_mph,current_peak_gust_direction=current_peak_gust_direction,current_peak_gust_time=current_peak_gust_time,past_24_peak_gust_mph=past_24_peak_gust_mph,past_24_peak_gust_direction=past_24_peak_gust_direction,past_24_peak_gust_time=past_24_peak_gust_time,future_peak_gust_mph=future_peak_gust_mph,future_peak_gust_direction=future_peak_gust_direction,future_peak_gust_time=future_peak_gust_time)
             db.session.add(snow)
 
             id = Snow.query.filter_by(date=date).first().id
@@ -669,7 +819,6 @@ def past_data():
                 db.session.add(avy4)
 
             db.session.commit()
-            #TODO fix pdf generation
             pdf_filename = generate_pdf(date)
             #return redirect('/view')
             return send_file(pdf_filename, as_attachment=True) #
@@ -679,8 +828,6 @@ def past_data():
         now = datetime.now()
         formatted_now = now.strftime("%Y-%m-%dT%H:%M")
         return render_template('past-data.html')
-
-
 
 
 scheduler.start()

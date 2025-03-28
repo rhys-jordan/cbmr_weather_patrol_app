@@ -237,7 +237,7 @@ def get_avalanche_danger_data():
 
 def create_avalanche_danger_table(ava_results, ava_danger):
     data = [['Avalanche Problems','','','','','',''],
-            ['', 'Problem', 'Location', 'Aspect', 'Elevation', 'Size','Likelihood' ]]
+            ['', 'Location', 'Problem', 'Aspect', 'Elevation', 'Size','Likelihood' ]]
 
 
     for i in range(len(ava_results)):
@@ -247,8 +247,9 @@ def create_avalanche_danger_table(ava_results, ava_danger):
 
         elevation_data = Paragraph(ava_results[i][3], styles['Normal'])
         size_data = Paragraph(ava_results[i][4], styles['Normal'])
+        aspect_data = Paragraph(ava_results[i][2], styles['Normal'])
         likelihood_data = Paragraph(ava_results[i][5], styles['Normal'])
-        data.append([ava_prob, ava_prob_data, ava_results[i][1], ava_results[i][2],
+        data.append([ava_prob,ava_results[i][1], ava_prob_data, aspect_data,
                      elevation_data, size_data, likelihood_data])
 
 
@@ -257,8 +258,10 @@ def create_avalanche_danger_table(ava_results, ava_danger):
     row_heights = [20,20]
     for x in range(len(data)-2):
         row_heights.append(40)
-    t = Table(data, colWidths=[83.5 for x in range(len(data[0]))],
-              spaceAfter= 20)
+    #t = Table(data, colWidths=[83.5 for x in range(len(data[0]))],
+              #spaceAfter= 20)
+    t = Table(data, colWidths=[81.5, 81.5,81.5,95,81.5,81.5,81.5],
+          spaceAfter= 20)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
                            ('GRID', (0, 0), (6, 1), 1.5, colors.black),
                            ('OUTLINE', (0, 0), (6, len(data)), 1.5, colors.black),
@@ -368,7 +371,7 @@ def generate_pdf(date):
 
 
 def main():
-    generate_pdf('2025-03-14')
+    generate_pdf('1999-03-15')
     connection.close()
 
 

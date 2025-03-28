@@ -15,14 +15,14 @@
     </div>
     <div class = "snow_row">
         <label>HS:</label> <input type="number" id="hs" name="hs" step="any">
-        <label>HN24:</label><input type="number" id="hn24" name="hn24" step="any">
-        <label>SWE:</label><input type="number" id="swe" name="swe" step="any">
+        <label>HN24:</label><input type="number" id="hn24" name="hn24" step="any" oninput="calculate_ytd_snow({{ytd_snowPre}})">
+        <label>SWE:</label><input type="number" id="swe" name="swe" step="any" oninput="calculate_ytd_swe({{ytd_swePre}})">
         <label>HST:</label> <input type="number" id="hst" name="hst" step="any">
-        <label>YTD Snow:</label> <input type="number" id="ytd_snow" name="ytd_snow" step="any">
-        <label>YTD SWE:</label> <input type="number" id="ytd_swe" name="ytd_swe" step="any"><br>
+        <label>YTD Snow:</label> <input type="number" id="ytd_snow" name="ytd_snow" step="any" readonly>
+        <label>YTD SWE:</label> <input type="number" id="ytd_swe" name="ytd_swe" step="any" readonly><br>
     </div>
     <label>Critical Information:</label><br>
-    <textarea id="critical_information" name="critical_information"></textarea><br>
+    <textarea id="critical_information" name="critical_information">{{critical_info}}</textarea><br>
     <h1>Pertinent Weather Observations past and future</h1><br>
     <table>
         <thead>
@@ -49,7 +49,7 @@
             </td>
             <td class="top_past">
                 <label>HST</label>
-                <input type="number" name="past_24_hst" id="past_24_hst"  step="any"><br>
+                <input type="number" name="past_24_hst" id="past_24_hst"  step="any">
                 <label>Date Cleared</label>
                 <input type="date" name="past_24_date_cir" id="past_24_date_cir">
                 <label>Settlement</label>
@@ -220,11 +220,120 @@
                 </select>
             </td>
         </tr>
+            <td>
+                <div class="gust_pairing">
+                <label>Peak Gust MPH</label><input type="number" step="any" id="current_peak_gust_mph" name="current_peak_gust_mph"><br>
+                </div>
+                <div class="gust_pairing">
+                <label>Gust Direction</label>
+                <select id="current_peak_gust_direction" name="current_peak_gust_direction">
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="N">N</option>
+                    <option value="NNE">NNE</option>
+                    <option value="NE">NE</option>
+                    <option value="ENE">ENE</option>
+                    <option value="E">E</option>
+                    <option value="ESE">ESE</option>
+                    <option value="SE">SE</option>
+                    <option value="SSE">SSE</option>
+                    <option value="S">S</option>
+                    <option value="SSW">SSW</option>
+                    <option value="SW">SW</option>
+                    <option value="WSW">WSW</option>
+                    <option value="W">W</option>
+                    <option value="WNW">WNW</option>
+                    <option value="NW">NW</option>
+                    <option value="NNW">NNW</option>
+                </select><br>
+                </div>
+                <div class="gust_pairing">
+                <label>Gust Time</label>
+                <input type="time" id="current_peak_gust_time" name="current_peak_gust_time">
+                </div>
+            </td>
+        <td>
+                <div class="gust_pairing">
+                <label>Peak Gust MPH</label><input type="number" step="any" id="past_24_peak_gust_mph" name="past_24_peak_gust_mph"><br>
+                </div>
+                <div class="gust_pairing">
+                <label>Gust Direction</label>
+                <select id="past_24_peak_gust_direction" name="past_24_peak_gust_direction">
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="N">N</option>
+                    <option value="NNE">NNE</option>
+                    <option value="NE">NE</option>
+                    <option value="ENE">ENE</option>
+                    <option value="E">E</option>
+                    <option value="ESE">ESE</option>
+                    <option value="SE">SE</option>
+                    <option value="SSE">SSE</option>
+                    <option value="S">S</option>
+                    <option value="SSW">SSW</option>
+                    <option value="SW">SW</option>
+                    <option value="WSW">WSW</option>
+                    <option value="W">W</option>
+                    <option value="WNW">WNW</option>
+                    <option value="NW">NW</option>
+                    <option value="NNW">NNW</option>
+                </select><br>
+                </div>
+                <div class="gust_pairing">
+                <label>Gust Time</label>
+                <input type="time" id="past_24_peak_gust_time" name="past_24_peak_gust_time">
+                </div>
+            </td>
+        <td>
+                <div class="gust_pairing">
+                <label>Peak Gust MPH</label><input type="number" step="any" id="future_peak_gust_mph" name="future_peak_gust_mph"><br>
+                </div>
+                <div class="gust_pairing">
+                <label>Gust Direction</label>
+                <select id="future_peak_gust_direction" name="future_peak_gust_direction">
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="N">N</option>
+                    <option value="NNE">NNE</option>
+                    <option value="NE">NE</option>
+                    <option value="ENE">ENE</option>
+                    <option value="E">E</option>
+                    <option value="ESE">ESE</option>
+                    <option value="SE">SE</option>
+                    <option value="SSE">SSE</option>
+                    <option value="S">S</option>
+                    <option value="SSW">SSW</option>
+                    <option value="SW">SW</option>
+                    <option value="WSW">WSW</option>
+                    <option value="W">W</option>
+                    <option value="WNW">WNW</option>
+                    <option value="NW">NW</option>
+                    <option value="NNW">NNW</option>
+                </select><br>
+                </div>
+                <div class="gust_pairing">
+                <label>Gust Time</label>
+                <input type="time" id="future_peak_gust_time" name="future_peak_gust_time">
+                </div>
+            </td>
+        <tr>
+
+        </tr>
     </table>
     <h1>Notes:</h1><br>
-    <textarea id="observation_notes" name="observation_notes"></textarea><br>
+    <textarea id="observation_notes" name="observation_notes">{{observation_notes}}</textarea><br>
     <h1>Weather Forecast:</h1><br>
-    <textarea id="weather_forecast" name="weather_forecast"></textarea><br>
+    <textarea id="weather_forecast" name="weather_forecast">{{weather_forecast}}</textarea><br>
+    <label>PWL:</label><input type="checkbox" id="pwl_checkbox" name="pwl_checkbox" onclick="togglePwl()">
+    <div id="pwl_div" style="display: none;">
+    <label>Type:</label><select id="pwl" name="pwl">
+                <option value="" hidden="true"></option>
+                <option value="SH">Surface Hoar</option>
+                <option value="NSF">Near Surface Facets</option>
+                <option value="MF">Melt Freeze</option>
+                <option value="GP">Graupel</option>
+                <option value="RC">Rain Crust</option>
+                <option value="DH">Depth Hoar</option>
+            </select>
+    <label>Date:</label><input type="date" id="pwl_date" name="pwl_date">
+    </div>
     <h1>AVALANCHE DANGER in the BC/on other side of the rope</h1><br>
 
     <label>Danger Rating Resort</label>
@@ -332,34 +441,6 @@
             <input type="text" id="size_1" name="size_1">
             <label>Likelihood:</label>
             <input type="text" id="likelihood_1" name="likelihood_1">
-
-
-            <!-- <label>Size</label>
-            <select name="size1">
-                <option value="certain">Certain</option>
-                <option value="very likely">Very Likely</option>
-                <option value="likely">Likely</option>
-                <option value="possible">Possible</option>
-                <option value="unlikely">Unlikely</option>
-            </select>
-
-            <label>Likelihood</label>
-            <select name="size">
-                <option value="small">Small</option>
-                <option value="large">Large</option>
-                <option value="very large">Very Large</option>
-                <option value="historic">Historic</option>
-            </select>
-
-            <label>Trend (From Yesterday)</label>
-            <select name="trend">
-                <option value="increase_dramatic">Increase (Dramatic)</option>
-                <option value="increase">Increase</option>
-                <option value="none">No Change</option>
-                <option value="decrease">Decrease</option>
-                <option value="decrease_dramatic">Decrease (Dramatic)</option>
-            </select> -->
-
     </div>
 
     <div id="problem_2" hidden="true">
@@ -682,16 +763,16 @@
     <button type="button" onclick="addProblem4()" id="problem_4_button" hidden="true">Add Fourth Problem</button>
 
     <h1>Avalanche Forecast and discussion, How it relates to our Mtn and Our Strategic Mindset</h1><br>
-    <textarea id="avalanche_forecast_discussion" name="avalanche_forecast_discussion"></textarea>
+    <textarea id="avalanche_forecast_discussion" name="avalanche_forecast_discussion">{{avalanche_forecast_discussion}}</textarea>
 
     <h1>Summary of Previous Day(s) Work</h1><br>
-    <textarea id="summary_of_previous_work" name="summary_previous_day"></textarea>
+    <textarea id="summary_of_previous_work" name="summary_previous_day">{{summary_previous_day}}</textarea>
 
     <h1>Mitigation Plan</h1><br>
-    <textarea id="mitigation_plan" name="mitigation_plan"></textarea>
+    <textarea id="mitigation_plan" name="mitigation_plan">{{mitigation_plan}}</textarea>
 
     <h1>Pertinent Terrain Opening/Closing</h1><br>
-    <textarea id="pertinent_terrain_opening/closing" name="pertinent_terrain_info"></textarea><br>
+    <textarea id="pertinent_terrain_opening/closing" name="pertinent_terrain_info">{{pertinent_terrain_info}}</textarea><br>
 
 
 
