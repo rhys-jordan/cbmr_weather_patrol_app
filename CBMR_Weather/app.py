@@ -162,6 +162,20 @@ def handle_post_login():
             return render_template('login_error_user.html')
     return render_template('loginform_user.html')
 
+@app.route('/loginReset', methods = ['GET', 'POST'])
+def reset_login():
+    username = '1'
+    if request.method == 'POST':
+        new_password = request.form['new_password']
+        confirm_password = request.form['confirm_password']
+        user = User.query.filter_by(username=username).first()
+        if(new_password != confirm_password):
+            return render_template('login_reset.html', error_message="Passwords do not match")
+        if user.password == new_password:
+            return render_template('login_reset.html', error_message="Your new password can not be the same as your old password")
+
+    return render_template('login_reset.html')
+
 @app.route('/logout')
 @login_required
 def logout():

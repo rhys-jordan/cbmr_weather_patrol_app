@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title%} LOGIN RESET {%endblock%}
+{% block content%}
+
+
+<body style="background:url(/static/Mount_crested_butte_1988.jpg); background-repeat:no-repeat; background-size:cover;">
+
+    <h1 id="title"> Please Reset Your Password </h1>
+
+</body>
+
+<div id="loginReset_container">
+        <form id="loginReset" action="/loginReset" method="post">
+                <label> New Password:</label>
+                <input type="password" required="required" name="new_password" value={{new_password}}><br>
+                <label> Confirm Password:</label>
+                <input type="password" required="required" name="confirm_password" value={{confirm_password}}><br>
+                <p name="reset_password_error">{{error_message}}</p>
+                <button type="submit" name="action" value="submit_query">Reset Password</button>
+        </form>
+</div>
+
+{% endblock %}
