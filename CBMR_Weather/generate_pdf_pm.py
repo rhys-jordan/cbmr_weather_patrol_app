@@ -63,7 +63,7 @@ def create_basic_stats(basic_stats_input):
     uphill_access = 'Uphill Access: ' + basic_stats_input[3]
     data = [[hs, hn24, ytd_snow, uphill_access]]
 
-    t = Table(data, colWidths=[100, 100, 100, 180], spaceAfter=10)
+    t = Table(data, colWidths=[126, 126, 126, 206], spaceAfter=10)
 
     t.setStyle(TableStyle([
         ('TEXTCOLOR', (0, 0), (-1, -1), colors.black),

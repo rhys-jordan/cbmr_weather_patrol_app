@@ -19,6 +19,20 @@ pdf_date =  ''
 
 styles = getSampleStyleSheet()
 
+def convert_time(time_orig):
+    if(time_orig != None):
+        hour = int(time_orig.split(':')[0])
+        min = time_orig.split(':')[1]
+        if (hour > 12):
+            hour = hour - 12
+            time = str(hour) + ':' + min + " PM"
+        else:
+            time = str(hour) + ':' + min + " AM"
+        return time
+    else:
+        return ''
+
+
 def get_information(category_name):
     command = 'SELECT ' + category_name + ' FROM snow WHERE date = "' + str(pdf_date) + '"'
     cursor.execute(command)
@@ -47,13 +61,7 @@ def create_basic_info():
     date_components = results[0][0].split('-')
     date = 'Date: ' + date_components[1] + '/' + date_components[2] + '/' + date_components[0]
     forecaster = 'Forecaster: ' + str(results[0][1])
-    hour = int(results[0][2].split(':')[0])
-    min = results[0][2].split(':')[1]
-    if(hour > 12):
-        hour = hour - 12
-        time = 'Time: ' + str(hour) + ':' + min + " PM"
-    else:
-        time = 'Time: ' + str(hour) + ':' + min + " AM"
+    time = 'Time: ' + convert_time(results[0][2])
 
     data = [[date,time,forecaster]]
     t = Table(data, spaceAfter= 20)
@@ -91,6 +99,7 @@ def create_basic_stats():
 
     return t
 
+
 def get_weather_obser_data():
     command = ('SELECT sky, current_precip_rate, temperature, wind_mph, wind_direction '
                'FROM snow'
@@ -112,14 +121,32 @@ def get_weather_obser_data():
     cursor.execute(command)
     results_future = cursor.fetchall()
 
+    command = ('SELECT  current_peak_gust_mph, current_peak_gust_direction, current_peak_gust_time'
+               ' FROM snow '
+               'WHERE date = "') + str(pdf_date) + '"'
+    cursor.execute(command)
+    current_gusts = cursor.fetchall()
+
+    command = ('SELECT past_24_peak_gust_mph, past_24_peak_gust_direction, past_24_peak_gust_time'
+                ' FROM snow '
+                'WHERE date = "') + str(pdf_date) + '"'
+    cursor.execute(command)
+    past_gusts = cursor.fetchall()
+
+    command = ('SELECT future_peak_gust_mph, future_peak_gust_direction, future_peak_gust_time'
+               ' FROM snow '
+               'WHERE date = "') + str(pdf_date) + '"'
+    cursor.execute(command)
+    future_gusts = cursor.fetchall()
+
     results_notes = get_information('observation_notes')
     results_notes_para = Paragraph('Notes: ' + str(results_notes), styles['Normal'])
-    #print(results_notes_para)
-    #print(results_notes)
-    date_components = results_past[0][4].split('-')
-    date_cleared = date_components[1] + '_' + date_components[2] + '_' + date_components[0]
-    if date_cleared == '01_01_0001':
-        date_cleared = ''
+    date_cleared = ''
+    if(results_past[0][4] != None):
+        date_components = results_past[0][4].split('-')
+        date_cleared = date_components[1] + '-' + date_components[2] + '-' + date_components[0]
+        if date_cleared == '01-01-0001':
+            date_cleared = ''
 
 
 
@@ -130,10 +157,14 @@ def get_weather_obser_data():
             ['Temp', str(results_current[0][2]),        'Settled',  results_past[0][5], 'HN24 %', results_past[0][2],           'Temp LOW', results_future[0][2]],
             ['Wind mph', results_current[0][3],         'Wind mph',  str(results_past[0][6]),'Temp HIGH',  str(results_past[0][8]),  'Wind mph', results_future[0][3]],
             ['Wind Direction', results_current[0][4],   'Wind Direction',  str(results_past[0][7]), 'Temp LOW',  str(results_past[0][9]), 'Wind Direction', results_future[0][4]],
+
+            ['Gust MPH', current_gusts[0][0], 'Gust MPH', '',  past_gusts[0][0],                                     '' ,'Gust MPH', future_gusts[0][0]],
+            ['Gust Direction', current_gusts[0][1], 'Gust Direction', '', past_gusts[0][1], '',                               'Gust Direction', future_gusts[0][1]],
+            ['Gust Time', convert_time(current_gusts[0][2]), 'Gust Time', '', convert_time(past_gusts[0][2]), '',           'Gust Time', convert_time(future_gusts[0][2])],
             [results_notes_para]]
     return data
 
-#Make things paragraphs
+
 def create_weather_observation_table():
     data = get_weather_obser_data()
     rowHeights = []
@@ -147,26 +178,37 @@ def create_weather_observation_table():
                            ('OUTLINE', (0, 0), (7, 0), 1.5, colors.black),
                            ('GRID', (0, 1), (7, 1), 1.5, colors.black),
 
-                           ('OUTLINE', (0, 2), (1, 6), 1.5, colors.black),
-                           ('LINEBEFORE', (1, 2), (1, 6), 1, colors.black, None, (3,4)),
-                           ('LINEBELOW', (0, 2), (1, 6), 1, colors.black),
+                           ('OUTLINE', (0, 2), (1, 9), 1.5, colors.black),
+                           ('LINEBEFORE', (1, 2), (1, 9), 1, colors.black, None, (3,4)),
+                           ('LINEBELOW', (0, 2), (1, 9), 1, colors.black),
 
-                           ('OUTLINE', (2, 2), (5, 6), 1.5, colors.black),
+                           ('OUTLINE', (2, 2), (5, 9), 1.5, colors.black),
                            ('LINEBEFORE', (3, 2), (3, 6), 1, colors.black, None, (3, 4)),
                            ('LINEBEFORE', (4, 2), (4, 6), 1, colors.black),
                            ('LINEBEFORE', (5, 2), (5, 6), 1, colors.black, None, (3, 4)),
                            ('LINEBELOW', (2, 2), (5, 6), 1, colors.black),
+                           ('SPAN',(2,7),(3,7)),
+                           ('SPAN', (4, 7), (5, 7)),
+                           ('SPAN', (2, 8), (3, 8)),
+                           ('SPAN', (4, 8), (5, 8)),
+                           ('SPAN', (2, 9), (3, 9)),
+                           ('SPAN', (4, 9), (5, 9)),
+                           ('ALIGN', (2, 7), (3, 9), 'RIGHT'),
+                           ('ALIGN', (4, 7), (5, 9), 'LEFT'),
+                           ('LINEBEFORE', (4, 7), (4, 9), 1, colors.black, None, (3, 4)),
+                           ('LINEBELOW', (2, 7), (5, 9), 1, colors.black),
 
-                           ('OUTLINE', (6, 2), (7, 6), 1.5, colors.black),
-                           ('LINEBEFORE', (7, 2), (7, 6), 1, colors.black, None, (3, 4)),
-                           ('LINEBELOW', (6, 2), (7, 6), 1, colors.black),
+
+                           ('OUTLINE', (6, 2), (7, 9), 1.5, colors.black),
+                           ('LINEBEFORE', (7, 2), (7, 9), 1, colors.black, None, (3, 4)),
+                           ('LINEBELOW', (6, 2), (7, 9), 1, colors.black),
 
                            ('SPAN', (0, 0), (7, 0)),
                            ('ALIGN', (0, 0), (7, 0), 'CENTER'),
                            ('VALIGN', (0, 0), (7, 0), 'MIDDLE'),
 
-                           ('GRID', (0, 7), (7, 7), 1.5, colors.black),
-                           ('SPAN', (0, 7), (7, 7)),
+                           ('GRID', (0, 10), (7, 10), 1.5, colors.black),
+                           ('SPAN', (0, 10), (7, 10)),
 
                            ('SPAN', (2, 1), (5, 1)),
                            ('SPAN', (6, 1), (7, 1)),
@@ -191,29 +233,39 @@ def create_weather_forcast_table():
     return t
 
 
-def get_avalanche_danger_ratings():
-    command = ('SELECT avalanche_danger_resort, avalanche_danger_backcountry'
+
+def create_avalanche_danger_ratings_pwl():
+    command = ('SELECT avalanche_danger_resort, avalanche_danger_backcountry, pwl, pwl_date'
                ' FROM snow '
                'WHERE date = "') + str(pdf_date) + '"'
     cursor.execute(command)
     results = cursor.fetchall()
-    return results
+    date = ' '
+    if (results[0][3] != None):
+        date_components = results[0][3].split('-')
+        date = date_components[1] + '-' + date_components[2] + '-' + date_components[0]
+        if date == '01-01-0001':
+            date = ' '
 
-def create_avalanche_danger_ratings():
-    command = ('SELECT avalanche_danger_resort, avalanche_danger_backcountry'
-               ' FROM snow '
-               'WHERE date = "') + str(pdf_date) + '"'
-    cursor.execute(command)
-    results = cursor.fetchall()
+    pwl_date = 'Date: ' + str(date)
+    pwl_type = 'Type: ' + str(results[0][2])
 
-    data = [['Avalanche Dangers', '', '', ''],
-             ['Resort Danger', results[0][0],'Backcountry Danger',results[0][0]]]
+    data = [['Resort Danger', results[0][0],'Backcountry Danger',results[0][1], 'PWL', pwl_type, pwl_date]]
 
-    t = Table(data, colWidths=[146 for x in range(4)],
-              rowHeights=[20 for x in range(len(data))], spaceAfter=10)
+    t = Table(data, colWidths=[85,85,110,85, 40, 85,95 ], spaceAfter=10)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (1, -1), colors.black),
-                           ('GRID', (0, 0), (3, 1), 1.5, colors.black),
-                           ('SPAN', (0, 0), (3, 0)),
+                           ('OUTLINE', (0, 0), (3, 0), 1.5, colors.black),
+                           ('LINEBEFORE', (1, 0), (1, 0), 1, colors.black, None, (3, 4)),
+                           ('LINEBEFORE', (2, 0), (2, 0), 1, colors.black, None),
+                           ('LINEBEFORE', (3, 0), (3, 0), 1, colors.black, None, (3, 4)),
+                           ('LINEBEFORE', (4, 0), (4, 0), 1, colors.black, None),
+
+                           ('OUTLINE', (4, 0), (6, 0), 1.5, colors.black),
+                           ('LINEBEFORE', (5, 0), (5, 0), 1, colors.black, None, (3, 4)),
+                           ('LINEBEFORE', (6, 0), (6, 0), 1, colors.black, None, (3, 4)),
+
+
+
 
                            ('ALIGN', (0, 0), (0, 0), 'CENTER'),
                            ('VALIGN', (0, 0), (0, 0), 'MIDDLE')]))
@@ -222,9 +274,8 @@ def create_avalanche_danger_ratings():
 
 
 
-
 def get_avalanche_danger_data():
-    command = ('SELECT problem, location, aspect, elevation, size, likelihood FROM avalanche '
+    command = ('SELECT problem, location, btl_aspect, ntl_aspect, atl_aspect, size, likelihood FROM avalanche '
                'WHERE Snow_id in '
                '(SELECT snow.id '
                'FROM snow '
@@ -235,22 +286,23 @@ def get_avalanche_danger_data():
 
 
 
-def create_avalanche_danger_table(ava_results, ava_danger):
-    data = [['Avalanche Problems','','','','','',''],
-            ['', 'Location', 'Problem', 'Aspect', 'Elevation', 'Size','Likelihood' ]]
+def create_avalanche_danger_table(ava_results):
+    data = [['Avalanche Problems','','','','',''],
+            ['', 'Location', 'Problem', 'Elevation: Aspect', 'Size','Likelihood' ]]
 
 
     for i in range(len(ava_results)):
         ava_problem_name = 'Problem ' + str(i + 1)
         ava_prob = Paragraph(ava_problem_name, styles['Normal'])
-        ava_prob_data = Paragraph(ava_results[i][0], styles['Normal'])
-
-        elevation_data = Paragraph(ava_results[i][3], styles['Normal'])
-        size_data = Paragraph(ava_results[i][4], styles['Normal'])
-        aspect_data = Paragraph(ava_results[i][2], styles['Normal'])
-        likelihood_data = Paragraph(ava_results[i][5], styles['Normal'])
-        data.append([ava_prob,ava_results[i][1], ava_prob_data, aspect_data,
-                     elevation_data, size_data, likelihood_data])
+        ava_prob_type = Paragraph(ava_results[i][0], styles['Normal'])
+        btl_aspect = Paragraph('BTL: ' + ava_results[i][2])
+        ntl_aspect = Paragraph('NTL: ' +ava_results[i][3])
+        atl_aspect = Paragraph('ATL: ' +ava_results[i][4])
+        aspects = [atl_aspect,ntl_aspect,btl_aspect]
+        size_data = Paragraph(ava_results[i][5], styles['Normal'])
+        likelihood_data = Paragraph(ava_results[i][6], styles['Normal'])
+        data.append([ava_prob,ava_results[i][1], ava_prob_type, aspects,
+                     size_data, likelihood_data])
 
 
     #t = Table(data, colWidths=[65,110,65,65,65,65,65,65] colWidths=[71 for x in range(len(data[0]))],
@@ -260,17 +312,18 @@ def create_avalanche_danger_table(ava_results, ava_danger):
         row_heights.append(40)
     #t = Table(data, colWidths=[83.5 for x in range(len(data[0]))],
               #spaceAfter= 20)
-    t = Table(data, colWidths=[81.5, 81.5,81.5,95,81.5,81.5,81.5],
+    t = Table(data, colWidths=[71, 71,120,190,66,66],
           spaceAfter= 20)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
-                           ('GRID', (0, 0), (6, 1), 1.5, colors.black),
-                           ('OUTLINE', (0, 0), (6, len(data)), 1.5, colors.black),
-                           ('GRID', (0, 2), (6, len(data)), 1, colors.black),
-                           ('SPAN', (0, 0), (6, 0)),
+                           ('GRID', (0, 0), (5, 1), 1.5, colors.black),
+                           ('OUTLINE', (0, 0), (5, len(data)), 1.5, colors.black),
+                           ('GRID', (0, 2), (5, len(data)), 1, colors.black),
+                           ('SPAN', (0, 0), (5, 0)),
                            ('LINEBEFORE', (1, 0), (1, len(data)), 1.5, colors.black),
 
-                           ('ALIGN', (0, 0), (6, len(data)), 'CENTER'),
-                           ('VALIGN', (0, 0), (6, len(data)), 'MIDDLE'),
+                           ('ALIGN', (0, 0), (5, len(data)+1), 'CENTER'),
+                           ('VALIGN', (0, 0), (5, len(data)+1), 'MIDDLE'),
+                           #('VALIGN', (0, 0), (5, 3), 'MIDDLE'),
                            ]))
     return t
 
@@ -290,8 +343,27 @@ def create_discuss_box(heading, summary):
     return t
 
 
+def create_pwl_box(data):
+    #data = [[heading],[sum_paragraph]]
 
+    t = Table(data, colWidths=[100 for x in range(1)], spaceAfter=10)
+    t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (1, -1), colors.black),
+                           ('GRID', (0, 0), (0, 1), 1.5, colors.black),
 
+                           ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                           ('VALIGN', (0, 0), (0, 0), 'MIDDLE')]))
+    return t
+
+def get_pwl_info():
+    command = ('SELECT pwl, pwl_date'
+               ' FROM snow '
+               'WHERE date = "') + str(pdf_date) + '"'
+    cursor.execute(command)
+    results_pwl = cursor.fetchall()
+    if results_pwl[0][1] == None and results_pwl[0][0] == '':
+        return ''
+    else:
+        return results_pwl
 
 
 def make_file_name():
@@ -344,11 +416,15 @@ def generate_pdf(date):
     elements.append(basic_stats)
     elements.append(weather_obser)
     elements.append(weather_forecast)
-    ava_danger_rating = create_avalanche_danger_ratings()
+
+
+
+    #ava_danger_rating = create_avalanche_danger_ratings()
+    ava_danger_rating = create_avalanche_danger_ratings_pwl()
     elements.append(ava_danger_rating)
     ava_results = get_avalanche_danger_data()
-    ava_danger_rate = get_avalanche_danger_ratings()
-    ava_danger = create_avalanche_danger_table(ava_results, ava_danger_rate)
+    #ava_danger_rate = get_avalanche_danger_ratings()
+    ava_danger = create_avalanche_danger_table(ava_results)
     elements.append(ava_danger)
 
     ava_forecast = create_discuss_box(
@@ -371,7 +447,7 @@ def generate_pdf(date):
 
 
 def main():
-    generate_pdf('1999-03-15')
+    generate_pdf('2025-03-28')
     connection.close()
 
 
