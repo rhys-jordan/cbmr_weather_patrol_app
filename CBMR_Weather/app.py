@@ -424,7 +424,13 @@ def pm_form():
         tomorrow = request.form.get('tomorrow', None)
         tomorrow_night = request.form.get('tomorrow_night', None)
         mitigation = request.form.get('mitigation', None)
-        uphill_access = "Open to top of Paradise" if request.form.get('uphill_access', None) == "paradise" else "Open to Peanut" if "Peanut" else "Not Open"
+        print(request.form.get('uphill_access', None))
+        if request.form.get('uphill_access', None) == 'paradise':
+            uphill_access =  'Open to top of Paradise'
+        elif request.form.get('uphill_access', None) == 'peanut':
+            uphill_access = 'Open to Peanut'
+        else:
+            uphill_access = 'Not Open'
         basic_stats = [hs, hn24, ytd_snow, uphill_access]
 
         pdf_filename = generate_pdf_pm(date, forecaster, basic_stats, weather_fx, tonight, tomorrow, tomorrow_night, mitigation)
