@@ -358,79 +358,105 @@
                 <option value="high">High</option>
                 <option value="extreme">Extreme</option>
             </select>
-        {% for avy in avalanches %}
-        <div id="problem_{{ loop.index }}">
-        <label>Location</label>
-        <select id="location{{ loop.index }}" name="location{{ loop.index }}">
-        <option value="{{ avy.location }}">{{ avy.location }}</option>
-        <option value="" hidden="true"></option>
-        <option value="Resort">Resort</option>
-        <option value="BC">Backcountry (BC)</option>
-        <option value="Both">Both</option>
-        </select>
-
-        <label>Problem {{ loop.index }}</label>
-        <select id="avalanche_problem_{{ loop.index }}" name="avalanche_problem_{{ loop.index }}">
-        <option value="{{ avy.problem }}">{{ avy.problem }}</option>
-        <option value="" hidden="true"></option>
-        <option value="Persistent Slab">Persistent Slab</option>
-        <option value="Deep Persistent Slab">Deep Persistent Slab</option>
-        <option value="Storm Slab">Storm Slab</option>
-        <option value="Wet Slab">Wet Slab</option>
-        <option value="Wind Slab">Wind Slab</option>
-        <option value="Dry Loose">Dry Loose</option>
-        <option value="Wet Loose">Wet Loose</option>
-        <option value="Glide">Glide</option>
-        <option value="Cornice Fall">Cornice Fall</option>
-        </select>
 
 
-        <label>Aspect</label>
-        <select id="aspect_{{ loop.index }}" name="aspect_{{ loop.index }}">
-        <option value="{{ avy.aspect }}">{{ avy.aspect }}</option>
-        <option value="" hidden="true"></option>
-        <option value="N">N (0)</option>
-        <option value="NE">NE (45)</option>
-        <option value="E">E (90)</option>
-        <option value="SE">SE (135)</option>
-        <option value="S">S (180)</option>
-        <option value="SW">SW (225)</option>
-        <option value="W">W (270)</option>
-        <option value="NW">NW (315)</option>
-        </select>
 
-        <label>Elevation</label>
-        <select id="elevation_{{ loop.index }}" name="elevation_{{ loop.index }}">
-        <option value="{{ avy.elevation }}">{{ avy.elevation }}</option>
-        <option value="" hidden="true"></option>
-        <option value="Below Treeline">Below Treeline</option>
-        <option value="Near Treeline">Near Treeline</option>
-        <option value="Above Treeline">Above Treeline</option>
-        </select>
-
-        <label>Size</label>
-        <input type="text" id="size_{{ loop.index }}" name="size_{{ loop.index }}" value="{{ avy.size }}">
-
-        <label>Likelihood</label>
-        <input type="text" id="likelihood_{{ loop.index }}" name="likelihood_{{ loop.index }}" value="{{ avy.likelihood }}">
-
-        <hr>
-        </div>
-        {% endfor %}
-
-
-    <div id="problem_1">
-            <label>Location </label>
+    <div id="problems-container" >
+            <div id="problem_1" {% set num_problems = avalanches | length %} {% if num_problems >=1 %} hidden="true"{% endif %} >
+                <h3>Avalanche Problem 1</h3>
+                <label>Location </label>
                 <select id="location1" name="location1">
-                    <option value='{{oldSnow.location1}}'>{{oldSnow.location1}}</option>
                     <option value="" hidden="true"></option>
-                    <option value="Resort"> Resort</option>
-                    <option value="BC">Backcountry (BC) </option>
+                    <option value="Resort">Resort</option>
+                    <option value="BC">Backcountry (BC)</option>
                     <option value="Both">Both</option>
                 </select>
-            <label>Problem 1 </label>
-            <select id="avalanche_problem_1" name="avalanche_problem_1">
-                <option value='{{oldSnow.avalanche_problem_1}}'>{{oldSnow.avalanche_problem_1}}</option>
+
+                <label>Problem Type</label>
+                <select id="avalanche_problem_1" name="avalanche_problem_1">
+                    <option value="" hidden="true"></option>
+                    <option value="Persistent Slab">Persistent Slab</option>
+                    <option value="Deep Persistent Slab">Deep Persistent Slab</option>
+                    <option value="Storm Slab">Storm Slab</option>
+                    <option value="Wet Slab">Wet Slab</option>
+                    <option value="Wind Slab">Wind Slab</option>
+                    <option value="Dry Loose">Dry Loose</option>
+                    <option value="Wet Loose">Wet Loose</option>
+                    <option value="Glide">Glide</option>
+                    <option value="Cornice Fall">Cornice Fall</option>
+                </select>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Elevation / Aspect</th>
+                            <th>N (0°)</th>
+                            <th>NE (45°)</th>
+                            <th>E (90°)</th>
+                            <th>SE (135°)</th>
+                            <th>S (180°)</th>
+                            <th>SW (225°)</th>
+                            <th>W (270°)</th>
+                            <th>NW (315°)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Below Tree Line</td>
+                            <td><input type="checkbox" name="btl_aspect_1[]" value="N"></td>
+                            <td><input type="checkbox" name="btl_aspect_1[]" value="NE"></td>
+                            <td><input type="checkbox" name="btl_aspect_1[]" value="E"></td>
+                            <td><input type="checkbox" name="btl_aspect_1[]" value="SE"></td>
+                            <td><input type="checkbox" name="btl_aspect_1[]" value="S"></td>
+                            <td><input type="checkbox" name="btl_aspect_1[]" value="SW"></td>
+                            <td><input type="checkbox" name="btl_aspect_1[]" value="W"></td>
+                            <td><input type="checkbox" name="btl_aspect_1[]" value="NW"></td>
+                        </tr>
+                        <tr>
+                            <td>Near Tree Line</td>
+                            <td><input type="checkbox" name="ntl_aspect_1[]" value="N"></td>
+                            <td><input type="checkbox" name="ntl_aspect_1[]" value="NE"></td>
+                            <td><input type="checkbox" name="ntl_aspect_1[]" value="E"></td>
+                            <td><input type="checkbox" name="ntl_aspect_1[]" value="SE"></td>
+                            <td><input type="checkbox" name="ntl_aspect_1[]" value="S"></td>
+                            <td><input type="checkbox" name="ntl_aspect_1[]" value="SW"></td>
+                            <td><input type="checkbox" name="ntl_aspect_1[]" value="W"></td>
+                            <td><input type="checkbox" name="ntl_aspect_1[]" value="NW"></td>
+                        </tr>
+                        <tr>
+                            <td>Above Tree Line</td>
+                            <td><input type="checkbox" name="atl_aspect_1[]" value="N"></td>
+                            <td><input type="checkbox" name="atl_aspect_1[]" value="NE"></td>
+                            <td><input type="checkbox" name="atl_aspect_1[]" value="E"></td>
+                            <td><input type="checkbox" name="atl_aspect_1[]" value="SE"></td>
+                            <td><input type="checkbox" name="atl_aspect_1[]" value="S"></td>
+                            <td><input type="checkbox" name="atl_aspect_1[]" value="SW"></td>
+                            <td><input type="checkbox" name="atl_aspect_1[]" value="W"></td>
+                            <td><input type="checkbox" name="atl_aspect_1[]" value="NW"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <label>Size:</label>
+                <input type="text" id="size_1" name="size_1">
+                <label>Likelihood:</label>
+                <input type="text" id="likelihood_1" name="likelihood_1">
+            </div>
+    </div>
+    {% for avy in avalanches %}
+        <div id="problem_{{ loop.index }}">
+            <h3>Avalanche Problem {{loop.index}}</h3>
+            <label>Location</label>
+            <select id="location{{ loop.index }}" name="location{{ loop.index }}">
+                <option value="{{ avy.location }}">{{ avy.location }}</option>
+                <option value="" hidden="true"></option>
+                <option value="Resort">Resort</option>
+                <option value="BC">Backcountry (BC)</option>
+                <option value="Both">Both</option>
+            </select>
+
+            <label>Problem</label>
+            <select id="avalanche_problem_{{ loop.index }}" name="avalanche_problem_{{ loop.index }}">
+                <option value="{{ avy.problem }}">{{ avy.problem }}</option>
                 <option value="" hidden="true"></option>
                 <option value="Persistent Slab">Persistent Slab</option>
                 <option value="Deep Persistent Slab">Deep Persistent Slab</option>
@@ -442,180 +468,313 @@
                 <option value="Glide">Glide</option>
                 <option value="Cornice Fall">Cornice Fall</option>
             </select>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Elevation / Aspect</th>
+                        <th>N (0°)</th>
+                        <th>NE (45°)</th>
+                        <th>E (90°)</th>
+                        <th>SE (135°)</th>
+                        <th>S (180°)</th>
+                        <th>SW (225°)</th>
+                        <th>W (270°)</th>
+                        <th>NW (315°)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Below Tree Line</td>
+                        {% set btl_aspects = avy.btl_aspect.split('-') %}
+                        <td><input type="checkbox" name="btl_aspect_{{ loop.index }}[]" value="N" {% if "N" in btl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="btl_aspect_{{ loop.index }}[]" value="NE" {% if "NE" in btl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="btl_aspect_{{ loop.index }}[]" value="E" {% if "E" in btl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="btl_aspect_{{ loop.index }}[]" value="SE" {% if "SE" in btl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="btl_aspect_{{ loop.index }}[]" value="S" {% if "S" in btl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="btl_aspect_{{ loop.index }}[]" value="SW" {% if "SW" in btl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="btl_aspect_{{ loop.index }}[]" value="W" {% if "W" in btl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="btl_aspect_{{ loop.index }}[]" value="NW" {% if "NW" in btl_aspects %}checked{% endif %}></td>
+                    </tr>
 
-            <label>Aspect</label>
-            <select id="aspect_1" name="aspect_1">
-                <option value='{{oldSnow.aspect_1}}'>{{oldSnow.aspect_1}}</option>
-                <option value="" hidden="true"></option>
-                <option value="N">N (0)</option>
-                <option value="NE">NE (45)</option>
-                <option value="E">E (90) </option>
-                <option value="SE">SE (135)</option>
-                <option value="S">S (180)</option>
-                <option value="SW">SW (225)</option>
-                <option value="W">W (270)</option>
-                <option value="NW">NW (315)</option>
-            </select>
-            <label>Elevation</label>
-            <select id="elevation_1" name="elevation_1">
-                <option value='{{oldSnow.elevation_1}}'>{{oldSnow.elevation_1}}</option>
-                <option value="" hidden="true"></option>
-                <option value="Below Treeline">Below Treeline</option>
-                <option value="Near Treeline">Near Treeline</option>
-                <option value="Below Treeline">Above Treeline</option>
-            </select>
+                    <!-- Near Tree Line -->
+                    <tr>
+                        <td>Near Tree Line</td>
+                        {% set ntl_aspects = avy.ntl_aspect.split('-') %}
+                        <td><input type="checkbox" name="ntl_aspect_{{ loop.index }}[]" value="N" {% if "N" in ntl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="ntl_aspect_{{ loop.index }}[]" value="NE" {% if "NE" in ntl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="ntl_aspect_{{ loop.index }}[]" value="E" {% if "E" in ntl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="ntl_aspect_{{ loop.index }}[]" value="SE" {% if "SE" in ntl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="ntl_aspect_{{ loop.index }}[]" value="S" {% if "S" in ntl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="ntl_aspect_{{ loop.index }}[]" value="SW" {% if "SW" in ntl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="ntl_aspect_{{ loop.index }}[]" value="W" {% if "W" in ntl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="ntl_aspect_{{ loop.index }}[]" value="NW" {% if "NW" in ntl_aspects %}checked{% endif %}></td>
+                    </tr>
+
+                    <!-- Above Tree Line -->
+                    <tr>
+                        <td>Above Tree Line</td>
+                        {% set atl_aspects = avy.atl_aspect.split('-') %}
+                        <td><input type="checkbox" name="atl_aspect_{{ loop.index }}[]" value="N" {% if "N" in atl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="atl_aspect_{{ loop.index }}[]" value="NE" {% if "NE" in atl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="atl_aspect_{{ loop.index }}[]" value="E" {% if "E" in atl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="atl_aspect_{{ loop.index }}[]" value="SE" {% if "SE" in atl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="atl_aspect_{{ loop.index }}[]" value="S" {% if "S" in atl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="atl_aspect_{{ loop.index }}[]" value="SW" {% if "SW" in atl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="atl_aspect_{{ loop.index }}[]" value="W" {% if "W" in atl_aspects %}checked{% endif %}></td>
+                        <td><input type="checkbox" name="atl_aspect_{{ loop.index }}[]" value="NW" {% if "NW" in atl_aspects %}checked{% endif %}></td>
+                    </tr>
+                </tbody>
+            </table>
             <label>Size</label>
-            <input type="text" id="size_1" name="size_1" value='{{oldSnow.size_1}}'>
-            <label>Likelihood</label>
-            <input type="text" id="likelihood_1" name="likelihood_1" value='{{oldSnow.likelihood_1}}'>
+            <input type="text" id="size_{{ loop.index }}" name="size_{{ loop.index }}" value="{{ avy.size }}">
 
-    </div>
+            <label>Likelihood</label>
+            <input type="text" id="likelihood_{{ loop.index }}" name="likelihood_{{ loop.index }}" value="{{ avy.likelihood }}">
+
+            <hr>
+        </div>
+        {% endfor %}
+
+
 
     <div id="problem_2" hidden="true">
-        <label>Location </label>
-                <select id="location2" name="location2">
-                    <option value="" hidden="true"></option>
-                    <option value="Resort"> Resort</option>
-                    <option value="BC">Backcountry (BC) </option>
-                    <option value="Both">Both</option>
-                </select>
-        <label>Problem 2 </label>
-        <select id="avalanche_problem_2" name="avalanche_problem_2">
-            <option value="" hidden="true"></option>
-            <option value="Persistent Slab">Persistent Slab</option>
-            <option value="Deep Persistent Slab">Deep Persistent Slab</option>
-            <option value="Storm Slab">Storm Slab</option>
-            <option value="Wet Slab">Wet Slab</option>
-            <option value="Wind Slab">Wind Slab</option>
-            <option value="Dry Loose">Dry Loose</option>
-            <option value="Wet Loose">Wet Loose</option>
-            <option value="Glide">Glide</option>
-            <option value="Cornice Fall">Cornice Fall</option>
-        </select>
+    <h3>Avalanche Problem 2</h3>
+    <label>Location </label>
+    <select id="location2" name="location2">
+        <option value="" hidden="true"></option>
+        <option value="Resort">Resort</option>
+        <option value="BC">Backcountry (BC)</option>
+        <option value="Both">Both</option>
+    </select>
 
-         <label>Aspect</label>
-            <select id="aspect_2" name="aspect_2">
-                <option value="" hidden="true"></option>
-                <option value="N">N (0)</option>
-                <option value="NE">NE (45)</option>
-                <option value="E">E (90) </option>
-                <option value="SE">SE (135)</option>
-                <option value="S">S (180)</option>
-                <option value="SW">SW (225)</option>
-                <option value="W">W (270)</option>
-                <option value="NW">NW (315)</option>
-            </select>
-            <label>Elevation</label>
-            <select id="elevation_2" name="elevation_2">
-                <option value="" hidden="true"></option>
-                <option value="Below Treeline">Below Treeline</option>
-                <option value="Near Treeline">Near Treeline</option>
-                <option value="Above Treeline">Above Treeline</option>
-            </select>
-            <label>Size</label>
-            <input type="text" id="size_2" name="size_2">
-            <label>Likelihood</label>
-            <input type="text" id="likelihood_2" name="likelihood_2">
+    <label>Problem Type</label>
+    <select id="avalanche_problem_2" name="avalanche_problem_2">
+        <option value="" hidden="true"></option>
+        <option value="Persistent Slab">Persistent Slab</option>
+        <option value="Deep Persistent Slab">Deep Persistent Slab</option>
+        <option value="Storm Slab">Storm Slab</option>
+        <option value="Wet Slab">Wet Slab</option>
+        <option value="Wind Slab">Wind Slab</option>
+        <option value="Dry Loose">Dry Loose</option>
+        <option value="Wet Loose">Wet Loose</option>
+        <option value="Glide">Glide</option>
+        <option value="Cornice Fall">Cornice Fall</option>
+    </select>
+    <table>
+        <thead>
+            <tr>
+                <th>Elevation / Aspect</th>
+                <th>N (0°)</th>
+                <th>NE (45°)</th>
+                <th>E (90°)</th>
+                <th>SE (135°)</th>
+                <th>S (180°)</th>
+                <th>SW (225°)</th>
+                <th>W (270°)</th>
+                <th>NW (315°)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Below Tree Line</td>
+                <td><input type="checkbox" name="btl_aspect_2[]" value="N"></td>
+                <td><input type="checkbox" name="btl_aspect_2[]" value="NE"></td>
+                <td><input type="checkbox" name="btl_aspect_2[]" value="E"></td>
+                <td><input type="checkbox" name="btl_aspect_2[]" value="SE"></td>
+                <td><input type="checkbox" name="btl_aspect_2[]" value="S"></td>
+                <td><input type="checkbox" name="btl_aspect_2[]" value="SW"></td>
+                <td><input type="checkbox" name="btl_aspect_2[]" value="W"></td>
+                <td><input type="checkbox" name="btl_aspect_2[]" value="NW"></td>
+            </tr>
+            <tr>
+                <td>Near Tree Line</td>
+                <td><input type="checkbox" name="ntl_aspect_2[]" value="N"></td>
+                <td><input type="checkbox" name="ntl_aspect_2[]" value="NE"></td>
+                <td><input type="checkbox" name="ntl_aspect_2[]" value="E"></td>
+                <td><input type="checkbox" name="ntl_aspect_2[]" value="SE"></td>
+                <td><input type="checkbox" name="ntl_aspect_2[]" value="S"></td>
+                <td><input type="checkbox" name="ntl_aspect_2[]" value="SW"></td>
+                <td><input type="checkbox" name="ntl_aspect_2[]" value="W"></td>
+                <td><input type="checkbox" name="ntl_aspect_2[]" value="NW"></td>
+            </tr>
+            <tr>
+                <td>Above Tree Line</td>
+                <td><input type="checkbox" name="atl_aspect_2[]" value="N"></td>
+                <td><input type="checkbox" name="atl_aspect_2[]" value="NE"></td>
+                <td><input type="checkbox" name="atl_aspect_2[]" value="E"></td>
+                <td><input type="checkbox" name="atl_aspect_2[]" value="SE"></td>
+                <td><input type="checkbox" name="atl_aspect_2[]" value="S"></td>
+                <td><input type="checkbox" name="atl_aspect_2[]" value="SW"></td>
+                <td><input type="checkbox" name="atl_aspect_2[]" value="W"></td>
+                <td><input type="checkbox" name="atl_aspect_2[]" value="NW"></td>
+            </tr>
+        </tbody>
+    </table>
 
-    </div>
+    <label>Size:</label>
+    <input type="text" id="size_2" name="size_2">
+    <label>Likelihood:</label>
+    <input type="text" id="likelihood_2" name="likelihood_2">
+</div>
 
     <div id="problem_3" hidden="true">
-        <label>Location </label>
-                <select id="location3" name="location3">
-                    <option value="" hidden="true"></option>
-                    <option value="Resort"> Resort</option>
-                    <option value="BC">Backcountry (BC) </option>
-                    <option value="Both">Both</option>
-                </select>
-        <label>Problem 3 </label>
-        <select id="avalanche_problem_3" name="avalanche_problem_3">
-            <option value="" hidden="true"></option>
-            <option value="Persistent Slab">Persistent Slab</option>
-            <option value="Deep Persistent Slab">Deep Persistent Slab</option>
-            <option value="Storm Slab">Storm Slab</option>
-            <option value="Wet Slab">Wet Slab</option>
-            <option value="Wind Slab">Wind Slab</option>
-            <option value="Dry Loose">Dry Loose</option>
-            <option value="Wet Loose">Wet Loose</option>
-            <option value="Glide">Glide</option>
-            <option value="Cornice Fall">Cornice Fall</option>
-        </select>
+    <h3>Avalanche Problem 3</h3>
+    <label>Location </label>
+    <select id="location3" name="location3">
+        <option value="" hidden="true"></option>
+        <option value="Resort">Resort</option>
+        <option value="BC">Backcountry (BC)</option>
+        <option value="Both">Both</option>
+    </select>
 
-         <label>Aspect</label>
-            <select id="aspect_3" name="aspect_3">
-                <option value="" hidden="true"></option>
-                <option value="N">N (0)</option>
-                <option value="NE">NE (45)</option>
-                <option value="E">E (90) </option>
-                <option value="SE">SE (135)</option>
-                <option value="S">S (180)</option>
-                <option value="SW">SW (225)</option>
-                <option value="W">W (270)</option>
-                <option value="NW">NW (315)</option>
-            </select>
-            <label>Elevation</label>
-            <select id="elevation_3" name="elevation_3">
-                <option value="" hidden="true"></option>
-                <option value="Below Treeline">Below Treeline</option>
-                <option value="Near Treeline">Near Treeline</option>
-                <option value="Above Treeline">Above Treeline</option>
-            </select>
-            <label>Size</label>
-            <input type="text" id="size_3" name="size_3">
-            <label>Likelihood</label>
-            <input type="text" id="likelihood_3" name="likelihood_3">
+    <label>Problem Type</label>
+    <select id="avalanche_problem_3" name="avalanche_problem_3">
+        <option value="" hidden="true"></option>
+        <option value="Persistent Slab">Persistent Slab</option>
+        <option value="Deep Persistent Slab">Deep Persistent Slab</option>
+        <option value="Storm Slab">Storm Slab</option>
+        <option value="Wet Slab">Wet Slab</option>
+        <option value="Wind Slab">Wind Slab</option>
+        <option value="Dry Loose">Dry Loose</option>
+        <option value="Wet Loose">Wet Loose</option>
+        <option value="Glide">Glide</option>
+        <option value="Cornice Fall">Cornice Fall</option>
+    </select>
+    <table>
+        <thead>
+            <tr>
+                <th>Elevation / Aspect</th>
+                <th>N (0°)</th>
+                <th>NE (45°)</th>
+                <th>E (90°)</th>
+                <th>SE (135°)</th>
+                <th>S (180°)</th>
+                <th>SW (225°)</th>
+                <th>W (270°)</th>
+                <th>NW (315°)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Below Tree Line</td>
+                <td><input type="checkbox" name="btl_aspect_3[]" value="N"></td>
+                <td><input type="checkbox" name="btl_aspect_3[]" value="NE"></td>
+                <td><input type="checkbox" name="btl_aspect_3[]" value="E"></td>
+                <td><input type="checkbox" name="btl_aspect_3[]" value="SE"></td>
+                <td><input type="checkbox" name="btl_aspect_3[]" value="S"></td>
+                <td><input type="checkbox" name="btl_aspect_3[]" value="SW"></td>
+                <td><input type="checkbox" name="btl_aspect_3[]" value="W"></td>
+                <td><input type="checkbox" name="btl_aspect_3[]" value="NW"></td>
+            </tr>
+            <tr>
+                <td>Near Tree Line</td>
+                <td><input type="checkbox" name="ntl_aspect_3[]" value="N"></td>
+                <td><input type="checkbox" name="ntl_aspect_3[]" value="NE"></td>
+                <td><input type="checkbox" name="ntl_aspect_3[]" value="E"></td>
+                <td><input type="checkbox" name="ntl_aspect_3[]" value="SE"></td>
+                <td><input type="checkbox" name="ntl_aspect_3[]" value="S"></td>
+                <td><input type="checkbox" name="ntl_aspect_3[]" value="SW"></td>
+                <td><input type="checkbox" name="ntl_aspect_3[]" value="W"></td>
+                <td><input type="checkbox" name="ntl_aspect_3[]" value="NW"></td>
+            </tr>
+            <tr>
+                <td>Above Tree Line</td>
+                <td><input type="checkbox" name="atl_aspect_3[]" value="N"></td>
+                <td><input type="checkbox" name="atl_aspect_3[]" value="NE"></td>
+                <td><input type="checkbox" name="atl_aspect_3[]" value="E"></td>
+                <td><input type="checkbox" name="atl_aspect_3[]" value="SE"></td>
+                <td><input type="checkbox" name="atl_aspect_3[]" value="S"></td>
+                <td><input type="checkbox" name="atl_aspect_3[]" value="SW"></td>
+                <td><input type="checkbox" name="atl_aspect_3[]" value="W"></td>
+                <td><input type="checkbox" name="atl_aspect_3[]" value="NW"></td>
+            </tr>
+        </tbody>
+    </table>
 
-
-
-    </div>
+    <label>Size:</label>
+    <input type="text" id="size_3" name="size_3">
+    <label>Likelihood:</label>
+    <input type="text" id="likelihood_3" name="likelihood_3">
+</div>
     <div id="problem_4" hidden="true">
-        <label>Location </label>
-                <select id="location4" name="location4">
-                    <option value="" hidden="true"></option>
-                    <option value="Resort"> Resort</option>
-                    <option value="BC">Backcountry (BC) </option>
-                    <option value="Both">Both</option>
-                </select>
-        <label>Problem 4 </label>
-        <select id="avalanche_problem_4" name="avalanche_problem_4">
-            <option value="" hidden="true"></option>
-            <option value="Persistent Slab">Persistent Slab</option>
-            <option value="Deep Persistent Slab">Deep Persistent Slab</option>
-            <option value="Storm Slab">Storm Slab</option>
-            <option value="Wet Slab">Wet Slab</option>
-            <option value="Wind Slab">Wind Slab</option>
-            <option value="Dry Loose">Dry Loose</option>
-            <option value="Wet Loose">Wet Loose</option>
-            <option value="Glide">Glide</option>
-            <option value="Cornice Fall">Cornice Fall</option>
-        </select>
+    <h3>Avalanche Problem 4</h3>
+    <label>Location </label>
+    <select id="location4" name="location4">
+        <option value="" hidden="true"></option>
+        <option value="Resort">Resort</option>
+        <option value="BC">Backcountry (BC)</option>
+        <option value="Both">Both</option>
+    </select>
 
-         <label>Aspect</label>
-            <select id="aspect_4" name="aspect_4">
-                <option value="" hidden="true"></option>
-                <option value="N">N (0)</option>
-                <option value="NE">NE (45)</option>
-                <option value="E">E (90) </option>
-                <option value="SE">SE (135)</option>
-                <option value="S">S (180)</option>
-                <option value="SW">SW (225)</option>
-                <option value="W">W (270)</option>
-                <option value="NW">NW (315)</option>
-            </select>
-            <label>Elevation</label>
-            <select id="elevation_4" name="elevation_4">
-                <option value="" hidden="true"></option>
-                <option value="Below Treeline">Below Treeline</option>
-                <option value="Near Treeline">Near Treeline</option>
-                <option value="Above Treeline">Above Treeline</option>
-            </select>
-            <label>Size</label>
-            <input type="text" id="size_4" name="size_4">
-            <label>Likelihood</label>
-            <input type="text" id="likelihood_4" name="likelihood_4">
+    <label>Problem Type</label>
+    <select id="avalanche_problem_4" name="avalanche_problem_4">
+        <option value="" hidden="true"></option>
+        <option value="Persistent Slab">Persistent Slab</option>
+        <option value="Deep Persistent Slab">Deep Persistent Slab</option>
+        <option value="Storm Slab">Storm Slab</option>
+        <option value="Wet Slab">Wet Slab</option>
+        <option value="Wind Slab">Wind Slab</option>
+        <option value="Dry Loose">Dry Loose</option>
+        <option value="Wet Loose">Wet Loose</option>
+        <option value="Glide">Glide</option>
+        <option value="Cornice Fall">Cornice Fall</option>
+    </select>
+    <table>
+        <thead>
+            <tr>
+                <th>Elevation / Aspect</th>
+                <th>N (0°)</th>
+                <th>NE (45°)</th>
+                <th>E (90°)</th>
+                <th>SE (135°)</th>
+                <th>S (180°)</th>
+                <th>SW (225°)</th>
+                <th>W (270°)</th>
+                <th>NW (315°)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Below Tree Line</td>
+                <td><input type="checkbox" name="btl_aspect_4[]" value="N"></td>
+                <td><input type="checkbox" name="btl_aspect_4[]" value="NE"></td>
+                <td><input type="checkbox" name="btl_aspect_4[]" value="E"></td>
+                <td><input type="checkbox" name="btl_aspect_4[]" value="SE"></td>
+                <td><input type="checkbox" name="btl_aspect_4[]" value="S"></td>
+                <td><input type="checkbox" name="btl_aspect_4[]" value="SW"></td>
+                <td><input type="checkbox" name="btl_aspect_4[]" value="W"></td>
+                <td><input type="checkbox" name="btl_aspect_4[]" value="NW"></td>
+            </tr>
+            <tr>
+                <td>Near Tree Line</td>
+                <td><input type="checkbox" name="ntl_aspect_4[]" value="N"></td>
+                <td><input type="checkbox" name="ntl_aspect_4[]" value="NE"></td>
+                <td><input type="checkbox" name="ntl_aspect_4[]" value="E"></td>
+                <td><input type="checkbox" name="ntl_aspect_4[]" value="SE"></td>
+                <td><input type="checkbox" name="ntl_aspect_4[]" value="S"></td>
+                <td><input type="checkbox" name="ntl_aspect_4[]" value="SW"></td>
+                <td><input type="checkbox" name="ntl_aspect_4[]" value="W"></td>
+                <td><input type="checkbox" name="ntl_aspect_4[]" value="NW"></td>
+            </tr>
+            <tr>
+                <td>Above Tree Line</td>
+                <td><input type="checkbox" name="atl_aspect_4[]" value="N"></td>
+                <td><input type="checkbox" name="atl_aspect_4[]" value="NE"></td>
+                <td><input type="checkbox" name="atl_aspect_4[]" value="E"></td>
+                <td><input type="checkbox" name="atl_aspect_4[]" value="SE"></td>
+                <td><input type="checkbox" name="atl_aspect_4[]" value="S"></td>
+                <td><input type="checkbox" name="atl_aspect_4[]" value="SW"></td>
+                <td><input type="checkbox" name="atl_aspect_4[]" value="W"></td>
+                <td><input type="checkbox" name="atl_aspect_4[]" value="NW"></td>
+            </tr>
+        </tbody>
+    </table>
 
-
-    </div>
+    <label>Size:</label>
+    <input type="text" id="size_4" name="size_4">
+    <label>Likelihood:</label>
+    <input type="text" id="likelihood_4" name="likelihood_4">
+</div>
 
     {% set num_problems = avalanches | length %}
     {% if num_problems < 2 %}
