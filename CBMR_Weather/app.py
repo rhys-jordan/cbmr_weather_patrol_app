@@ -543,7 +543,7 @@ def update_form(inputDate):
         current_peak_gust_direction = request.form.get('current_peak_gust_direction', None)
         current_peak_gust_time_raw = request.form.get('current_peak_gust_time', None)
         if current_peak_gust_time_raw:
-            current_peak_gust_time = datetime.strptime(current_peak_gust_time_raw, '%H:%M').time()
+            current_peak_gust_time = datetime.strptime(current_peak_gust_time_raw, '%H:%M:%S').time()
         else:
             current_peak_gust_time = None
 
@@ -552,7 +552,7 @@ def update_form(inputDate):
         past_24_peak_gust_direction = request.form.get('past_24_peak_gust_direction', None)
         past_24_peak_gust_time_raw = request.form.get('past_24_peak_gust_time', None)
         if past_24_peak_gust_time_raw:
-            past_24_peak_gust_time = datetime.strptime(past_24_peak_gust_time_raw, '%H:%M').time()
+            past_24_peak_gust_time = datetime.strptime(past_24_peak_gust_time_raw, '%H:%M:%S').time()
         else:
             past_24_peak_gust_time = None
 
@@ -561,7 +561,7 @@ def update_form(inputDate):
         future_peak_gust_direction = request.form.get('future_peak_gust_direction', None)
         future_peak_gust_time_raw = request.form.get('future_peak_gust_time', None)
         if future_peak_gust_time_raw:
-            future_peak_gust_time = datetime.strptime(future_peak_gust_time_raw, '%H:%M').time()
+            future_peak_gust_time = datetime.strptime(future_peak_gust_time_raw, '%H:%M:%S').time()
         else:
             future_peak_gust_time = None
 
