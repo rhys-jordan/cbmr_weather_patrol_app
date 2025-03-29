@@ -485,7 +485,7 @@
                 <tbody>
                     <tr>
                         <td>Below Tree Line</td>
-                        {% set btl_aspects = avy.btl_aspect.split('-') %}
+                        {% set btl_aspects = (avy.btl_aspect or "").split('-') %}
                         <td><input type="checkbox" name="btl_aspect_{{ loop.index }}[]" value="N" {% if "N" in btl_aspects %}checked{% endif %}></td>
                         <td><input type="checkbox" name="btl_aspect_{{ loop.index }}[]" value="NE" {% if "NE" in btl_aspects %}checked{% endif %}></td>
                         <td><input type="checkbox" name="btl_aspect_{{ loop.index }}[]" value="E" {% if "E" in btl_aspects %}checked{% endif %}></td>
@@ -499,7 +499,7 @@
                     <!-- Near Tree Line -->
                     <tr>
                         <td>Near Tree Line</td>
-                        {% set ntl_aspects = avy.ntl_aspect.split('-') %}
+                        {% set ntl_aspects = (avy.ntl_aspect or "").split('-') %}
                         <td><input type="checkbox" name="ntl_aspect_{{ loop.index }}[]" value="N" {% if "N" in ntl_aspects %}checked{% endif %}></td>
                         <td><input type="checkbox" name="ntl_aspect_{{ loop.index }}[]" value="NE" {% if "NE" in ntl_aspects %}checked{% endif %}></td>
                         <td><input type="checkbox" name="ntl_aspect_{{ loop.index }}[]" value="E" {% if "E" in ntl_aspects %}checked{% endif %}></td>
@@ -513,7 +513,7 @@
                     <!-- Above Tree Line -->
                     <tr>
                         <td>Above Tree Line</td>
-                        {% set atl_aspects = avy.atl_aspect.split('-') %}
+                        {% set atl_aspects = (avy.atl_aspect or "").split('-') %}
                         <td><input type="checkbox" name="atl_aspect_{{ loop.index }}[]" value="N" {% if "N" in atl_aspects %}checked{% endif %}></td>
                         <td><input type="checkbox" name="atl_aspect_{{ loop.index }}[]" value="NE" {% if "NE" in atl_aspects %}checked{% endif %}></td>
                         <td><input type="checkbox" name="atl_aspect_{{ loop.index }}[]" value="E" {% if "E" in atl_aspects %}checked{% endif %}></td>
