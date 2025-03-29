@@ -105,8 +105,61 @@ function recheck() {
     window.location.href = "/view";
 }
 
-function confirm_data_delete(){
-    //alert("Are you sure you want to delete the data for this date?")
-    return confirm("Are you sure you want to delete the data for this date?")
+function confirm_data_delete(date){
+    if (confirm("Are you sure you want to delete the data for this date?")) {
+        window.location.href = "/view/" + date;
+    }
 }
-//
+
+
+let problemCount = 1; // Initial problem count
+const maxProblems = 4; // Maximum number of avalanche problems
+
+        function addAvalancheProblem() {
+            if (problemCount >= maxProblems) {
+                alert("You can only add up to " + maxProblems + " avalanche problems.");
+                return;
+            }
+
+            problemCount++;
+            let newProblem = document.getElementById("problem_1").cloneNode(true);
+
+            // Update IDs and names to be unique
+            newProblem.id = "problem_" + problemCount;
+            newProblem.querySelectorAll("select, input").forEach(element => {
+                let name = element.name.replace(/\d+/, problemCount); // Update number in names
+                element.name = name;
+                element.id = name;
+                if (element.type === "checkbox"){
+                    element.checked = false;
+                }
+                else if (element.type === "text"){
+                    element.value="";
+                }
+
+            });
+
+            // Update heading
+            newProblem.querySelector("h3")?.remove();
+            let heading = document.createElement("h3");
+            heading.textContent = "Avalanche Problem " + problemCount;
+            newProblem.prepend(heading);
+
+            // Add a remove button (only for additional problems)
+            let removeBtn = document.createElement("button");
+            removeBtn.type = "button";
+            removeBtn.textContent = "Remove";
+            removeBtn.onclick = function () { removeAvalancheProblem(newProblem.id); };
+            newProblem.appendChild(removeBtn);
+
+            document.getElementById("problems-container").appendChild(newProblem);
+        }
+
+        function removeAvalancheProblem(id) {
+            if (problemCount > 1) {
+                document.getElementById(id).remove();
+                problemCount--;
+            } else {
+                alert("At least one avalanche problem must be present.");
+            }
+        }

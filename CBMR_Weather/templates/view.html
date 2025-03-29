@@ -73,7 +73,7 @@
             <td>{{ i.temperature }}</td>
             <td>{{ i.wind_mph }}</td>
             <td>{{ i.wind_direction }}</td>
-            <td onclick="confirm_data_delete()"> <a href="/view/{{i.date}}"> Delete </a></td>
+            <td onclick="confirm_data_delete('{{i.date}}')"> <a href="javascript:void(0)"> Delete </a></td>
         </tr>
     {%endfor%}
 
