@@ -21,8 +21,9 @@
         <label>YTD Snow:</label> <input type="number" id="ytd_snow" name="ytd_snow" value='{{oldSnow.ytd_snow}}' step="any">
         <label>YTD SWE:</label> <input type="number" id="ytd_swe" name="ytd_swe" value='{{oldSnow.ytd_swe}}' step="any"><br>
     </div>
-    <label>Critical Information:</label><br>
-    <textarea id="critical_information" name="critical_information">{{oldSnow.critical_info}}</textarea><br>
+    <h1>Critical Information:</h1>
+    <br>
+    <textarea id="critical_information" name="critical_information">{{critical_info}}</textarea><br>
     <h1>Pertinent Weather Observations past and future</h1><br>
     <table>
         <thead>
@@ -35,7 +36,7 @@
         <tbody>
         <tr>
             <td>
-                <label>Sky </label>
+                <label>Sky:</label>
                 <select id="sky" name="sky">
                     <option value='{{oldSnow.sky}}'>{{oldSnow.sky}}</option>
                     <option value="clear">Clear</option>
@@ -48,15 +49,15 @@
                 </select>
             </td>
             <td class="top_past">
-                <label>HST</label>
+                <label>HST:</label>
                 <input type="number" name="past_24_hst" id="past_24_hst" value='{{oldSnow.hst}}' step="any"><br>
-                <label>Date Cleared</label>
+                <label>Date Cleared:</label>
                 <input type="date" name="past_24_date_cir" id="past_24_date_cir" value='{{oldSnow.past_24_date_cir}}' step="any">
-                <label>Settlement</label>
+                <label>Settlement:</label>
                 <input type="number" name="past_24_settlement" id="past_24_settlement" value='{{oldSnow.past_24_settlement}}' step="any">
             </td>
             <td>
-                <label>Precip/Rate</label>
+                <label>Precip/Rate:</label>
                 <select id="future_precip_rate" name="future_precip_rate">
                     <option value='{{oldSnow.future_precip_rate}}'>{{oldSnow.future_precip_rate}}</option>
                     <option value="NO">No Precipitation</option>
@@ -75,7 +76,7 @@
         </tr>
         <tr>
             <td>
-                <label>Precip/Rate</label>
+                <label>Precip/Rate:</label>
                 <select id="current_precip/rate" name="current_precip_rate">
                     <option value='{{oldSnow.current_precip_rate}}'>{{oldSnow.current_precip_rate}}</option>
                     <option value="NO">No Precipitation</option>
@@ -92,23 +93,22 @@
                 </select>
             </td>
             <td>
-                <label>HN24</label>
-                <input type="number" id="past_24_hn24" name="past_24_hn24" value='{{oldSnow.past_24_hn24}}' step="any" oninput = "calculate_hn24_percent()">
-                <label>HN24 SWE</label><input type="number" id="past_24_hn24_swe" name="past_24_hn24_swe" value='{{oldSnow.past_24_hn24_swe}}' step="any" oninput = "calculate_hn24_percent()">
-                <label>HN24%</label><input type="number" step =".01" id="past_24_hn24_percent" name="past_24_hn24_percent" value='{{oldSnow.past_24_hn24_percent}}' step="any" readonly>
+                <label>HN24:</label><input type="number" id="past_24_hn24" name="past_24_hn24" value='{{oldSnow.past_24_hn24}}' step="any" oninput = "calculate_hn24_percent()">
+                <label>HN24 SWE:</label><input type="number" id="past_24_hn24_swe" name="past_24_hn24_swe" value='{{oldSnow.past_24_hn24_swe}}' step="any" oninput = "calculate_hn24_percent()">
+                <label>HN24%:</label><input type="number" id="past_24_hn24_percent" name="past_24_hn24_percent" value='{{oldSnow.past_24_hn24_percent}}' step="any" readonly>
             </td>
             <td>
-                <label>Temp HIGH</label>
+                <label>Temp High:</label>
                 <input type="number" id="future_temp_high" name="future_temp_high" value='{{oldSnow.future_temp_high}}' step="any">
             </td>
         </tr>
         <tr>
             <td>
-                <label>Temp</label>
+                <label>Temp:</label>
                 <input type="number" id="current_temp" name="current_temp" value='{{oldSnow.temperature}}' step="any">
             </td>
             <td>
-                <label>Wind MPH</label>
+                <label>Wind MPH:</label>
                 <select id="past_24_wind_mph" name="past_24_wind_mph">
                     <option value='{{oldSnow.past_24_wind_mph}}'>{{oldSnow.past_24_wind_mph}}</option>
                     <option value="calm">Calm (0 mi/hr)</option>
@@ -118,7 +118,7 @@
                     <option value="extreme">Extreme (>38 mi/hr)</option>
                 </select>
 
-                <label>Wind Direction</label>
+                <label>Wind Direction:</label>
                 <select id="past_24_wind_direction" name="past_24_wind_direction">
                     <option value='{{oldSnow.past_24_wind_direction}}'>{{oldSnow.past_24_wind_direction}}</option>
                     <option value="N">N</option>
@@ -140,13 +140,13 @@
                 </select>
             </td>
             <td>
-                <label>Temp LOW</label>
+                <label>Temp Low:</label>
                 <input type="number" id="future_temp_low" name="future_temp_low" value='{{oldSnow.future_temp_low}}' step="any">
             </td>
         </tr>
         <tr>
             <td>
-                <label>Wind MPH</label>
+                <label>Wind MPH:</label>
                 <select id="current_wind_mph" name="current_wind_mph">
                     <option value='{{oldSnow.wind_mph}}'>{{oldSnow.wind_mph}}</option>
                     <option value="calm">Calm (0 mi/hr)</option>
@@ -157,11 +157,11 @@
                 </select>
             </td>
             <td>
-                <label>Temp HIGH</label>
+                <label>Temp High:</label>
                 <input type="number" id="past_24_temp_high" name="past_24_temp_high" value='{{oldSnow.past_24_temp_high}}' step="any">
             </td>
             <td>
-                <label>Wind MPH</label>
+                <label>Wind MPH:</label>
                 <select id="future_wind_mph" name="future_wind_mph">
                     <option value='{{oldSnow.future_wind_mph}}'>{{oldSnow.future_wind_mph}}</option>
                     <option value="calm">Calm (0 mi/hr)</option>
@@ -174,7 +174,7 @@
         </tr>
         <tr>
             <td>
-                <label>Wind Direction</label>
+                <label>Wind Direction:</label>
                 <select id="current_wind_direction" name="current_wind_direction">
                     <option value='{{oldSnow.wind_direction}}'>{{oldSnow.wind_direction}}</option>
                     <option value="N">N</option>
@@ -196,11 +196,11 @@
                 </select>
             </td>
             <td>
-                <label>Temp LOW</label>
+                <label>Temp Low:</label>
                 <input type="number" id="past_24_temp_low" name="past_24_temp_low" value='{{oldSnow.past_24_temp_low}}' step="any">
             </td>
             <td>
-                <label>Wind Direction</label>
+                <label>Wind Direction:</label>
                 <select id="future_wind_direction" name="future_wind_direction">
                     <option value='{{oldSnow.future_wind_direction}}'>{{oldSnow.future_wind_direction}}</option>
                     <option value="N">N</option>
@@ -222,13 +222,12 @@
                 </select>
             </td>
         </tr>
-        </tr>
             <td>
                 <div class="gust_pairing">
-                <label>Peak Gust MPH</label><input type="number" step="any" id="current_peak_gust_mph" name="current_peak_gust_mph" value="{{oldSnow.current_peak_gust_mph}}"><br>
+                <label>Peak Gust MPH:</label><input type="number" step="any" id="current_peak_gust_mph" name="current_peak_gust_mph" value="{{oldSnow.current_peak_gust_mph}}"><br>
                 </div>
                 <div class="gust_pairing">
-                <label>Gust Direction</label>
+                <label>Gust Direction:</label>
                 <select id="current_peak_gust_direction" name="current_peak_gust_direction">
                     <option value="{{oldSnow.current_peak_gust_direction}}">{{oldSnow.current_peak_gust_direction}}</option>
                     <option value="N">N</option>
@@ -250,16 +249,16 @@
                 </select><br>
                 </div>
                 <div class="gust_pairing">
-                <label>Gust Time</label>
+                <label>Gust Time:</label>
                 <input type="time" id="current_peak_gust_time" name="current_peak_gust_time" value="{{oldSnow.current_peak_gust_time}}">
                 </div>
             </td>
         <td>
                 <div class="gust_pairing">
-                <label>Peak Gust MPH</label><input type="number" step="any" id="past_24_peak_gust_mph" name="past_24_peak_gust_mph" value="{{oldSnow.past_24_peak_gust_mph}}"><br>
+                <label>Peak Gust MPH:</label><input type="number" step="any" id="past_24_peak_gust_mph" name="past_24_peak_gust_mph" value="{{oldSnow.past_24_peak_gust_mph}}"><br>
                 </div>
                 <div class="gust_pairing">
-                <label>Gust Direction</label>
+                <label>Gust Direction:</label>
                 <select id="past_24_peak_gust_direction" name="past_24_peak_gust_direction">
                     <option value="{{oldSnow.past_24_peak_gust_direction}}">{{oldSnow.past_24_peak_gust_direction}}</option>
                     <option value="N">N</option>
@@ -281,16 +280,16 @@
                 </select><br>
                 </div>
                 <div class="gust_pairing">
-                <label>Gust Time</label>
+                <label>Gust Time:</label>
                 <input type="time" id="past_24_peak_gust_time" name="past_24_peak_gust_time" value="{{oldSnow.past_24_peak_gust_time}}">
                 </div>
             </td>
         <td>
                 <div class="gust_pairing">
-                <label>Peak Gust MPH</label><input type="number" step="any" id="future_peak_gust_mph" name="future_peak_gust_mph" value="{{oldSnow.future_peak_gust_mph}}"><br>
+                <label>Peak Gust MPH:</label><input type="number" step="any" id="future_peak_gust_mph" name="future_peak_gust_mph" value="{{oldSnow.future_peak_gust_mph}}"><br>
                 </div>
                 <div class="gust_pairing">
-                <label>Gust Direction</label>
+                <label>Gust Direction:</label>
                 <select id="future_peak_gust_direction" name="future_peak_gust_direction">
                     <option value="{{oldSnow.future_peak_gust_direction}}">{{oldSnow.future_peak_gust_direction}}</option>
                     <option value="N">N</option>
@@ -312,7 +311,7 @@
                 </select><br>
                 </div>
                 <div class="gust_pairing">
-                <label>Gust Time</label>
+                <label>Gust Time:</label>
                 <input type="time" id="future_peak_gust_time" name="future_peak_gust_time" value="{{oldSnow.future_peak_gust_time}}">
                 </div>
             </td>
@@ -324,7 +323,9 @@
     <textarea id="observation_notes" name="observation_notes">{{oldSnow.observation_notes}}</textarea><br>
     <h1>Weather Forecast:</h1><br>
     <textarea id="weather_forecast" name="weather_forecast">{{oldSnow.weather_forecast}}</textarea><br>
-    <label>PWL:</label><input type="checkbox" id="pwl_checkbox" name="pwl_checkbox" onclick="togglePwl()" {% if oldSnow.pwl %} checked {% endif %}>
+    <div id="pwl_checkbox_label">
+    <label>PWL:</label><input type="checkbox" id="pwl_checkbox" name="pwl_checkbox" onclick="togglePwl()">
+    </div>
     <div id="pwl_div" style="display: none;">
     <label>Type:</label><select id="pwl" name="pwl">
                 <option value='{{oldSnow.pwl}}'>{{oldSnow.pwl}}</option>
@@ -337,10 +338,11 @@
             </select>
     <label>Date:</label><input type="date" id="pwl_date" name="pwl_date" value="{{oldSnow.pwl_date}}">
     </div>
-    <h1>AVALANCHE DANGER in the BC/on other side of the rope</h1><br>
+    <h1 id="avy_danger_split">Avalanche Danger in the BC/on other side of the rope</h1><br>
 
-    <label>Danger Rating Resort</label>
-            <select id="avalanche_danger_resort" name="avalanche_danger_resort">
+    <div id="danger">
+        <label>Danger Rating Resort:</label>
+                <select id="avalanche_danger_resort" name="avalanche_danger_resort">
                 <option value='{{oldSnow.avalanche_danger_resort}}'>{{oldSnow.avalanche_danger_resort}}</option>
                 <option value="low">Low</option>
                 <option value="moderate">Moderate</option>
@@ -349,7 +351,7 @@
                 <option value="extreme">Extreme</option>
             </select>
 
-    <label>Danger Rating Backcountry</label>
+    <label>Danger Rating Backcountry:</label>
             <select id="avalanche_danger_backcountry" name="avalanche_danger_backcountry">
                 <option value='{{oldSnow.avalanche_danger_backcountry}}'>{{oldSnow.avalanche_danger_backcountry}}</option>
                 <option value="low">Low</option>
@@ -358,14 +360,14 @@
                 <option value="high">High</option>
                 <option value="extreme">Extreme</option>
             </select>
-
-    <div id="problems-container" >
+    </div>
+    <div id="problems-container">
         {% set num_problems = avalanches | length %}
         {% if num_problems == 0 %}
             <div id="problem_1">
-                <h3>Avalanche Problem 1</h3>
+                <h3>Avalanche Problem 1:</h3>
 
-                <label>Location</label>
+                <label>Location:</label>
                 <select id="location1" name="location1">
                     <option value="" hidden="true"></option>
                     <option value="Resort">Resort</option>
@@ -373,7 +375,7 @@
                     <option value="Both">Both</option>
                 </select>
 
-                <label>Problem</label>
+                <label>Problem Type:</label>
                 <select id="avalanche_problem_1" name="avalanche_problem_1">
                     <option value="" hidden="true"></option>
                     <option value="Persistent Slab">Persistent Slab</option>
@@ -386,7 +388,7 @@
                     <option value="Glide">Glide</option>
                     <option value="Cornice Fall">Cornice Fall</option>
                 </select>
-                <table>
+                <table id="avalanche_table">
                     <thead>
                         <tr>
                             <th>Elevation / Aspect</th>
@@ -402,7 +404,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Below Tree Line</td>
+                            <td>Below Tree Line:</td>
                             <td><input type="checkbox" name="btl_aspect_1[]" value="N"></td>
                             <td><input type="checkbox" name="btl_aspect_1[]" value="NE"></td>
                             <td><input type="checkbox" name="btl_aspect_1[]" value="E"></td>
@@ -413,7 +415,7 @@
                             <td><input type="checkbox" name="btl_aspect_1[]" value="NW"></td>
                         </tr>
                         <tr>
-                            <td>Near Tree Line</td>
+                            <td>Near Tree Line:</td>
                             <td><input type="checkbox" name="ntl_aspect_1[]" value="N"></td>
                             <td><input type="checkbox" name="ntl_aspect_1[]" value="NE"></td>
                             <td><input type="checkbox" name="ntl_aspect_1[]" value="E"></td>
@@ -424,7 +426,7 @@
                             <td><input type="checkbox" name="ntl_aspect_1[]" value="NW"></td>
                         </tr>
                         <tr>
-                            <td>Above Tree Line</td>
+                            <td>Above Tree Line:</td>
                             <td><input type="checkbox" name="atl_aspect_1[]" value="N"></td>
                             <td><input type="checkbox" name="atl_aspect_1[]" value="NE"></td>
                             <td><input type="checkbox" name="atl_aspect_1[]" value="E"></td>
@@ -437,17 +439,17 @@
                     </tbody>
                 </table>
 
-                <label>Size</label>
+                <label>Size:</label>
                 <input type="text" id="size_1" name="size_1">
 
-                <label>Likelihood</label>
+                <label>Likelihood:</label>
                 <input type="text" id="likelihood_1" name="likelihood_1">
             </div>
         {%endif%}
     {% for avy in avalanches %}
         <div id="problem_{{ loop.index }}">
-            <h3>Avalanche Problem {{loop.index}}</h3>
-            <label>Location</label>
+            <h3>Avalanche Problem {{loop.index}}:</h3>
+            <label>Location:</label>
             <select id="location{{ loop.index }}" name="location{{ loop.index }}">
                 <option value="{{ avy.location }}">{{ avy.location }}</option>
                 <option value="" hidden="true"></option>
@@ -456,7 +458,7 @@
                 <option value="Both">Both</option>
             </select>
 
-            <label>Problem</label>
+            <label>Problem:</label>
             <select id="avalanche_problem_{{ loop.index }}" name="avalanche_problem_{{ loop.index }}">
                 <option value="{{ avy.problem }}">{{ avy.problem }}</option>
                 <option value="" hidden="true"></option>
@@ -486,7 +488,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Below Tree Line</td>
+                        <td>Below Tree Line:</td>
                         {% set btl_aspects = (avy.btl_aspect or "").split('-') %}
                         <td><input type="checkbox" name="btl_aspect_{{ loop.index }}[]" value="N" {% if "N" in btl_aspects %}checked{% endif %}></td>
                         <td><input type="checkbox" name="btl_aspect_{{ loop.index }}[]" value="NE" {% if "NE" in btl_aspects %}checked{% endif %}></td>
@@ -500,7 +502,7 @@
 
                     <!-- Near Tree Line -->
                     <tr>
-                        <td>Near Tree Line</td>
+                        <td>Near Tree Line:</td>
                         {% set ntl_aspects = (avy.ntl_aspect or "").split('-') %}
                         <td><input type="checkbox" name="ntl_aspect_{{ loop.index }}[]" value="N" {% if "N" in ntl_aspects %}checked{% endif %}></td>
                         <td><input type="checkbox" name="ntl_aspect_{{ loop.index }}[]" value="NE" {% if "NE" in ntl_aspects %}checked{% endif %}></td>
@@ -514,7 +516,7 @@
 
                     <!-- Above Tree Line -->
                     <tr>
-                        <td>Above Tree Line</td>
+                        <td>Above Tree Line:</td>
                         {% set atl_aspects = (avy.atl_aspect or "").split('-') %}
                         <td><input type="checkbox" name="atl_aspect_{{ loop.index }}[]" value="N" {% if "N" in atl_aspects %}checked{% endif %}></td>
                         <td><input type="checkbox" name="atl_aspect_{{ loop.index }}[]" value="NE" {% if "NE" in atl_aspects %}checked{% endif %}></td>
@@ -527,10 +529,10 @@
                     </tr>
                 </tbody>
             </table>
-            <label>Size</label>
+            <label>Size:</label>
             <input type="text" id="size_{{ loop.index }}" name="size_{{ loop.index }}" value="{{ avy.size }}">
 
-            <label>Likelihood</label>
+            <label>Likelihood:</label>
             <input type="text" id="likelihood_{{ loop.index }}" name="likelihood_{{ loop.index }}" value="{{ avy.likelihood }}">
 
             <hr>
@@ -541,7 +543,7 @@
 
 
     <div id="problem_2" hidden="true">
-    <h3>Avalanche Problem 2</h3>
+    <h3>Avalanche Problem 2:</h3>
     <label>Location </label>
     <select id="location2" name="location2">
         <option value="" hidden="true"></option>
@@ -793,16 +795,16 @@
         <button type="button" onclick="addProblem4()" id="problem_4_button" {% if num_problems < 3 %} hidden="true" {% endif %}>Add Fourth Problem</button>
     {% endif %}
 
-    <h1>Avalanche Forecast and discussion, How it relates to our Mtn and Our Strategic Mindset</h1><br>
+    <h1>Avalanche Forecast and discussion, How it relates to our Mtn and Our Strategic Mindset:</h1><br>
     <textarea id="avalanche_forecast_discussion" name="avalanche_forecast_discussion">{{oldSnow.avalanche_forecast_discussion}}</textarea>
 
-    <h1>Summary of Previous Day(s) Work</h1><br>
+    <h1>Summary of Previous Day(s) Work:</h1><br>
     <textarea id="summary_of_previous_work" name="summary_previous_day">{{oldSnow.summary_previous_day}}</textarea>
 
-    <h1>Mitigation Plan</h1><br>
+    <h1>Mitigation Plan:</h1><br>
     <textarea id="mitigation_plan" name="mitigation_plan">{{oldSnow.mitigation_plan}}</textarea>
 
-    <h1>Pertinent Terrain Opening/Closing</h1><br>
+    <h1>Pertinent Terrain Opening/Closing:</h1><br>
     <textarea id="pertinent_terrain_opening/closing" name="pertinent_terrain_info">{{oldSnow.pertinent_terrain_info}}</textarea><br>
 
 
