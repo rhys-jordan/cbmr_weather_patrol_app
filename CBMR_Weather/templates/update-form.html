@@ -358,10 +358,11 @@
                 <option value="high">High</option>
                 <option value="extreme">Extreme</option>
             </select>
-<!-- TODO: Need to fix avalanche update portion. Currently doesn't add the first avy problem... -->
 
     <div id="problems-container" >
-            <div id="problem_1" {% set num_problems = avalanches | length %} {% if num_problems >=1 %} hidden="true"{% endif %} >
+        {% set num_problems = avalanches | length %}
+        {% if num_problems == 0 %}
+            <div id="problem_1">
                 <h3>Avalanche Problem 1</h3>
 
                 <label>Location</label>
@@ -442,7 +443,7 @@
                 <label>Likelihood</label>
                 <input type="text" id="likelihood_1" name="likelihood_1">
             </div>
-    </div>
+        {%endif%}
     {% for avy in avalanches %}
         <div id="problem_{{ loop.index }}">
             <h3>Avalanche Problem {{loop.index}}</h3>
@@ -535,6 +536,7 @@
             <hr>
         </div>
         {% endfor %}
+    </div>
 
 
 

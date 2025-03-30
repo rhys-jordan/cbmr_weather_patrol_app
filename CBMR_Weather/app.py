@@ -633,13 +633,16 @@ def update_form(inputDate):
             Avalanche.query.filter_by(Snow_id=dateCheck.id).delete(synchronize_session=False)
             db.session.delete(dateCheck)
             db.session.commit()
-        print(avalanche_problem_1, avalanche_problem_2, avalanche_problem_3, avalanche_problem_4)
+
         snow = Snow(dateTime=dateTime,date=date, day=day, month=month, year=year, time=time, season=season, forecaster=forecaster, hs=hs, hn24=hn24,swe=swe, hst=hst, ytd_snow=ytd_snow, ytd_swe=ytd_swe, sky=sky, temperature=temperature, wind_mph=wind_mph, wind_direction=wind_direction, observation_notes=observation_notes, critical_info=critical_info, weather_forecast=weather_forecast, avalanche_forecast_discussion=avalanche_forecast_discussion, summary_previous_day=summary_previous_day, mitigation_plan=mitigation_plan, pertinent_terrain_info=pertinent_terrain_info, current_precip_rate=current_precip_rate, past_24_hst=past_24_hst, past_24_settlement=past_24_settlement,past_24_date_cir=past_24_date_cir, future_precip_rate=future_precip_rate, past_24_hn24_swe=past_24_hn24_swe, past_24_hn24=past_24_hn24, past_24_hn24_percent=past_24_hn24_percent, future_temp_high=future_temp_high, past_24_wind_mph=past_24_wind_mph, past_24_wind_direction=past_24_wind_direction, future_temp_low=future_temp_low, past_24_temp_high=past_24_temp_high, future_wind_mph=future_wind_mph, past_24_temp_low=past_24_temp_low, future_wind_direction=future_wind_direction, avalanche_danger_resort=avalanche_danger_resort, avalanche_danger_backcountry=avalanche_danger_backcountry,pwl=pwl,pwl_date=pwl_date,current_peak_gust_mph=current_peak_gust_mph,current_peak_gust_direction=current_peak_gust_direction,current_peak_gust_time=current_peak_gust_time,past_24_peak_gust_mph=past_24_peak_gust_mph,past_24_peak_gust_direction=past_24_peak_gust_direction,past_24_peak_gust_time=past_24_peak_gust_time,future_peak_gust_mph=future_peak_gust_mph,future_peak_gust_direction=future_peak_gust_direction,future_peak_gust_time=future_peak_gust_time)
         db.session.add(snow)
 
         id = Snow.query.filter_by(date=date).first().id
         print(id)
-
+        print("avy 1 aspects: "+btl_aspect_1+ " prob type "+avalanche_problem_1+"_ ")
+        print("avalanceh 2 aspects: " + btl_aspect_2+ " prob type "+avalanche_problem_2+"_ ")
+        print("avalanceh 3 aspects: " + btl_aspect_3+ " prob type "+avalanche_problem_3+"_ ")
+        print("avalanceh 4 aspects: " + btl_aspect_4+ " prob type "+avalanche_problem_4+"_ ")
         if avalanche_problem_1:
             avy1 = Avalanche(problem=avalanche_problem_1, size=size_1, likelihood=likelihood_1, btl_aspect=btl_aspect_1,
                              ntl_aspect=ntl_aspect_1, atl_aspect=atl_aspect_1, location=location1, Snow_id=id)
