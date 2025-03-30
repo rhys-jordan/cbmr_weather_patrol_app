@@ -358,13 +358,13 @@
                 <option value="high">High</option>
                 <option value="extreme">Extreme</option>
             </select>
-
-
+<!-- TODO: Need to fix avalanche update portion. Currently doesn't add the first avy problem... -->
 
     <div id="problems-container" >
             <div id="problem_1" {% set num_problems = avalanches | length %} {% if num_problems >=1 %} hidden="true"{% endif %} >
                 <h3>Avalanche Problem 1</h3>
-                <label>Location </label>
+
+                <label>Location</label>
                 <select id="location1" name="location1">
                     <option value="" hidden="true"></option>
                     <option value="Resort">Resort</option>
@@ -372,7 +372,7 @@
                     <option value="Both">Both</option>
                 </select>
 
-                <label>Problem Type</label>
+                <label>Problem</label>
                 <select id="avalanche_problem_1" name="avalanche_problem_1">
                     <option value="" hidden="true"></option>
                     <option value="Persistent Slab">Persistent Slab</option>
@@ -436,9 +436,10 @@
                     </tbody>
                 </table>
 
-                <label>Size:</label>
+                <label>Size</label>
                 <input type="text" id="size_1" name="size_1">
-                <label>Likelihood:</label>
+
+                <label>Likelihood</label>
                 <input type="text" id="likelihood_1" name="likelihood_1">
             </div>
     </div>
