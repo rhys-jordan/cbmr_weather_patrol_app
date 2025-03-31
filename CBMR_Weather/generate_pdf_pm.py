@@ -11,7 +11,8 @@ import sqlite3
 import os
 
 #idk about this false on threading, this may be dangerous and we could run into problems.
-db_path = os.path.join("instance", "CBMR_Weather.db")
+db_path = os.path.join("instance", "CBMR_Weather.db") #Local
+#db_path = "/home/CBMRPatrolApp/database/CBMR_Weather.db" #pythonAnywhere
 connection = sqlite3.connect(db_path, check_same_thread=False)
 cursor = connection.cursor()
 
@@ -20,7 +21,8 @@ pdf_date = ''
 styles = getSampleStyleSheet()
 
 def create_header():
-    img = Image('./static/CB_Logo.jpg', width=100, height=50)
+    img = Image('./static/CB_Logo.jpg', width=100, height=50) #local
+    #img = Image('/home/CBMRPatrolApp/cbmr_weather_patrol_app/CBMR_Weather/static/CB_Logo.jpg', width=100, height=50)  # pythonAnywhere
     data = [[img, 'CBSP Evening Report', '']]
     t = Table(data)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),

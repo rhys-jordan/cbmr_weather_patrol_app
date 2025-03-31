@@ -32,7 +32,8 @@ class Config_jobs:
 app = Flask(__name__, static_url_path='/static')
 json= FlaskJSON(app)
 app.config.from_object(Config_jobs)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CBMR_Weather.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CBMR_Weather.db' #Local
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/CBMRPatrolApp/database/CBMR_Weather.db' #pythonAnywhere
 app.config['SECRET_KEY']="secretKey"
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=120)
 

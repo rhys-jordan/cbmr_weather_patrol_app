@@ -11,7 +11,8 @@ import sqlite3
 import os
 
 #idk about this false on threading, this may be dangerous and we could run into problems.
-db_path = os.path.join("instance", "CBMR_Weather.db")
+db_path = os.path.join("instance", "CBMR_Weather.db") #Local
+#db_path = "/home/CBMRPatrolApp/database/CBMR_Weather.db" #pythonAnywhere
 connection = sqlite3.connect(db_path, check_same_thread=False)
 cursor = connection.cursor()
 
@@ -43,7 +44,8 @@ def get_information(category_name):
         return ''
 
 def create_header():
-    img = Image('./static/CB_Logo.jpg', width=100, height=50)
+    img = Image('./static/CB_Logo.jpg', width=100, height=50)  # local
+    #img = Image('/home/CBMRPatrolApp/cbmr_weather_patrol_app/CBMR_Weather/static/CB_Logo.jpg', width=100, height=50)  # pythonAnywhere
     data = [[img, 'CBSP Morning Weather and Avalanche Report', '']]
     t = Table(data)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
@@ -392,7 +394,9 @@ def generate_pdf(date):
 
     filename_date = make_file_name()
     pdf_file_name = 'CBMR_' + filename_date + '.pdf'
-    filepath = './past_pdfs/'
+    filepath = './past_pdfs/' #local
+    #filepath = '/home/CBMRPatrolApp/past_pdfs/' #pythonAnywhere
+
     #added to ensure directory exists
     os.makedirs(filepath, exist_ok=True)
     doc = SimpleDocTemplate(filepath+pdf_file_name,
