@@ -4,12 +4,9 @@ nav {
 }
 
 nav ul {
-    list-style-type: none;
-    padding:20px;
-    margin: 0px;
-    font-size: 2vw;
-    text-align: left;
-
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 nav ul li {
@@ -27,10 +24,16 @@ nav ul li a:hover{
 
 input{
     margin: 5px auto;
-    font-size: 20px;
+    font-size: 1.25vw;
 }
+
 h1 {
     font-size: 3vw;/* Scales based on viewport width */
+}
+form h1 {
+    text-decoration: underline;
+    width: 100%;
+    text-align: center;
 }
 p {
     font-size: 2vw;
@@ -211,9 +214,14 @@ form {
     width: 7vw;
     max-width: 100%;
 }
+.snow_row {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 .date_row input{
     width: 5vw;
     max-width: 95%;
+
 }
 .date_row label{
     width: auto;
@@ -222,12 +230,12 @@ form {
 
 #datetime, #forecaster{
     width: auto;
-    font-size: 2vw;
+    font-size: 1.25vw;
 }
 #problem_1 label, #problem_2 label, #problem_3 label, #problem_4 label,
 #elevation_1 label, #elevation_2 label, #elevation_3 label, #elevation_4 label {
-    display: inline-block; /* Make the label inline with the checkboxes */
-    margin-right: 10px; /* Add spacing between elements */
+    display: inline-block;
+    margin-right: 5px; /* Add spacing between elements */
 }
 
 /* Apply to the checkbox container inside each problem */
@@ -241,7 +249,7 @@ form {
     display: inline-block; /* Ensure that the checkboxes and the main label stay on the same line */
 }
 
-#problem_1::after, #problem_2::after, #problem_3::after   {
+#problem_1::after, #problem_2::after, #problem_3::after {
     content: "";
     display: block;
     width: 100%;
@@ -286,4 +294,152 @@ td.top_past {
     font-size: 1vw;
     width: auto;
     height: auto;
+}
+
+input[type="checkbox"] {
+  width: 1.5vw;
+  height: 1.5vw;
+  background-color: lightblue;
+}
+
+#avalanche_table td {
+  text-align: center;
+}
+#avalanche_table{
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+#avalanche_table input[type="checkbox"] {
+    width: 1.5vw;
+    height: 1.5vw;
+}
+
+select{
+    font-size: 1vw;
+    width: auto;
+    height: auto;
+
+}
+select:hover {
+    background-color: light green;
+}
+
+#pwl_checkbox_label {
+    display: block;
+}
+
+#pwl_checkbox_label label {
+    margin-right: 10px;
+}
+#problems-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+select {
+    margin-bottom: 10px;
+    font-size: 1vw;
+    width: 100%;
+    height: auto;
+}
+
+textarea {
+    margin-bottom: 10px;
+}
+
+
+
+nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    padding: 10px;
+    font-size: 1.5vw;
+}
+
+
+
+/*this is a lot of adapting to screen size stuff*/
+
+/* Stack navigation items on small screens meh on this*/
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+        font-size: 3vw;
+    }
+    nav ul li {
+        display: block;
+        text-align: center;
+        padding: 10px 0;
+    }
+}
+
+/* Responsive grid to screen size */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-rows: auto;
+    gap: 10px;
+    width: 100%;
+}
+
+
+.grid img, img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+}
+
+
+form {
+    width: 90%;
+    font-size: 1.5vw;
+}
+
+@media (max-width: 768px) {
+    form {
+        font-size: 3vw;
+    }
+}
+
+
+input, select, label {
+    font-size: 1.25vw;
+    text-size: 1.25vw;
+    width: 100%;
+    max-width: 200px;
+}
+textarea {
+    font-size: 1.25vw;
+    width: 100%;
+    max-width: 95%;
+    padding: 10px;
+}
+
+
+table {
+    width: 100%;
+}
+
+th, td {
+    font-size: 1.25vw;
+}
+
+@media (max-width: 768px) {
+    th, td {
+        font-size: 3vw;
+    }
+}
+
+button {
+    font-size: 1.5vw;
+}
+
+@media (max-width: 768px) {
+    button {
+        font-size: 4vw;
+    }
 }
