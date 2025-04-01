@@ -14,6 +14,10 @@ from generate_pdf import generate_pdf
 from generate_pdf_pm import generate_pdf_pm
 from job_delete_pdf_files import delete_files
 from flask_apscheduler import APScheduler
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
 
 
 class Config_jobs:
@@ -162,17 +166,83 @@ def handle_post_login():
             return render_template('login_error_user.html')
     return render_template('loginform_user.html')
 
+@app.route('/resetEmail', methods = ['POST'])
+def reset_email():
+    sender_email = "clynckejje328@gmail.com"
+    receiver_email = "clynckejje328@gmail.com"
+    email_key = "rmzx qdnl ovtr psmu"
+
+    subject = "CBMR Patrol App Reset Login"
+
+    link = "https://cbmrpatrolapp.pythonanywhere.com/login_reset.html"
+    hardcoded_password = "8493"
+
+    user = User.query.filter_by(id=1).first()
+    username = user.username
+    password = user.password
+
+    # body = f"""
+    #     Hello,
+    #
+    #     Here is the password reset link: {link}
+    #     Your password is: {hardcoded_password}
+    #
+    #     Please do not share this information.
+    #
+    #     Regards,
+    #     CBMR Ski Patrol
+    #     """
+
+    body = f"""
+        Hello,
+
+        Username: {username}
+        Password: {password}
+
+        Please do not share this information.
+
+        Regards,
+        CBMR Ski Patrol
+    """
+
+    msg = MIMEMultipart()
+    msg['From'] = sender_email
+    msg['To'] = receiver_email
+    msg['Subject'] = subject
+
+    msg.attach(MIMEText(body, 'plain'))
+
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(sender_email, email_key)
+        text = msg.as_string()
+        server.sendmail(sender_email, receiver_email, text)
+        server.quit()
+        print("Email sent successfully!")
+    except Exception as e:
+        print(f"Error: {e}")
+
+    return render_template('loginform_user.html')
+
 @app.route('/loginReset', methods = ['GET', 'POST'])
-def reset_login():
+def login_reset():
     username = '1'
     if request.method == 'POST':
+        resetCode = request.form['resetCode']
         new_password = request.form['new_password']
         confirm_password = request.form['confirm_password']
         user = User.query.filter_by(username=username).first()
+        if(resetCode != '8493'):
+            return render_template('login_reset.html', error_message="Invalid Reset Code")
         if(new_password != confirm_password):
             return render_template('login_reset.html', error_message="Passwords do not match")
         if user.password == new_password:
             return render_template('login_reset.html', error_message="Your new password can not be the same as your old password")
+
+        #update password in data base
+
+
 
     return render_template('login_reset.html')
 
