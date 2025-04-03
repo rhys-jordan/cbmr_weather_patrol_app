@@ -451,7 +451,7 @@ def generate_pdf(date):
 
 
 def main():
-    generate_pdf('2025-03-28')
+    generate_pdf('2025-04-03')
     connection.close()
 
 
