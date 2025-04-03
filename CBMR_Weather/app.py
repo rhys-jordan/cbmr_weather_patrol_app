@@ -425,6 +425,7 @@ def pm_form():
         hs = request.form.get('hs', None)
         hn24 = request.form.get('hn24', None)
         ytd_snow = request.form.get('ytd_snow', None)
+        ytd_swe= request.form.get('ytd_swe', None)
         weather_fx = request.form.get('weather_fx', None)
         tonight = request.form.get('tonight', None)
         tomorrow = request.form.get('tomorrow', None)
