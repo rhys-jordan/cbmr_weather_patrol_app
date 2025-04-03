@@ -3,8 +3,9 @@ from flask import Blueprint
 bp_home = Blueprint('home', __name__)
 bp_am_form = Blueprint('am_form', __name__)
 bp_forms = Blueprint('forms', __name__)
+bp_read = Blueprint('read', __name__)
 
-from CBMR_Weather.routes import home, am_form, forms
+from CBMR_Weather.routes import home, am_form, forms, read
 
 from CBMR_Weather import login_manager
 from CBMR_Weather.models import User
