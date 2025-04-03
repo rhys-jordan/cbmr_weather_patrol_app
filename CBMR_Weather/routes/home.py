@@ -1,9 +1,9 @@
 
-from flask import Flask, Blueprint, render_template, request, redirect, send_file, after_this_request, session, url_for
-from flask_login import LoginManager, UserMixin, login_user,logout_user,current_user,login_required
+from flask import render_template, request, redirect, session
+from flask_login import  login_user,logout_user,current_user,login_required
 
 from CBMR_Weather.routes import bp_home
-from CBMR_Weather import db, login_manager
+from CBMR_Weather import db
 from CBMR_Weather.models import User
 
 @bp_home.route('/')

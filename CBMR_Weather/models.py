@@ -1,9 +1,7 @@
 from CBMR_Weather.extensions import db
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import ForeignKey, desc
-from sqlalchemy.dialects.mysql import insert
-from sqlalchemy.orm import foreign, relationship
-from flask_login import LoginManager, UserMixin, login_user,logout_user,current_user,login_required
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
+from flask_login import UserMixin
 
 
 class Snow(db.Model):

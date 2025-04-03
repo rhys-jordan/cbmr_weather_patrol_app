@@ -1,13 +1,11 @@
-from flask import Blueprint, render_template, request, send_file
-from flask_login import LoginManager, UserMixin, login_user,logout_user,current_user,login_required
-from CBMR_Weather.models import Snow, Avalanche
-from CBMR_Weather import db
+from flask import render_template, request, send_file
+from flask_login import login_required
 from CBMR_Weather.generate_pdf import generate_pdf
 from datetime import datetime, timedelta
 
 from CBMR_Weather.routes import bp_am_form
 from CBMR_Weather.extensions import db
-from CBMR_Weather.models import User, Snow, Avalanche
+from CBMR_Weather.models import Snow, Avalanche
 
 
 

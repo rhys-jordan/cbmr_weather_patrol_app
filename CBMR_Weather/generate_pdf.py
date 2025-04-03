@@ -15,7 +15,7 @@ db_path = os.path.join("instance", "CBMR_Weather.db") #Local
 #db_path = "/home/CBMRPatrolApp/database/CBMR_Weather.db" #pythonAnywhere
 connection = sqlite3.connect(db_path, check_same_thread=False)
 cursor = connection.cursor()
-
+print(db_path)
 pdf_date =  ''
 
 styles = getSampleStyleSheet()
@@ -44,7 +44,7 @@ def get_information(category_name):
         return ''
 
 def create_header():
-    img = Image('./static/CB_Logo.jpg', width=100, height=50)  # local
+    img = Image('./CBMR_Weather/static/CB_Logo.jpg', width=100, height=50)  # local
     #img = Image('/home/CBMRPatrolApp/cbmr_weather_patrol_app/CBMR_Weather/static/CB_Logo.jpg', width=100, height=50)  # pythonAnywhere
     data = [[img, 'CBSP Morning Weather and Avalanche Report', '']]
     t = Table(data)
@@ -394,7 +394,7 @@ def generate_pdf(date):
 
     filename_date = make_file_name()
     pdf_file_name = 'CBMR_' + filename_date + '.pdf'
-    filepath = './past_pdfs/' #local
+    filepath = 'past_pdfs/' #local
     #filepath = '/home/CBMRPatrolApp/past_pdfs/' #pythonAnywhere
 
     #added to ensure directory exists
@@ -446,12 +446,12 @@ def generate_pdf(date):
 
     doc.build(elements)
     #connection.close()
-
+    print(pdf_file_name)
     return filepath+pdf_file_name
 
 
 def main():
-    generate_pdf('2025-03-28')
+    generate_pdf('2025-04-03')
     connection.close()
 
 
