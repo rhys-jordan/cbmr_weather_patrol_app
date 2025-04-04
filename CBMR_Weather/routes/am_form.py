@@ -1,4 +1,4 @@
-from flask import render_template, request, send_file,redirect
+from flask import render_template, request, send_file
 from flask_login import login_required
 from CBMR_Weather.generate_pdf_am import generate_pdf
 from datetime import datetime, timedelta
