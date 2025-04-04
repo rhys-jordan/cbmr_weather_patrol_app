@@ -673,6 +673,7 @@ def update_form(inputDate):
         print(avalanche)
         return render_template('update-form.html', oldSnow=snow,avalanches=avalanche)
 
+
 @app.route('/past-data', methods=['GET', 'POST'])
 @login_required
 def past_data():
