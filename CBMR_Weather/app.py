@@ -10,7 +10,7 @@ from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import foreign, relationship
 from flask_login import LoginManager, UserMixin, login_user,logout_user,current_user,login_required
 from datetime import datetime, timedelta
-from generate_pdf import generate_pdf
+from generate_pdf_am import generate_pdf
 from generate_pdf_pm import generate_pdf_pm
 from job_delete_pdf_files import delete_files
 from flask_apscheduler import APScheduler
