@@ -64,10 +64,11 @@ def create_basic_stats(basic_stats_input):
     hs = 'HS: ' + basic_stats_input[0]
     hn24 = 'HN24: ' + basic_stats_input[1]
     ytd_snow = 'YTD Snow: ' + basic_stats_input[2]
-    uphill_access = 'Uphill Access: ' + basic_stats_input[3]
-    data = [[hs, hn24, ytd_snow, uphill_access]]
+    ytd_swe = 'YTD SWE: ' + basic_stats_input[3]
+    uphill_access = 'Uphill Access: ' + basic_stats_input[4]
+    data = [[hs, hn24, ytd_snow, ytd_swe, uphill_access]]
 
-    t = Table(data, colWidths=[126, 126, 126, 206], spaceAfter=10)
+    t = Table(data, colWidths=[94, 94, 94, 94, 206], spaceAfter=10)
 
     t.setStyle(TableStyle([
         ('TEXTCOLOR', (0, 0), (-1, -1), colors.black),
@@ -104,7 +105,7 @@ def make_file_name(date_input):
     return filename
 
 
-def generate_pdf_pm(date, forecaster, basic_stats_input, weather_fx_input, tonight_input, tomorrow_input, tomorrow_night_input, mitigation_input):
+def generate_pdf_pm(date, forecaster, basic_stats_input, weather_fx_input, tonight_tomorrow_input, do_today_input, plan_to_do_input, mitigation_input):
 
     global pdf_date
     pdf_date = date
@@ -130,9 +131,9 @@ def generate_pdf_pm(date, forecaster, basic_stats_input, weather_fx_input, tonig
     basic_info = create_basic_info(date, forecaster)
     basic_stats = create_basic_stats(basic_stats_input)
     weather_fx = create_discuss_box('Weather Forecast', weather_fx_input)
-    tonight = create_discuss_box('Tonight', tonight_input)
-    tomorrow = create_discuss_box('Tomorrow', tomorrow_input)
-    tomorrow_night = create_discuss_box('Tomorrow Morning', tomorrow_night_input)
+    tonight = create_discuss_box('Tonight, Tomorrow, Tomorrow night', tonight_tomorrow_input)
+    tomorrow = create_discuss_box('What we did today', do_today_input)
+    tomorrow_night = create_discuss_box('What we plan to do tomorrow', plan_to_do_input)
     mitigation = create_discuss_box('Mitigation Plan', mitigation_input)
 
 
@@ -151,7 +152,7 @@ def generate_pdf_pm(date, forecaster, basic_stats_input, weather_fx_input, tonig
 
 
 def main():
-    generate_pdf_pm('2025-03-14', '', ['', '', '', ''], '', '', '', '', '')
+    generate_pdf_pm('2025-04-03T15:24', 'Jordan', [ '2','1','3', '', ''], '', '', '', '', '')
     connection.close()
 
 

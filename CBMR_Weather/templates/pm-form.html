@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "forms_base.html" %}
 {% block title%} PM-Form {%endblock%}
 {% block content%}
 <h1 id="title"> PM FORM</h1><br>
@@ -18,19 +18,20 @@
         <label>HS:</label> <input type="number" id="hs" name="hs" value="{{snow.hs}}" step="any">
         <label>HN24:</label><input type="number" id="hn24" name="hn24" value="{{snow.hn24}}" step="any">
         <label>YTD Snow:</label> <input type="number" id="ytd_snow" name="ytd_snow" value="{{snow.ytd_snow}}" step="any">
+        <label>YTD SWE:</label> <input type="number" id="ytd_swe" name="ytd_swe" value="{{snow.ytd_swe}}" step="any">
     </div>
 
     <h1>Weather Forecast</h1><br>
     <textarea id="weather_fx" name="weather_fx"></textarea>
 
-    <h1>Tonight</h1><br>
-    <textarea id="tonight" name="tonight"></textarea>
+    <h1>Tonight, Tomorrow, Tomorrow night</h1><br>
+    <textarea id="tonight_tomorrow" name="tonight_tomorrow"></textarea>
 
-    <h1>Tomorrow</h1><br>
-    <textarea id="tomorrow" name="tomorrow"></textarea>
+    <h1>What we did today</h1><br>
+    <textarea id="do_today" name="do_today"></textarea>
 
-    <h1>Tomorrow Night</h1><br>
-    <textarea id="tomorrow_night" name="tomorrow_night"></textarea>
+    <h1>What we plan to do tomorrow</h1><br>
+    <textarea id="plan_to_do" name="plan_to_do"></textarea>
 
     <h1>Mitigation</h1><br>
     <textarea id="mitigation" name="mitigation"></textarea>
