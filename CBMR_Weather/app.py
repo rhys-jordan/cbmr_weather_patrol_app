@@ -419,7 +419,6 @@ def am_form():
 @login_required
 def pm_form():
     if request.method == 'POST':
-
         date = request.form.get('datetime', None)
         forecaster = request.form.get('forecaster', None)
         hs = request.form.get('hs', None)
