@@ -186,19 +186,6 @@ def view():
     snow = Snow.query.order_by(desc(Snow.date)).all()
     return render_template('view.html', snow=snow)
 
-@app.route('/view/<inputDate>', methods=['GET', 'POST'])
-@login_required
-def delete_data(inputDate):
-    if request.method == 'GET':
-        dateCheck = Snow.query.filter_by(date=inputDate).first()
-        if dateCheck:
-            #print("Delete Data from " + str(dateCheck))
-            Avalanche.query.filter_by(Snow_id=dateCheck.id).delete(synchronize_session=False)
-            db.session.delete(dateCheck)
-            db.session.commit()
-    snow = Snow.query.order_by(desc(Snow.date)).all()
-    #return render_template('view.html', snow=snow)
-    return redirect(url_for('view', snow=snow))
 
 
 @app.route('/am-form', methods=['GET', 'POST'])
