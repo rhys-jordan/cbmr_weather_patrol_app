@@ -403,7 +403,6 @@ def generate_pdf(date):
     #added to ensure directory exists
     os.makedirs(filepath, exist_ok=True)
     file = os.path.join(filepath, pdf_file_name) #local
-    print(file)
     doc = SimpleDocTemplate(file,
                             pagesize=letter,
                             rightMargin=72,

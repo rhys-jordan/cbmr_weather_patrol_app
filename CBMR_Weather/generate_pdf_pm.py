@@ -21,7 +21,9 @@ pdf_date = ''
 styles = getSampleStyleSheet()
 
 def create_header():
-    img = Image('./static/CB_Logo.jpg', width=100, height=50) #local
+    img_path = os.path.join("CBMR_Weather", "static", 'CB_Logo.jpg')
+    img = Image(img_path, width=100, height=50)
+    #img = Image('./static/CB_Logo.jpg', width=100, height=50) #local
     #img = Image('/home/CBMRPatrolApp/cbmr_weather_patrol_app/CBMR_Weather/static/CB_Logo.jpg', width=100, height=50)  # pythonAnywhere
     data = [[img, 'CBSP Evening Report', '']]
     t = Table(data)
@@ -109,10 +111,13 @@ def generate_pdf_pm(date, forecaster, basic_stats_input, weather_fx_input, tonig
 
     filename_date = make_file_name(date)
     pdf_file_name = 'CBMR_PM_' + filename_date + '.pdf'
-    filepath = '/home/CBMRPatrolApp/past_pdfs'
+    filepath = 'CBMR_Weather/past_pdfs/'  # local
+    # filepath = '/home/CBMRPatrolApp/past_pdfs/' #pythonAnywhere
+
     # added to ensure directory exists
     os.makedirs(filepath, exist_ok=True)
-    doc = SimpleDocTemplate(filepath + pdf_file_name,
+    file = os.path.join(filepath, pdf_file_name)  # local
+    doc = SimpleDocTemplate(file,
                             pagesize=letter,
                             rightMargin=72,
                             leftMargin=72,
@@ -142,7 +147,7 @@ def generate_pdf_pm(date, forecaster, basic_stats_input, weather_fx_input, tonig
 
     doc.build(elements)
 
-    return pdf_file_name
+    return 'past_pdfs/' + pdf_file_name
 
 
 def main():
