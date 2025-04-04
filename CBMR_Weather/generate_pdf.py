@@ -4,13 +4,14 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, Image
 from reportlab.platypus import Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
+import os
 from io import StringIO
 from flask import send_file
 
 import sqlite3
 import os
 
-#idk about this false on threading, this may be dangerous and we could run into problems.
+
 db_path = os.path.join("instance", "CBMR_Weather.db") #Local
 #db_path = "/home/CBMRPatrolApp/database/CBMR_Weather.db" #pythonAnywhere
 connection = sqlite3.connect(db_path, check_same_thread=False)
@@ -44,7 +45,9 @@ def get_information(category_name):
         return ''
 
 def create_header():
-    img = Image('./CBMR_Weather/static/CB_Logo.jpg', width=100, height=50)  # local
+    img_path = os.path.join("CBMR_Weather","static", 'CB_Logo.jpg')
+    img = Image(img_path, width=100, height=50)
+    #img = Image('./CBMR_Weather/static/CB_Logo.jpg', width=100, height=50)  # local
     #img = Image('/home/CBMRPatrolApp/cbmr_weather_patrol_app/CBMR_Weather/static/CB_Logo.jpg', width=100, height=50)  # pythonAnywhere
     data = [[img, 'CBSP Morning Weather and Avalanche Report', '']]
     t = Table(data)
@@ -394,12 +397,14 @@ def generate_pdf(date):
 
     filename_date = make_file_name()
     pdf_file_name = 'CBMR_' + filename_date + '.pdf'
-    filepath = 'past_pdfs/' #local
+    filepath = 'CBMR_Weather/past_pdfs/' #local
     #filepath = '/home/CBMRPatrolApp/past_pdfs/' #pythonAnywhere
 
     #added to ensure directory exists
     os.makedirs(filepath, exist_ok=True)
-    doc = SimpleDocTemplate(filepath+pdf_file_name,
+    file = os.path.join(filepath, pdf_file_name) #local
+    print(file)
+    doc = SimpleDocTemplate(file,
                             pagesize=letter,
                             rightMargin=72,
                             leftMargin=72,
@@ -445,9 +450,9 @@ def generate_pdf(date):
     elements.append(terrain_opening)
 
     doc.build(elements)
-    #connection.close()
-    print(pdf_file_name)
-    return filepath+pdf_file_name
+
+    #local
+    return 'past_pdfs/' + pdf_file_name
 
 
 def main():
