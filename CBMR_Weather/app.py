@@ -113,11 +113,11 @@ class Snow(db.Model):
     children = relationship("Avalanche", back_populates="parent")
 
 
-
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(40), unique=True, nullable=False)
     password = db.Column(db.String(40), nullable=False)
+
 
 class Avalanche(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -129,6 +129,7 @@ class Avalanche(db.Model):
     likelihood = db.Column(db.String)
     Snow_id = db.Column(db.Integer, ForeignKey('snow.id'))
     parent = relationship("Snow", back_populates="children")
+
 
 with app.app_context():
     db.create_all()
@@ -168,40 +169,39 @@ def handle_post_login():
 
 @app.route('/resetEmail', methods = ['POST'])
 def reset_email():
+
+    # snowsafetycb@gmail.com
+    # CB email_key:
+
     sender_email = "clynckejje328@gmail.com"
     receiver_email = "clynckejje328@gmail.com"
     email_key = "rmzx qdnl ovtr psmu"
 
     subject = "CBMR Patrol App Reset Login"
 
-    link = "https://cbmrpatrolapp.pythonanywhere.com/login_reset.html"
-    hardcoded_password = "8493"
+    link = "http://127.0.0.1:5000/loginReset" #locala
+    #link = "https://cbmrpatrolapp.pythonanywhere.com/loginReset.html" #pythonAnywhere
+    confirmation_key = "8493"
 
     user = User.query.filter_by(id=1).first()
     username = user.username
     password = user.password
 
-    # body = f"""
-    #     Hello,
-    #
-    #     Here is the password reset link: {link}
-    #     Your password is: {hardcoded_password}
-    #
-    #     Please do not share this information.
-    #
-    #     Regards,
-    #     CBMR Ski Patrol
-    #     """
-
     body = f"""
         Hello,
+        
+        Your current username is: {username}
+        Your current password is: {password}
+        
+        If you want to change your username and password:
+        Use the link and confirmation key below.
 
-        Username: {username}
-        Password: {password}
+        Here is the password reset link: {link}
+        Your confirmation key is: {confirmation_key}
 
         Please do not share this information.
 
-        Regards,
+        Hoping for snow,
         CBMR Ski Patrol
     """
 
@@ -223,28 +223,42 @@ def reset_email():
     except Exception as e:
         print(f"Error: {e}")
 
-    return render_template('loginform_user.html')
+    return redirect("/login")
 
 @app.route('/loginReset', methods = ['GET', 'POST'])
 def login_reset():
-    username = '1'
+
+    user = User.query.filter_by(id=1).first()
+    username = user.username
+    password = user.password
+
     if request.method == 'POST':
-        resetCode = request.form['resetCode']
-        new_password = request.form['new_password']
-        confirm_password = request.form['confirm_password']
+        resetCode = request.form.get('resetCode', None)
+        new_username = request.form.get('new_username', None)
+        confirm_username = request.form.get('confirm_username', None)
+        new_password = request.form.get('new_password', None)
+        confirm_password = request.form.get('confirm_password', None)
         user = User.query.filter_by(username=username).first()
         if(resetCode != '8493'):
             return render_template('login_reset.html', error_message="Invalid Reset Code")
+        if (new_username != confirm_username):
+            return render_template('login_reset.html', error_message="Usernames do not match")
+        if(new_password == ""):
+            return render_template('login_reset.html', error_message="Password must be at least 1 character")
         if(new_password != confirm_password):
             return render_template('login_reset.html', error_message="Passwords do not match")
         if user.password == new_password:
             return render_template('login_reset.html', error_message="Your new password can not be the same as your old password")
 
-        #update password in data base
+        print(user.username)
 
+        user.username = new_username if new_username else user.username
+        user.password = new_password
+        db.session.commit()
 
+        return render_template('loginform_user.html')
 
-    return render_template('login_reset.html')
+    return render_template('loginReset.html')
 
 @app.route('/logout')
 @login_required
@@ -503,14 +517,6 @@ def pm_form():
 
         pdf_filename = generate_pdf_pm(date, forecaster, basic_stats, weather_fx, tonight, tomorrow, tomorrow_night, mitigation)
         return send_file(pdf_filename, as_attachment=True)  #
-
-
-        #send info to pm form generate pdf
-        #send pdf
-
-        #push to main
-        #host on pA
-        #set up task to delete or delete on logout
 
     else:
         now = datetime.now()
