@@ -21,6 +21,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from CBMR_Weather import create_app
 
 app = create_app()
-
+#NEED TO Make your own database. Copy from python anywhere and rename to CBMR_Weather.db and place in instance formula
+#need dependencies. Import flask, json, sql stuff, report lab,.... Import all from app.py and generate_pdf files
 if __name__ == '__main__':
     app.run()
