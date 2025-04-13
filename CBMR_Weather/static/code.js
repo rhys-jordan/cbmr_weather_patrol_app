@@ -125,3 +125,6 @@ const maxProblems = 4; // Maximum number of avalanche problems
                 alert("At least one avalanche problem must be present.");
             }
         }
+
+
+

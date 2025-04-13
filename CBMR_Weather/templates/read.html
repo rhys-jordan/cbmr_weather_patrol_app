@@ -1,6 +1,38 @@
 {% extends "base.html" %}
 {% block title%} Read {%endblock%}
 {% block content%}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+
+
+
 <h1 id="title"> Read</h1><br>
+
+<canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+
+<script>
+const xValues = JSON.parse("{{dates}}");
+const yValues = JSON.parse("{{ytd_snow}}");
+
+new Chart("myChart", {
+  type: "line",
+  data: {
+    labels: xValues,
+    datasets: [{
+      fill: false,
+      lineTension: 0,
+      backgroundColor: "rgba(0,0,255,1.0)",
+      borderColor: "rgba(0,0,255,0.1)",
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {display: false},
+    scales: {
+      yAxes: [{ticks: {min: 20, max:120}}]
+    }
+  }
+});
+</script>
 
 {% endblock %}
