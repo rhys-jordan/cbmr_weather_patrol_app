@@ -196,4 +196,3 @@ def past_data():
 app.run()
 
 
-
