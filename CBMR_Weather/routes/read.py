@@ -11,23 +11,21 @@ import matplotlib.pyplot as plt
 import json
 
 
-@bp_read.route("/read", methods=['GET', 'POST'])
-def read():
-    #ytd_snow = Snow.query.get(Snow.ytd_snow)
-    #ytd_snow = Snow.query(Snow.ytd_snow)
+def get_ytd_snow():
     ytd_snow = db.session.query(Snow.ytd_snow, Snow.date).order_by(Snow.date)
-    #print(ytd_snow[1][0])
     dates = []
     snow = []
-    inct = 0
     for row in ytd_snow:
         date_format = datetime.strftime(row[1], '%m-%d-%Y')
-        dates.append(date_format)
-        #dates.append(str(inct))
-        inct = inct + 1
-        snow.append(row[0])
 
-    print(dates)
+        if (row[0] != None):
+            dates.append(date_format)
+            # dates.append(str(inct))
+            snow.append(row[0])
+    return dates, snow
 
+@bp_read.route("/read", methods=['GET', 'POST'])
+def read():
+    dates, snow = get_ytd_snow()
 
     return render_template('read.html', dates = json.dumps(dates), ytd_snow = snow)
