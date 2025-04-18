@@ -12,10 +12,10 @@
 <script src="/static/graphs.js"></script>
 
 <canvas id="ytd_snow_graph" style="width:100%;max-width:700px" ></canvas>
-<script>graphs(JSON.parse({{dates|tojson}}), JSON.parse("{{ytd_snow}}"),"ytd_snow_graph" )</script>
+<script>graphs(JSON.parse({{dates_snow|tojson}}), JSON.parse("{{ytd_snow}}"),"ytd_snow_graph" )</script>
 
 <canvas id="ytd_swe_graph" style="width:100%;max-width:700px" ></canvas>
-<script>graphs(JSON.parse({{dates|tojson}}), JSON.parse("{{ytd_snow}}"),"ytd_swe_graph" )</script>
+<script>graphs(JSON.parse({{dates_swe|tojson}}), JSON.parse("{{ytd_swe}}"),"ytd_swe_graph" )</script>
 
 
 {% endblock %}

@@ -4,6 +4,7 @@ function graphs(x, y, element_id){
     const xValues = x;
     const yValues = y;
     const y_max = Math.max(...yValues)
+    const y_min = Math.min(...yValues)
 
     new Chart(document.getElementById(element_id).getContext('2d'), {
       type: "line",
@@ -20,7 +21,7 @@ function graphs(x, y, element_id){
       options: {
         legend: {display: false},
         scales: {
-          yAxes: [{ticks: {min: 20, max:y_max+50}}]
+          yAxes: [{ticks: {min:y_min, max:y_max}}]
         }
       }
     });

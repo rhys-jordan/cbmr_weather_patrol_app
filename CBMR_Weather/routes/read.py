@@ -24,8 +24,24 @@ def get_ytd_snow():
             snow.append(row[0])
     return dates, snow
 
+def get_swe_snow():
+    ytd_snow = db.session.query(Snow.ytd_swe, Snow.date).order_by(Snow.date)
+    dates = []
+    swe = []
+    for row in ytd_snow:
+        date_format = datetime.strftime(row[1], '%m-%d-%Y')
+
+        if (row[0] != None):
+            dates.append(date_format)
+            # dates.append(str(inct))
+            swe.append(row[0])
+    return dates, swe
+
+
 @bp_read.route("/read", methods=['GET', 'POST'])
 def read():
-    dates, snow = get_ytd_snow()
+    dates_snow, snow = get_ytd_snow()
+    dates_swe, swe = get_swe_snow()
 
-    return render_template('read.html', dates = json.dumps(dates), ytd_snow = snow)
+    return render_template('read.html', dates_snow = json.dumps(dates_snow), ytd_snow = snow,
+                            dates_swe = json.dumps(dates_swe), ytd_swe = swe)
