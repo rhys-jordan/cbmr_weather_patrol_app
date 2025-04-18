@@ -22,17 +22,12 @@ def read():
     inct = 0
     for row in ytd_snow:
         date_format = datetime.strftime(row[1], '%m-%d-%Y')
-        dates.append(inct)
+        dates.append(date_format)
+        #dates.append(str(inct))
         inct = inct + 1
         snow.append(row[0])
 
     print(dates)
-    #print(snow)
-    #plt.plot(dates, snow)
-    #plt.show()
-    #st.write("My First App")
-    #df = pd.DataFrame(SQL_Query, columns=['value1', 'value2'])
-    #st.line_chart(df)
 
 
     return render_template('read.html', dates = json.dumps(dates), ytd_snow = snow)

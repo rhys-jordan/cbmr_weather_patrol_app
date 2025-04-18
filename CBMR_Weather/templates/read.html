@@ -11,7 +11,8 @@
 <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
 
 <script>
-const xValues = JSON.parse("{{dates}}");
+
+const xValues = JSON.parse({{dates|tojson}});
 const yValues = JSON.parse("{{ytd_snow}}");
 
 new Chart("myChart", {
