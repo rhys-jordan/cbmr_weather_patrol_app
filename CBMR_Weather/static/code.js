@@ -63,13 +63,19 @@ function addProblem4() {
 
 
 function recheck() {
-    alert("this date exists please input a valid date or go to the Past-Data Form.")
+    alert("this date exists please input a valid date or go to the the view tab to update an existing form.")
     window.location.href = "/view";
 }
 
-function confirm_data_delete(date){
-    if (confirm("Are you sure you want to delete the data for this date?")) {
-        window.location.href = "/view/" + date;
+function confirm_data_delete_am(date){
+    if (confirm("Are you sure you want to delete the AM Form for "+date+" ?")) {
+        window.location.href = "/view_am/" + date;
+    }
+}
+
+function confirm_data_delete_pm(date){
+    if (confirm("Are you sure you want to delete the PM Form for "+date+" ?")) {
+        window.location.href = "/view_pm/" + date;
     }
 }
 

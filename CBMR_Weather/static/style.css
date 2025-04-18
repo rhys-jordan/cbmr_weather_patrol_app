@@ -443,3 +443,12 @@ button {
         font-size: 4vw;
     }
 }
+
+
+#snowTable {
+    width: 95%;
+
+}
+#snowTable th, td {
+    text-align: center;
+}

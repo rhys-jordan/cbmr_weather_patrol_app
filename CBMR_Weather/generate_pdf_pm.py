@@ -61,11 +61,11 @@ def create_basic_info(date_input, forecaster_input):
 #
 def create_basic_stats(basic_stats_input):
 
-    hs = 'HS: ' + basic_stats_input[0]
-    hn24 = 'HN24: ' + basic_stats_input[1]
-    ytd_snow = 'YTD Snow: ' + basic_stats_input[2]
-    ytd_swe = 'YTD SWE: ' + basic_stats_input[3]
-    uphill_access = 'Uphill Access: ' + basic_stats_input[4]
+    hs = 'HS: ' + str(basic_stats_input[0])
+    hn24 = 'HN24: ' + str(basic_stats_input[1])
+    ytd_snow = 'YTD Snow: ' + str(basic_stats_input[2])
+    ytd_swe = 'YTD SWE: ' + str(basic_stats_input[3])
+    uphill_access = 'Uphill Access: ' + str(basic_stats_input[4])
     data = [[hs, hn24, ytd_snow, ytd_swe, uphill_access]]
 
     t = Table(data, colWidths=[94, 94, 94, 94, 206], spaceAfter=10)
