@@ -68,7 +68,7 @@ function recheck() {
 }
 
 function confirm_data_delete_am(date){
-    if (confirm("Are you sure you want to delete the AM Form for "+date+" ?")) {
+    if (confirm("Are you sure you want to delete the AM and PM Form for "+date+" ?")) {
         window.location.href = "/view_am/" + date;
     }
 }

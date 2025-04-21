@@ -11,8 +11,52 @@ from CBMR_Weather.models import Snow, Avalanche, Pm_form
 
 @bp_view.route("/view",methods=['GET', 'POST'])
 def view():
-    snow = Snow.query.order_by(desc(Snow.date)).all()
-    return render_template('view.html', snow=snow)
+    search_query = request.args.get("search", "").strip()
+    search_column = request.args.get("column", "").strip()
+    sort_order = request.args.get("sort_order", "asc")
+
+    # Mapping of valid columns to Snow model attributes
+    column_map = {
+        "date": Snow.date,
+        "season": Snow.season,
+        "hs": Snow.hs,
+        "hn24": Snow.hn24,
+        "hn24_swe":Snow.swe,
+        "hst": Snow.hst,
+        "ytd_snow": Snow.ytd_snow,
+        "ytd_swe": Snow.ytd_swe,
+        "temperature": Snow.temperature,
+        "wind_mph": Snow.wind_mph,
+        "wind_direction": Snow.wind_direction,
+        "peak_gust": Snow.current_peak_gust_mph,
+    }
+
+    query = Snow.query
+
+    # Apply search filter if both search_query and search_column are provided and valid
+    if search_query and search_column in column_map:
+        column_attr = column_map[search_column]
+        like_pattern = f"%{search_query}%"
+        query = query.filter(db.cast(column_attr, db.String).like(like_pattern))
+
+    if search_column in column_map:
+        column_attr = column_map[search_column]
+        query = query.filter(column_attr.isnot(None))
+    # Apply sorting based on search_column and sort_order
+    if search_column in column_map:
+        column_attr = column_map[search_column]
+        if sort_order == "desc":
+            # Ensure peak_gust is cast to float for proper sorting
+            query = query.order_by(db.cast(column_attr, db.Float).desc())
+        else:
+            # Ensure peak_gust is cast to float for proper sorting
+            query = query.order_by(db.cast(column_attr, db.Float).asc())
+    else:
+        # Default sorting by date descending
+        query = query.order_by(Snow.date.desc())
+
+    snow = query.all()
+    return render_template("view.html", snow=snow, search=search_query, column=search_column, sort_order=sort_order)
 
 @bp_view.route('/view_am/<inputDate>', methods=['GET', 'POST'])
 @login_required

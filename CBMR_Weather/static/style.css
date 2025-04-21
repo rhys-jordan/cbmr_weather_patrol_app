@@ -452,3 +452,46 @@ button {
 #snowTable th, td {
     text-align: center;
 }
+
+#view_search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    width: 70%;
+    justify-content: center;
+}
+
+/* Make each form group vertical */
+#view_search div {
+    display: flex;
+    flex-direction: column;
+    margin: 0 5px;
+}
+
+#view_search #reset_button {
+    margin-right: auto;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 4px 10px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#view_search #reset_button:hover {
+    background-color: red;
+}
+
+#view_search label {
+    margin-bottom: 2px;
+}
+
+#view_search select,
+#view_search input[type="text"],
+#view_search button[type="submit"] {
+    border: 1px solid #ccc;
+    padding: 4px 6px;
+    border-radius: 3px;
+}
