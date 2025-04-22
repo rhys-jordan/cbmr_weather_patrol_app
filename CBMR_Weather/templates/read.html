@@ -11,19 +11,22 @@
 
 <script src="/static/graphs.js"></script>
 
-<canvas id="ytd_snow_graph" style="width:100%;max-width:700px" ></canvas>
-<script>graphs(JSON.parse({{dates_snow|tojson}}), JSON.parse("{{ytd_snow}}"),"ytd_snow_graph", 'YTD Snow', 'Dates', 'YTD Snow (inches)')</script>
+<canvas id="graph_1" style="width:100%;max-width:700px" ></canvas>
+<script>graph(JSON.parse({{dates_1|tojson}}), JSON.parse("{{data_1}}"),"graph_1", JSON.parse({{title_1|tojson}}), JSON.parse({{y_label|tojson}}))</script>
 
-<canvas id="ytd_swe_graph" style="width:100%;max-width:700px" ></canvas>
-<script>graphs3(JSON.parse({{dates_swe|tojson}}), JSON.parse("{{ytd_swe}}"),"ytd_swe_graph", 'YTD SWE', 'Dates', 'YTD SWE' )</script>
+<form action="/read" method="post">
+    <select name = "data_1">
+        <option value = "None">None</option>
+        <option value = "YTD Snow">YTD Snow</option>
+        <option value = "hn24">hn24</option>
+    </select>
+    <select name = "season_1">
+        <option value = "None">None</option>
+        <option value = "23-24">23-24</option>
+        <option value = "24-25">24-25</option>
+    </select>
+    <button type="submit">Submit</button>
+</form>
 
-<canvas id="temps_graph" style="width:100%;max-width:700px" ></canvas>
-<script>graphs3(JSON.parse({{dates_temp|tojson}}), JSON.parse("{{temps}}"),"temps_graph", 'Temperature Trends of the Season ', 'Dates', 'Temperature (F)' )</script>
-
-<canvas id="hn24_graph" style="width:100%;max-width:700px" ></canvas>
-<script>graphs3(JSON.parse({{dates_hn24|tojson}}), JSON.parse("{{hn24}}"),"hn24_graph", 'Hn24 Trends of the Season ', 'Dates', 'hn24 (inches)' )</script>
-
-<canvas id="hs_graph" style="width:100%;max-width:700px" ></canvas>
-<script>graphs3(JSON.parse({{dates_hs|tojson}}), JSON.parse("{{hs}}"),"hs_graph", 'Hs Trends of the Season ', 'Dates', 'hs (inches)' )</script>
 
 {% endblock %}

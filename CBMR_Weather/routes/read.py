@@ -1,5 +1,5 @@
 from CBMR_Weather.routes import bp_read
-from flask import render_template
+from flask import render_template, request
 from CBMR_Weather.extensions import db
 from CBMR_Weather.models import Snow, Avalanche
 from sqlalchemy import desc
@@ -11,24 +11,64 @@ import matplotlib.pyplot as plt
 import json
 
 
+'''@bp_read.route("/read", methods=['GET', 'POST'])
+def read():
+    dates_1 = []
+    data_1 = []
+    if request.method == 'POST':
+        data = request.form.get("season_1")
+        if data == "YTD Snow":
+            dates_1, data_1 = get_hn24_ytd_snow('2024-10-01', '2025-05-01')
+            return render_template('read.html', dates_1=json.dumps(dates_1), data_1=data_1)
+        elif data == "hn24":
+            dates_1, data_1 = get_hn24('2024-10-01', '2025-05-01')
+            return render_template('read.html', dates_1=json.dumps(dates_1), data_1=data_1)
 
+    else:
+        dates_1, data_1 = get_hn24_ytd_snow('2024-10-01', '2025-05-01')
+        print(dates_1)
+        print(data_1)
 
+    dates_1, data_1 = get_hn24_ytd_snow('2024-10-01', '2025-05-01')
+    return render_template('read.html', dates_snow = json.dumps(dates_1), ytd_snow = data_1)'''
 
 @bp_read.route("/read", methods=['GET', 'POST'])
+def read():
+    if request.method == 'POST':
+        data_request_1 = request.form.get("data_1")
+        season_1 = request.form.get("season_1")
+        title_1 = data_request_1 + " for " + season_1 + " season"
+
+        if data_request_1 == "YTD Snow":
+            dates_1, data_1 = get_hn24_ytd_snow(season_1)
+            return render_template('read.html', dates_1=json.dumps(dates_1), data_1=data_1, title_1 = json.dumps(title_1), y_label = json.dumps("YTD Snow (inches)"))
+        elif data_request_1 == "hn24":
+            dates_1, data_1 = get_hn24(season_1)
+            return render_template('read.html', dates_1=json.dumps(dates_1), data_1=data_1, title_1 = json.dumps(title_1), y_label = json.dumps("hn24 (inches)"))
+        else:
+            return render_template('read.html', dates_1=json.dumps([]), data_1=[], title_1=json.dumps(""), y_label = json.dumps(""))
+
+    title_1 = "YTD Snow for 24-25 season"
+    dates_1, data_1 = get_hn24_ytd_snow('24-25')
+
+    return render_template('read.html', dates_1 = json.dumps(dates_1), data_1 = data_1, title_1 = json.dumps(title_1), y_label = json.dumps("YTD Snow (inches)"))
+
+
+'''@bp_read.route("/read", methods=['GET', 'POST'])
 def read():
     #dates_snow, snow = get_ytd_snow()
     dates_swe, swe = get_swe_snow()
     dates_ytd_1, hn24_ytd_1 = get_hn24_ytd_snow('2023-10-01', '2024-05-01')
     dates_ytd_2, hn24_ytd_2 = get_hn24_ytd_snow('2024-10-01', '2025-05-01')
     #dates_ytd, hn24_ytd = get_ytd_snow('2024-10-01', '2025-05-01')
-    dates_ytd_2, hn24_2 = get_hn24_ytd_snow('2024-10-01', '2025-05-01')
+    dates_ytd, hn24_ytd = get_hn24_ytd_snow('2024-10-01', '2025-05-01')
     dates_ytd_swe, ytd_swe = get_swe_ytd_swe('2024-10-01', '2025-05-01')
     #really struggling with comparing two seasons ytd snow
     #got to get the dates to line up correctly
-    print(dates_ytd_1)
-    print((dates_ytd_2))
-    dates_ytd = [dates_ytd_1,dates_ytd_2]
-    hn24_ytd = [hn24_ytd_1,hn24_ytd_2]
+    # print(dates_ytd_1)
+    # print((dates_ytd_2))
+    # dates_ytd = [dates_ytd_1,dates_ytd_2]
+    # hn24_ytd = [hn24_ytd_1,hn24_ytd_2]
 
     dates_temp, temperatures = get_temp('2024-10-01', '2025-05-01')
     date_hn24, hn24 = get_hn24('2024-10-01', '2025-05-01')
@@ -40,7 +80,7 @@ def read():
                             dates_swe = json.dumps(dates_ytd_swe), ytd_swe = ytd_swe,
                            dates_temp =json.dumps(dates_temp), temps = temperatures,
                            dates_hn24 = json.dumps(date_hn24), hn24 = hn24,
-                           dates_hs = json.dumps(date_hs), hs = hs)
+                           dates_hs = json.dumps(date_hs), hs = hs)'''
 
 
 def get_ytd_snow(start_date,end_date):
@@ -68,8 +108,8 @@ def get_swe_snow():
             swe.append(row[0])
     return dates, swe
 
-def get_hn24_ytd_snow(start_date, end_date):
-    hn24_snow = db.session.query(Snow.hn24, Snow.date).filter(Snow.date.between(start_date,end_date)).order_by(Snow.date)
+def get_hn24_ytd_snow(season):
+    hn24_snow = db.session.query(Snow.hn24, Snow.date).filter(Snow.season == season).order_by(Snow.date)
     dates = []
     ytd_snow = []
     past_hn24 = 0
@@ -111,8 +151,8 @@ def get_temp(start_date, end_date):
             temperatures.append(row[0])
     return dates, temperatures
 
-def get_hn24(start_date, end_date):
-    hn24_snow_results = db.session.query(Snow.hn24, Snow.date).filter(Snow.date.between(start_date, end_date)).order_by(Snow.date)
+def get_hn24(season):
+    hn24_snow_results = db.session.query(Snow.hn24, Snow.date).filter(Snow.season == season).order_by(Snow.date)
     dates = []
     hn24_snow = []
     for row in hn24_snow_results:
