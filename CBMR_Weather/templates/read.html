@@ -6,27 +6,41 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
 
-
 <h1 id="title"> Read</h1><br>
 
 <script src="/static/graphs.js"></script>
 
-<canvas id="graph_1" style="width:100%;max-width:700px" ></canvas>
-<script>graph(JSON.parse({{dates_1|tojson}}), JSON.parse("{{data_1}}"),"graph_1", JSON.parse({{title_1|tojson}}), JSON.parse({{y_label|tojson}}))</script>
+<table>
+    <tbody>
+      <tr>
+        <td>
+            <form action="/read" method="post">
+                <label for="data_1">Data</label>
+                <select  id = "data_1" name = "data_1" >
+                    <option value = "None">None</option>
+                    <option value = "YTD Snow">YTD Snow</option>
+                    <option value = "YTD Swe">YTD Swe</option>
+                    <option value = "hn24">hn24</option>
+                    <option value = "hs">hs</option>
+                    <option value = "temp">Temperature</option>
+                </select>
 
-<form action="/read" method="post">
-    <select name = "data_1">
-        <option value = "None">None</option>
-        <option value = "YTD Snow">YTD Snow</option>
-        <option value = "hn24">hn24</option>
-    </select>
-    <select name = "season_1">
-        <option value = "None">None</option>
-        <option value = "23-24">23-24</option>
-        <option value = "24-25">24-25</option>
-    </select>
-    <button type="submit">Submit</button>
-</form>
-
+                <label for="season_1">Season</label>
+                <select id = "season_1" name = "season_1" >
+                    <option value = "None">None</option>
+                    {% for i in seasons%}
+                        <option value = "{{i}}">{{i}}</option>
+                    {%endfor%}
+                </select>
+                <button type="submit">Submit</button>
+            </form>
+        </td>
+        <td>
+            <canvas id="graph_1" style="width:100%;max-width:700px" ></canvas>
+            <script>graph(JSON.parse({{dates_1|tojson}}), JSON.parse("{{data_1}}"),"graph_1", JSON.parse({{title_1|tojson}}), JSON.parse({{y_label|tojson}}))</script>
+        </td>
+      </tr>
+    </tbody>
+</table>
 
 {% endblock %}

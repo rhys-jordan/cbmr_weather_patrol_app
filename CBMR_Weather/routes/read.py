@@ -34,24 +34,44 @@ def read():
 
 @bp_read.route("/read", methods=['GET', 'POST'])
 def read():
+    seasons_db = db.session.query(Snow.season).distinct()
+    seasons = []
+    for s in seasons_db:
+        seasons.append(s[0])
+
     if request.method == 'POST':
         data_request_1 = request.form.get("data_1")
         season_1 = request.form.get("season_1")
         title_1 = data_request_1 + " for " + season_1 + " season"
-
         if data_request_1 == "YTD Snow":
             dates_1, data_1 = get_hn24_ytd_snow(season_1)
-            return render_template('read.html', dates_1=json.dumps(dates_1), data_1=data_1, title_1 = json.dumps(title_1), y_label = json.dumps("YTD Snow (inches)"))
+            return render_template('read.html',seasons = seasons,  dates_1=json.dumps(dates_1), data_1=data_1,
+                                   title_1 = json.dumps(title_1), y_label = json.dumps("YTD Snow (inches)"))
+        elif data_request_1 == "YTD Swe":
+            dates_1, data_1 = get_swe_ytd_swe(season_1)
+            return render_template('read.html',seasons = seasons,  dates_1=json.dumps(dates_1), data_1=data_1,
+                                   title_1 = json.dumps(title_1), y_label = json.dumps("YTD Swe"))
         elif data_request_1 == "hn24":
             dates_1, data_1 = get_hn24(season_1)
-            return render_template('read.html', dates_1=json.dumps(dates_1), data_1=data_1, title_1 = json.dumps(title_1), y_label = json.dumps("hn24 (inches)"))
+            return render_template('read.html',seasons = seasons,  dates_1=json.dumps(dates_1), data_1=data_1,
+                                   title_1 = json.dumps(title_1), y_label = json.dumps("hn24 (inches)"))
+        elif data_request_1 == "hs":
+            dates_1, data_1 = get_hs(season_1)
+            return render_template('read.html', seasons=seasons, dates_1=json.dumps(dates_1), data_1=data_1,
+                                   title_1=json.dumps(title_1), y_label=json.dumps("hs (inches)"))
+        elif data_request_1 == "temp":
+            dates_1, data_1 = get_temp(season_1)
+            return render_template('read.html', seasons=seasons, dates_1=json.dumps(dates_1), data_1=data_1,
+                                   title_1=json.dumps(title_1), y_label=json.dumps("Temperature (F)"))
         else:
-            return render_template('read.html', dates_1=json.dumps([]), data_1=[], title_1=json.dumps(""), y_label = json.dumps(""))
+            return render_template('read.html', seasons = seasons, dates_1=json.dumps([]),
+                                   data_1=[], title_1=json.dumps(""), y_label = json.dumps(""))
+
 
     title_1 = "YTD Snow for 24-25 season"
-    dates_1, data_1 = get_hn24_ytd_snow('24-25')
-
-    return render_template('read.html', dates_1 = json.dumps(dates_1), data_1 = data_1, title_1 = json.dumps(title_1), y_label = json.dumps("YTD Snow (inches)"))
+    dates_1, data_1 = get_hn24_ytd_snow(seasons[0])
+    return render_template('read.html', seasons = seasons, dates_1 = json.dumps(dates_1),
+                           data_1 = data_1, title_1 = json.dumps(title_1), y_label = json.dumps("YTD Snow (inches)"))
 
 
 '''@bp_read.route("/read", methods=['GET', 'POST'])
@@ -124,8 +144,8 @@ def get_hn24_ytd_snow(season):
     return dates, ytd_snow
 
 
-def get_swe_ytd_swe(start_date, end_date):
-    swe = db.session.query(Snow.swe, Snow.date).filter(Snow.date.between(start_date,end_date)).order_by(Snow.date)
+def get_swe_ytd_swe(season):
+    swe = db.session.query(Snow.swe, Snow.date).filter(Snow.season == season).order_by(Snow.date)
     dates = []
     ytd_swe = []
     past_hn24 = 0
@@ -139,8 +159,8 @@ def get_swe_ytd_swe(start_date, end_date):
             ytd_swe.append(0 + past_hn24 )
     return dates, ytd_swe
 
-def get_temp(start_date, end_date):
-    temps = db.session.query(Snow.temperature, Snow.date).filter(Snow.date.between(start_date,end_date)).order_by(Snow.date)
+def get_temp(season):
+    temps = db.session.query(Snow.temperature, Snow.date).filter(Snow.season == season).order_by(Snow.date)
     dates = []
     temperatures = []
     for row in temps:
@@ -164,8 +184,8 @@ def get_hn24(season):
             hn24_snow.append(0)
     return dates, hn24_snow
 
-def get_hs(start_date, end_date):
-    hs_snow_results = db.session.query(Snow.hs, Snow.date).filter(Snow.date.between(start_date, end_date)).order_by(Snow.date)
+def get_hs(season):
+    hs_snow_results = db.session.query(Snow.hs, Snow.date).filter(Snow.season == season).order_by(Snow.date)
     dates = []
     hs_snow = []
     for row in hs_snow_results:
