@@ -35,20 +35,21 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //Buttons for update-form avalanches
 function addProblem2() {
-
     document.getElementById("problem_2").hidden = false;
+    document.getElementById("remove_1").hidden = true;
     document.getElementById("problem_2_button").hidden = true;
     document.getElementById("problem_3_button").hidden = false;
-
-
+    document.getElementById("removeproblem2button").hidden = false;
 }
 
 
 function addProblem3() {
-
+    document.getElementById("removeproblem2button").hidden = true;
     document.getElementById("problem_3").hidden = false;
     document.getElementById("problem_3_button").hidden = true;
+    document.getElementById("problem_3_button").hidden = true;
     document.getElementById("problem_4_button").hidden = false;
+    document.getElementById("removeproblem3button").hidden = false;
 
 
 }
@@ -57,10 +58,34 @@ function addProblem4() {
 
     document.getElementById("problem_4").hidden = false;
     document.getElementById("problem_4_button").hidden = true;
+    document.getElementById("removeproblem3button").hidden = true;
+    document.getElementById("removeproblem4button").hidden = false;
 
 
 }
-
+function hideproblem2(){
+    document.getElementById("problem_2").hidden = true;
+    resetProblem2Fields();
+    document.getElementById("removeproblem2button").hidden = true;
+    document.getElementById("problem_2_button").hidden = false;
+    document.getElementById("remove_1").hidden = false;
+    document.getElementById("problem_3_button").hidden = true;
+}
+function hideproblem3(){
+    document.getElementById("problem_3").hidden = true;
+    resetProblem3Fields();
+    document.getElementById("removeproblem3button").hidden = true;
+    document.getElementById("problem_3_button").hidden = false;
+    document.getElementById("removeproblem2button").hidden = false;
+    document.getElementById("problem_4_button").hidden = true;
+}
+function hideproblem4(){
+    document.getElementById("problem_4").hidden = true;
+    resetProblem4Fields();
+    document.getElementById("removeproblem4button").hidden = true;
+    document.getElementById("problem_4_button").hidden = false;
+    document.getElementById("removeproblem3button").hidden = false;
+}
 
 function recheck() {
     alert("this date exists please input a valid date or go to the the view tab to update an existing form.")
@@ -153,10 +178,31 @@ function removeAvalancheProblem1(id) {
 
     document.getElementById(id).hidden = true;
     document.getElementById('restore').hidden = false;
-    document.getElementById('add_avy').hidden = true;
     document.getElementById('remove_1').hidden = true;
     resetProblem1Fields();
+    if(document.getElementById('add_avy')){
+    document.getElementById('add_avy').hidden = true;
+    }
+    if(document.getElementById("problem_2_button")){
+         document.getElementById("problem_2_button").hidden =true;
+    }
 }
+function restoreProblem1() {
+    let problem1 = document.getElementById("problem_1");
+    if (problem1) {
+        problem1.hidden = false;
+    }
+    if(document.getElementById("problem_2_button")){
+         document.getElementById("problem_2_button").hidden = false;
+    }
+    document.getElementById('restore').hidden = true;
+    document.getElementById('remove_1').hidden = false;
+    if(document.getElementById('add_avy')){
+        document.getElementById('add_avy').hidden = false;
+    }
+}
+
+
 function resetProblem1Fields() {
     // Reset dropdowns
     document.getElementById("location1").value = "";
@@ -176,12 +222,59 @@ function resetProblem1Fields() {
     document.getElementById("likelihood_1").value = "";
 }
 
-function restoreProblem1() {
-    let problem1 = document.getElementById("problem_1");
-    if (problem1) {
-        problem1.hidden = false;
-    }
-    document.getElementById('restore').hidden = true;
-    document.getElementById('add_avy').hidden = false;
-     document.getElementById('remove_1').hidden = false;
+function resetProblem2Fields() {
+    // Reset dropdowns
+    document.getElementById("location2").value = "";
+    document.getElementById("avalanche_problem_2").value = "";
+
+    // Reset checkboxes (all aspects at all elevations)
+    const checkboxNames = [
+        "btl_aspect_2[]", "ntl_aspect_2[]", "atl_aspect_2[]"
+    ];
+    checkboxNames.forEach(name => {
+        const checkboxes = document.getElementsByName(name);
+        checkboxes.forEach(cb => cb.checked = false);
+    });
+
+    // Reset text inputs
+    document.getElementById("size_2").value = "";
+    document.getElementById("likelihood_2").value = "";
+}
+
+function resetProblem3Fields() {
+    // Reset dropdowns
+    document.getElementById("location3").value = "";
+    document.getElementById("avalanche_problem_3").value = "";
+
+    // Reset checkboxes (all aspects at all elevations)
+    const checkboxNames = [
+        "btl_aspect_3[]", "ntl_aspect_3[]", "atl_aspect_3[]"
+    ];
+    checkboxNames.forEach(name => {
+        const checkboxes = document.getElementsByName(name);
+        checkboxes.forEach(cb => cb.checked = false);
+    });
+
+    // Reset text inputs
+    document.getElementById("size_3").value = "";
+    document.getElementById("likelihood_3").value = "";
+}
+
+function resetProblem4Fields() {
+    // Reset dropdowns
+    document.getElementById("location4").value = "";
+    document.getElementById("avalanche_problem_4").value = "";
+
+    // Reset checkboxes (all aspects at all elevations)
+    const checkboxNames = [
+        "btl_aspect_4[]", "ntl_aspect_4[]", "atl_aspect_4[]"
+    ];
+    checkboxNames.forEach(name => {
+        const checkboxes = document.getElementsByName(name);
+        checkboxes.forEach(cb => cb.checked = false);
+    });
+
+    // Reset text inputs
+    document.getElementById("size_4").value = "";
+    document.getElementById("likelihood_4").value = "";
 }
