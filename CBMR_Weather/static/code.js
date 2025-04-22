@@ -131,13 +131,57 @@ const maxProblems = 4; // Maximum number of avalanche problems
             newProblem.appendChild(removeBtn);
 
             document.getElementById("problems-container").appendChild(newProblem);
+            if (document.getElementById('problem_2')) {
+                document.getElementById('remove_1').hidden = true;
+            }
+            else{
+                document.getElementById('remove_1').hidden = false;
+            }
         }
 
         function removeAvalancheProblem(id) {
-            if (problemCount > 1) {
-                document.getElementById(id).remove();
-                problemCount--;
-            } else {
-                alert("At least one avalanche problem must be present.");
+            document.getElementById(id).remove();
+            problemCount--;
+            if (document.getElementById('problem_2')) {
+                document.getElementById('remove_1').hidden = true;
+            }
+            else{
+                document.getElementById('remove_1').hidden = false;
             }
         }
+function removeAvalancheProblem1(id) {
+
+    document.getElementById(id).hidden = true;
+    document.getElementById('restore').hidden = false;
+    document.getElementById('add_avy').hidden = true;
+    document.getElementById('remove_1').hidden = true;
+    resetProblem1Fields();
+}
+function resetProblem1Fields() {
+    // Reset dropdowns
+    document.getElementById("location1").value = "";
+    document.getElementById("avalanche_problem_1").value = "";
+
+    // Reset checkboxes (all aspects at all elevations)
+    const checkboxNames = [
+        "btl_aspect_1[]", "ntl_aspect_1[]", "atl_aspect_1[]"
+    ];
+    checkboxNames.forEach(name => {
+        const checkboxes = document.getElementsByName(name);
+        checkboxes.forEach(cb => cb.checked = false);
+    });
+
+    // Reset text inputs
+    document.getElementById("size_1").value = "";
+    document.getElementById("likelihood_1").value = "";
+}
+
+function restoreProblem1() {
+    let problem1 = document.getElementById("problem_1");
+    if (problem1) {
+        problem1.hidden = false;
+    }
+    document.getElementById('restore').hidden = true;
+    document.getElementById('add_avy').hidden = false;
+     document.getElementById('remove_1').hidden = false;
+}
