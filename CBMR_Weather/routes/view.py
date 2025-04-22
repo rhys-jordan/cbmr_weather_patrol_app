@@ -58,8 +58,11 @@ def delete_am_data(inputDate):
             Avalanche.query.filter_by(Snow_id=dateCheck.id).delete(synchronize_session=False)
             db.session.delete(dateCheck)
             db.session.commit()
+            dateCheck_pm = Pm_form.query.filter_by(date=inputDate).first()
+            if dateCheck_pm:
+                db.session.delete(dateCheck_pm)
+                db.session.commit()
     snow = Snow.query.order_by(desc(Snow.date)).all()
-
     return redirect(url_for('view.view', snow=snow))
 
 @bp_view.route('/view_pm/<inputDate>', methods=['GET', 'POST'])
