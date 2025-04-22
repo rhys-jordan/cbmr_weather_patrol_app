@@ -82,8 +82,6 @@ function confirm_data_delete_pm(date){
 
 
 function update_pm_form(pm_form_dates,date) {
-        console.log(pm_form_dates)
-        console.log(date)
         if (pm_form_dates.includes(date)) {
             window.location.href = "/update-pm-form/" + date;
         } else {

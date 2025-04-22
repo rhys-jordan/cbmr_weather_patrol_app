@@ -48,7 +48,6 @@ def view():
 
     snow = query.all()
     pm_form_dates = [str(i.date) for i in Pm_form.query.all()]
-    print(pm_form_dates)
     return render_template("view.html", snow=snow, search=search_query, column=search_column, sort_order=sort_order,pm_form_dates=pm_form_dates)
 
 @bp_view.route('/view_am/<inputDate>', methods=['GET', 'POST'])
