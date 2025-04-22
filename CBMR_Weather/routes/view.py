@@ -14,8 +14,6 @@ def view():
     search_query = request.args.get("search", "").strip()
     search_column = request.args.get("column", "").strip()
     sort_order = request.args.get("sort_order", "asc")
-
-    # Mapping of valid columns to Snow model attributes
     column_map = {
         "date": Snow.date,
         "season": Snow.season,
@@ -32,27 +30,20 @@ def view():
     }
 
     query = Snow.query
-
-    # Apply search filter if both search_query and search_column are provided and valid
     if search_query and search_column in column_map:
         column_attr = column_map[search_column]
         like_pattern = f"%{search_query}%"
         query = query.filter(db.cast(column_attr, db.String).like(like_pattern))
-
     if search_column in column_map:
         column_attr = column_map[search_column]
         query = query.filter(column_attr.isnot(None))
-    # Apply sorting based on search_column and sort_order
     if search_column in column_map:
         column_attr = column_map[search_column]
         if sort_order == "desc":
-            # Ensure peak_gust is cast to float for proper sorting
             query = query.order_by(db.cast(column_attr, db.Float).desc())
         else:
-            # Ensure peak_gust is cast to float for proper sorting
             query = query.order_by(db.cast(column_attr, db.Float).asc())
     else:
-        # Default sorting by date descending
         query = query.order_by(Snow.date.desc())
 
     snow = query.all()

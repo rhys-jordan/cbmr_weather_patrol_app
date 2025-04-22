@@ -75,9 +75,7 @@ def am_form():
                         past_24_peak_gust_time=past_24_peak_gust_time,future_peak_gust_mph=future_peak_gust_mph,future_peak_gust_direction=future_peak_gust_direction,
                         future_peak_gust_time=future_peak_gust_time)
             db.session.add(snow)
-
             id = Snow.query.filter_by(date=date).first().id
-
             if avalanche_problem_1:
                 avy1 = Avalanche(problem=avalanche_problem_1, size = size_1, likelihood = likelihood_1, btl_aspect=btl_aspect_1,
                                  ntl_aspect=ntl_aspect_1,atl_aspect=atl_aspect_1, location=location_1, Snow_id=id)
