@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block title%} View {%endblock%}
 {% block content%}
+<script>
+    // Pass the pm_form_dates list as a JavaScript array
+    const pm_form_dates = {{ pm_form_dates | tojson }};
+</script>
 <h1 id="title"> View Data</h1><br>
 
 <form method="get" action="{{ url_for('view.view') }}" id="view_search">
@@ -99,7 +103,7 @@
     {% for i in snow%}
         <tr>
             <td> <a href="/update-form/{{i.date}}">{{ i.date }}</a></td>
-            <td><a href="/update-pm-form/{{i.date}}">Update</a></td>
+            <td onclick="update_pm_form(pm_form_dates,'{{i.date}}')"> <a href="javascript:void(0)">Update</a></td>
             <td>{{ i.hs }}</td>
             <td>{{ i.hn24 }}</td>
             <td>{{ i.swe }}</td>

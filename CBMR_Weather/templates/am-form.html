@@ -14,7 +14,7 @@
         <label>Forecaster: </label> <input type="text" id="forecaster" name="forecaster"><br>
     </div>
     <div class = "snow_row">
-        <label>HS:</label> <input type="number" id="hs" name="hs" step="any">
+        <label>HS:</label> <input type="number" id="hs" name="hs" step="any" value='{{hs}}'>
         <label>HN24:</label><input type="number" id="hn24" name="hn24" step="any" oninput="calculate_ytd_snow({{ytd_snowPre}})">
         <label>SWE:</label><input type="number" id="swe" name="swe" step="any" oninput="calculate_ytd_swe({{ytd_swePre}})">
         <label>HST:</label> <input type="number" id="hst" name="hst" step="any">

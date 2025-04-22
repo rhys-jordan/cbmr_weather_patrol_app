@@ -110,12 +110,14 @@ def am_form():
                 snow.ytd_snow=0
             if snow.ytd_swe == None:
                 snow.ytd_swe=0
+            if snow.hs == None:
+                snow.hs=0
             return render_template('am-form.html', now=formatted_now, ytd_snowPre=snow.ytd_snow,ytd_swePre=snow.ytd_swe,
                                    critical_info=snow.critical_info,observation_notes=snow.observation_notes,weather_forecast=snow.weather_forecast,
                                    avalanche_forecast_discussion=snow.avalanche_forecast_discussion,summary_previous_day=snow.summary_previous_day,
-                                   mitigation_plan=snow.mitigation_plan,pertinent_terrain_info=snow.pertinent_terrain_info)
+                                   mitigation_plan=snow.mitigation_plan,pertinent_terrain_info=snow.pertinent_terrain_info,hs=snow.hs)
         else:
             return render_template('am-form.html', now=formatted_now, ytd_snowPre=0,ytd_swePre=0,
                                    critical_info="",observation_notes="",weather_forecast="",
                                    avalanche_forecast_discussion="",summary_previous_day="",
-                                   mitigation_plan="",pertinent_terrain_info="")
+                                   mitigation_plan="",pertinent_terrain_info="",hs=0)
