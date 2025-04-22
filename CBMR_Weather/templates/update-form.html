@@ -781,7 +781,7 @@
     <input type="text" id="likelihood_4" name="likelihood_4">
 </div>
     {% set num_problems = avalanches | length %}
-    <button type="button" onclick="addProblem2()" id="problem_2_button"{% if num_problems < 1 %} hidden="true" {% endif %}>Add Second Problem</button>
+    <button type="button" onclick="addProblem2()" id="problem_2_button">Add Second Problem</button>
     <button type="button" onclick="addProblem3()" id="problem_3_button"{% if num_problems < 2 %} hidden="true" {% endif %}>Add Third Problem</button>
     <button type="button" onclick="addProblem4()" id="problem_4_button" {% if num_problems < 3 %} hidden="true" {% endif %}>Add Fourth Problem</button>
     <button type="button" onclick="removeAvalancheProblem1('problem_1')" id="remove_1" name="remove_1" {% if num_problems > 1 %} hidden="true" {% endif %}>Remove Problem 1</button>
