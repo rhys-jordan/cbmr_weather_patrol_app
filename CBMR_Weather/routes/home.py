@@ -1,12 +1,14 @@
 from flask import render_template, request, redirect, session
 from flask_login import  login_user,logout_user,current_user,login_required
+from sqlalchemy import desc, asc
 
 from CBMR_Weather.routes import bp_home
 from CBMR_Weather import db
-from CBMR_Weather.models import User
+from CBMR_Weather.models import User, Snow, Avalanche, Pm_form
 
 @bp_home.route('/')
 def home():
+
     if current_user.is_authenticated:
         return render_template('home.html')
     else:

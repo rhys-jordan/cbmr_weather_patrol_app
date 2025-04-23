@@ -1,6 +1,19 @@
 {% extends "base.html" %}
 {% block title%} Read {%endblock%}
+
 {% block content%}
+
 <h1 id="title"> Read</h1><br>
+
+<body>
+    <div>
+        <ul>
+            <li><strong>Greatest 24hr Snowfall:</strong> {{stats.hn24Greatest}}in. <strong>on</strong> {{stats.hn24Greatest_date}}</li>
+            <li><strong>Coldest Temperature:</strong> {{stats.temperatureColdest}}° <strong>on</strong> {{stats.temperatureColdest_date}}</li>
+            <li><strong>Deepest Snowpack:</strong> {{stats.hsDeepest}}in. <strong>on</strong> {{stats.hsDeepest_date}}</li>
+        </ul>
+    </div>
+
+</body>
 
 {% endblock %}

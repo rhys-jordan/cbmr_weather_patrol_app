@@ -3,23 +3,45 @@ nav {
     width: 100%;
 }
 
-nav ul {
+.navbar {
+    list-style-type: none;
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    margin: 0;
 }
 
-nav ul li {
-    display: inline;
+.navbar li {
     padding: 10px;
 }
 
-nav ul li a:link, nav ul li a:visited{
+.navbar li a:link,
+.navbar li a:visited {
     color: white;
+    text-decoration: none;
 }
 
-nav ul li a:hover{
+.navbar li a:hover {
     color: green;
+}
+
+.snow-data {
+    margin-left: auto;
+    color: white;
+    font-weight: normal;
+    padding: 10px;
+    white-space: nowrap;
+}
+
+.nav-logo {
+    padding: 0 10px;
+}
+
+.nav-img {
+    height: 30px;
+    width: 90px;
+    vertical-align: middle;
 }
 
 input{
@@ -48,6 +70,7 @@ p.error-text {
 }
 
 p{ color: purple;}
+
 img.correct{
     border: 5px solid green;
 }
@@ -451,4 +474,17 @@ button {
 }
 #snowTable th, td {
     text-align: center;
+}
+
+.info-box {
+    position: fixed;
+    top: 20px; 
+    left: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    font-size: 18px;
+    max-width: 400px;
+    text-align: left;
 }

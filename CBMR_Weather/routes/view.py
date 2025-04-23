@@ -1,5 +1,10 @@
+
+
 from flask_login import login_required
-from flask import request,redirect,url_for
+from flask import request, redirect, url_for, send_file
+import pandas as pd
+from datetime import datetime
+import io
 
 # from CBMR_Weather.app import Pm_form
 from CBMR_Weather.routes import bp_view
@@ -38,3 +43,31 @@ def delete_pm_data(inputDate):
     snow = Snow.query.order_by(desc(Snow.date)).all()
 
     return redirect(url_for('view.view', snow=snow))
+
+@bp_view.route('/view/export')
+@login_required
+def download_excel():
+
+    snow = Snow.query.order_by(desc(Snow.date)).all()
+    # data = [s.__dict__ for s in snow]
+    # for d in data:
+    #     d.pop('_sa_instance_state', None)
+    # df = pd.DataFrame(data)
+
+    columns = [col.name for col in Snow.__table__.columns]
+    data = [{col: getattr(s, col) for col in columns} for s in snow]
+    df = pd.DataFrame(data)
+
+    print(df.iloc[0])
+
+    output = io.BytesIO()
+    with pd.ExcelWriter(output) as writer:  # No need to specify engine
+        df.to_excel(writer, index=False, sheet_name='CBMR_allData')
+    output.seek(0)
+
+    fileName = "CBMR_allData_" + datetime.now().date().strftime('%Y-%m-%d')
+
+    return send_file(output,
+                     download_name=fileName,
+                     as_attachment=True,
+                     mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
