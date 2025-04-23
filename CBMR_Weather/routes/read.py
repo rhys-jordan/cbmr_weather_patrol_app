@@ -11,27 +11,6 @@ import matplotlib.pyplot as plt
 import json
 
 
-'''@bp_read.route("/read", methods=['GET', 'POST'])
-def read():
-    dates_1 = []
-    data_1 = []
-    if request.method == 'POST':
-        data = request.form.get("season_1")
-        if data == "YTD Snow":
-            dates_1, data_1 = get_hn24_ytd_snow('2024-10-01', '2025-05-01')
-            return render_template('read.html', dates_1=json.dumps(dates_1), data_1=data_1)
-        elif data == "hn24":
-            dates_1, data_1 = get_hn24('2024-10-01', '2025-05-01')
-            return render_template('read.html', dates_1=json.dumps(dates_1), data_1=data_1)
-
-    else:
-        dates_1, data_1 = get_hn24_ytd_snow('2024-10-01', '2025-05-01')
-        print(dates_1)
-        print(data_1)
-
-    dates_1, data_1 = get_hn24_ytd_snow('2024-10-01', '2025-05-01')
-    return render_template('read.html', dates_snow = json.dumps(dates_1), ytd_snow = data_1)'''
-
 @bp_read.route("/read", methods=['GET', 'POST'])
 def read():
     seasons_db = db.session.query(Snow.season).distinct()
@@ -74,35 +53,6 @@ def read():
                            data_1 = data_1, title_1 = json.dumps(title_1), y_label = json.dumps("YTD Snow (inches)"))
 
 
-'''@bp_read.route("/read", methods=['GET', 'POST'])
-def read():
-    #dates_snow, snow = get_ytd_snow()
-    dates_swe, swe = get_swe_snow()
-    dates_ytd_1, hn24_ytd_1 = get_hn24_ytd_snow('2023-10-01', '2024-05-01')
-    dates_ytd_2, hn24_ytd_2 = get_hn24_ytd_snow('2024-10-01', '2025-05-01')
-    #dates_ytd, hn24_ytd = get_ytd_snow('2024-10-01', '2025-05-01')
-    dates_ytd, hn24_ytd = get_hn24_ytd_snow('2024-10-01', '2025-05-01')
-    dates_ytd_swe, ytd_swe = get_swe_ytd_swe('2024-10-01', '2025-05-01')
-    #really struggling with comparing two seasons ytd snow
-    #got to get the dates to line up correctly
-    # print(dates_ytd_1)
-    # print((dates_ytd_2))
-    # dates_ytd = [dates_ytd_1,dates_ytd_2]
-    # hn24_ytd = [hn24_ytd_1,hn24_ytd_2]
-
-    dates_temp, temperatures = get_temp('2024-10-01', '2025-05-01')
-    date_hn24, hn24 = get_hn24('2024-10-01', '2025-05-01')
-    date_hs, hs = get_hs('2024-10-01', '2025-05-01')
-
-
-
-    return render_template('read.html', dates_snow = json.dumps(dates_ytd), ytd_snow = hn24_ytd,
-                            dates_swe = json.dumps(dates_ytd_swe), ytd_swe = ytd_swe,
-                           dates_temp =json.dumps(dates_temp), temps = temperatures,
-                           dates_hn24 = json.dumps(date_hn24), hn24 = hn24,
-                           dates_hs = json.dumps(date_hs), hs = hs)'''
-
-
 def get_ytd_snow(start_date,end_date):
     ytd_snow = db.session.query(Snow.ytd_snow, Snow.date).filter(Snow.date.between(start_date,end_date)).order_by(Snow.date)
     dates = []
@@ -112,7 +62,6 @@ def get_ytd_snow(start_date,end_date):
 
         if (row[0] != None):
             dates.append(date_format)
-            # dates.append(str(inct))
             snow.append(row[0])
     return dates, snow
 
@@ -124,7 +73,6 @@ def get_swe_snow():
         date_format = datetime.strftime(row[1], '%m-%d-%Y')
         if (row[0] != None):
             dates.append(date_format)
-            # dates.append(str(inct))
             swe.append(row[0])
     return dates, swe
 
@@ -136,10 +84,15 @@ def get_hn24_ytd_snow(season):
     for row in hn24_snow:
         date_format = datetime.strftime(row[1], '%m-%d-%Y')
         dates.append(date_format)
-        if (row[0] != None and type(row[0]) != str):
-            ytd_snow.append(row[0] + past_hn24)
-            past_hn24 = row[0] + past_hn24
+        if (row[0] != None ):
+            try:
+                hn24=float(row[0])
+                ytd_snow.append(hn24 + past_hn24)
+                past_hn24 = hn24 + past_hn24
+            except:
+                hn24=0
         else:
+
             ytd_snow.append(0 + past_hn24 )
     return dates, ytd_snow
 
@@ -178,10 +131,15 @@ def get_hn24(season):
     for row in hn24_snow_results:
         date_format = datetime.strftime(row[1], '%m-%d-%Y')
         dates.append(date_format)
-        if (row[0] != None and type(row[0]) != str):
-            hn24_snow.append(row[0] )
+        if (row[0] != None):
+            try:
+                hn24 = float(row[0])
+                hn24_snow.append(hn24)
+            except:
+                hn24=0
         else:
             hn24_snow.append(0)
+
     return dates, hn24_snow
 
 def get_hs(season):
