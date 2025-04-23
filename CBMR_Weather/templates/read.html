@@ -10,37 +10,101 @@
 
 <script src="/static/graphs.js"></script>
 
-<table>
-    <tbody>
-      <tr>
-        <td>
-            <form action="/read" method="post">
-                <label for="data_1">Data</label>
-                <select  id = "data_1" name = "data_1" >
-                    <option value = "None">None</option>
-                    <option value = "YTD Snow">YTD Snow</option>
-                    <option value = "YTD Swe">YTD Swe</option>
-                    <option value = "hn24">hn24</option>
-                    <option value = "hs">hs</option>
-                    <option value = "temp">Temperature</option>
-                </select>
 
-                <label for="season_1">Season</label>
-                <select id = "season_1" name = "season_1" >
-                    <option value = "None">None</option>
-                    {% for i in seasons%}
-                        <option value = "{{i}}">{{i}}</option>
-                    {%endfor%}
-                </select>
+            <form action="/read" method="post">
+                <div id="graph_1_input">
+    <label for="data_1">Data 1:</label>
+    <select id="data_1" name="data_1">
+        <option value="None">None</option>
+        <option value="YTD Snow">YTD Snow</option>
+        <option value="YTD Swe">YTD Swe</option>
+        <option value="hn24">hn24</option>
+        <option value="hs">hs</option>
+        <option value="temp">Temperature</option>
+    </select>
+
+    <label for="season_1">Season 1:</label>
+    <select id="season_1" name="season_1">
+        <option value="None">None</option>
+        {% for i in seasons %}
+            <option value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<div id="graph_2_input">
+    <label for="data_2">Data 2:</label>
+    <select id="data_2" name="data_2">
+        <option value="None">None</option>
+        <option value="YTD Snow">YTD Snow</option>
+        <option value="YTD Swe">YTD Swe</option>
+        <option value="hn24">hn24</option>
+        <option value="hs">hs</option>
+        <option value="temp">Temperature</option>
+    </select>
+
+    <label for="season_2">Season 2:</label>
+    <select id="season_2" name="season_2">
+        <option value="None">None</option>
+        {% for i in seasons %}
+            <option value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<div id="graph_3_input">
+    <label for="data_3">Data 3:</label>
+    <select id="data_3" name="data_3">
+        <option value="None">None</option>
+        <option value="YTD Snow">YTD Snow</option>
+        <option value="YTD Swe">YTD Swe</option>
+        <option value="hn24">hn24</option>
+        <option value="hs">hs</option>
+        <option value="temp">Temperature</option>
+    </select>
+
+    <label for="season_3">Season 3:</label>
+    <select id="season_3" name="season_3">
+        <option value="None">None</option>
+        {% for i in seasons %}
+            <option value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+<div id="graph_4_input">
+    <label for="data_4">Data 4:</label>
+    <select id="data_4" name="data_4">
+        <option value="None">None</option>
+        <option value="YTD Snow">YTD Snow</option>
+        <option value="YTD Swe">YTD Swe</option>
+        <option value="hn24">hn24</option>
+        <option value="hs">hs</option>
+        <option value="temp">Temperature</option>
+    </select>
+
+    <label for="season_4">Season 4:</label>
+    <select id="season_4" name="season_4">
+        <option value="None">None</option>
+        {% for i in seasons %}
+            <option value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+    </select>
+</div>
                 <button type="submit">Submit</button>
-            </form>
-        </td>
-        <td>
-            <canvas id="graph_1" style="width:100%;max-width:700px" ></canvas>
-            <script>graph(JSON.parse({{dates_1|tojson}}), JSON.parse("{{data_1}}"),"graph_1", JSON.parse({{title_1|tojson}}), JSON.parse({{y_label|tojson}}))</script>
-        </td>
-      </tr>
-    </tbody>
-</table>
+</form>
+<div id="leftHalf">
+    <h1>Graph 1:</h1>
+    <canvas id="graph_1" style="width:100%;max-width:700px" ></canvas>
+    <script>graph(JSON.parse({{dates_1|tojson}}), JSON.parse("{{data_1}}"),"graph_1", JSON.parse({{title_1|tojson}}), JSON.parse({{y_label_1|tojson}}))</script>
+    <h1>Graph 2:</h1><canvas id="graph_2" style="width:100%;max-width:700px" ></canvas>
+    <script>graph(JSON.parse({{dates_2|tojson}}), JSON.parse("{{data_2}}"),"graph_2", JSON.parse({{title_2|tojson}}), JSON.parse({{y_label_2|tojson}}))</script>
+</div>
+<div id="rightHalf">
+    <h1>Graph 3:</h1><canvas id="graph_3" style="width:100%;max-width:700px" ></canvas>
+    <script>graph(JSON.parse({{dates_3|tojson}}), JSON.parse("{{data_3}}"),"graph_3", JSON.parse({{title_3|tojson}}), JSON.parse({{y_label_3|tojson}}))</script>
+    <h1>Graph 4:</h1><canvas id="graph_4" style="width:100%;max-width:700px" ></canvas>
+    <script>graph(JSON.parse({{dates_4|tojson}}), JSON.parse("{{data_4}}"),"graph_4", JSON.parse({{title_4|tojson}}), JSON.parse({{y_label_4|tojson}}))</script>
+</div>
 
 {% endblock %}
