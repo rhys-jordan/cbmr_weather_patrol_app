@@ -17,150 +17,92 @@ def read():
     seasons = []
     for s in seasons_db:
         seasons.append(s[0])
-
     if request.method == 'POST':
-        data_request_1 = request.form.get("data_1")
-        season_1 = request.form.get("season_1")
+        # Get form values and store them in previous_request
+        previous_request = {
+            'data_1': request.form['data_1'],
+            'season_1': request.form['season_1'],
+            'data_2': request.form['data_2'],
+            'season_2': request.form['season_2'],
+            'data_3': request.form['data_3'],
+            'season_3': request.form['season_3'],
+            'data_4': request.form['data_4'],
+            'season_4': request.form['season_4']
+        }
+
+        # Process data for graph 1
+        data_request_1 = previous_request['data_1']
+        season_1 = previous_request['season_1']
+        dates_1, data_1 = get_data_and_title(data_request_1, season_1)
         title_1 = data_request_1 + " for " + season_1 + " season"
-        if data_request_1 == "YTD Snow":
-            dates_1, data_1 = get_hn24_ytd_snow(season_1)
-            title_1="YTD Snow (inches)"
 
-        elif data_request_1 == "YTD Swe":
-            dates_1, data_1 = get_swe_ytd_swe(season_1)
-            title_1 = "YTD Swe"
-
-        elif data_request_1 == "hn24":
-            dates_1, data_1 = get_hn24(season_1)
-            title_1 = "hn24 (inches)"
-
-        elif data_request_1 == "hs":
-            dates_1, data_1 = get_hs(season_1)
-            title_1 = "hs (inches)"
-
-        elif data_request_1 == "temp":
-            dates_1, data_1 = get_temp(season_1)
-            title_1 = "Temperature (F)"
-        else:
-            dates_1=[]
-            data_1=[]
-            title_1=''
-            y_label_1 = ''
-
-        data_request_2 = request.form.get("data_2")
-        season_2 = request.form.get("season_2")
+        # Process data for graph 2
+        data_request_2 = previous_request['data_2']
+        season_2 = previous_request['season_2']
+        dates_2, data_2 = get_data_and_title(data_request_2, season_2)
         title_2 = data_request_2 + " for " + season_2 + " season"
-        if data_request_2 == "YTD Snow":
-            dates_2, data_2 = get_hn24_ytd_snow(season_2)
-            title_2 = "YTD Snow (inches)"
 
-        elif data_request_2 == "YTD Swe":
-            dates_2, data_2 = get_swe_ytd_swe(season_2)
-            title_2 = "YTD Swe"
-
-        elif data_request_2 == "hn24":
-            dates_2, data_2 = get_hn24(season_2)
-            title_2 = "hn24 (inches)"
-
-        elif data_request_2 == "hs":
-            dates_2, data_2 = get_hs(season_2)
-            title_2 = "hs (inches)"
-
-        elif data_request_2 == "temp":
-            dates_2, data_2 = get_temp(season_2)
-            title_2 = "Temperature (F)"
-        else:
-            dates_2 = []
-            data_2 = []
-            title_2 = ''
-            y_label_2 = ''
-        data_request_3 = request.form.get("data_3")
-        season_3 = request.form.get("season_3")
+        # Process data for graph 3
+        data_request_3 = previous_request['data_3']
+        season_3 = previous_request['season_3']
+        dates_3, data_3 = get_data_and_title(data_request_3, season_3)
         title_3 = data_request_3 + " for " + season_3 + " season"
-        if data_request_3 == "YTD Snow":
-            dates_3, data_3 = get_hn24_ytd_snow(season_3)
-            title_3 = "YTD Snow (inches)"
 
-        elif data_request_3 == "YTD Swe":
-            dates_3, data_3 = get_swe_ytd_swe(season_3)
-            title_3 = "YTD Swe"
-
-        elif data_request_3 == "hn24":
-            dates_3, data_3 = get_hn24(season_3)
-            title_3 = "hn24 (inches)"
-
-        elif data_request_3 == "hs":
-            dates_3, data_3 = get_hs(season_3)
-            title_3 = "hs (inches)"
-
-        elif data_request_3 == "temp":
-            dates_3, data_3 = get_temp(season_3)
-            title_3 = "Temperature (F)"
-        else:
-            dates_3 = []
-            data_3 = []
-            title_3 = ''
-            y_label_3 = ''
-
-        data_request_4 = request.form.get("data_4")
-        season_4 = request.form.get("season_4")
+        # Process data for graph 4
+        data_request_4 = previous_request['data_4']
+        season_4 = previous_request['season_4']
+        dates_4, data_4 = get_data_and_title(data_request_4, season_4)
         title_4 = data_request_4 + " for " + season_4 + " season"
-        if data_request_4 == "YTD Snow":
-            dates_4, data_4 = get_hn24_ytd_snow(season_4)
-            title_4 = "YTD Snow (inches)"
 
-        elif data_request_4 == "YTD Swe":
-            dates_4, data_4 = get_swe_ytd_swe(season_4)
-            title_4 = "YTD Swe"
+        # Render the template with the form data and graphs
+        return render_template(
+            'read.html',
+            seasons=seasons,
+            dates_1=json.dumps(dates_1), data_1=data_1, title_1=json.dumps(title_1),
+            y_label_1=json.dumps(title_1),
+            dates_2=json.dumps(dates_2), data_2=data_2, title_2=json.dumps(title_2),
+            y_label_2=json.dumps(title_2),
+            dates_3=json.dumps(dates_3), data_3=data_3, title_3=json.dumps(title_3),
+            y_label_3=json.dumps(title_3),
+            dates_4=json.dumps(dates_4), data_4=data_4, title_4=json.dumps(title_4),
+            y_label_4=json.dumps(title_4),
+            previous_request=previous_request  # Keep track of previous form data
+        )
 
-        elif data_request_4 == "hn24":
-            dates_4, data_4 = get_hn24(season_4)
-            title_4 = "hn24 (inches)"
-
-        elif data_request_4 == "hs":
-            dates_4, data_4 = get_hs(season_4)
-            title_4 = "hs (inches)"
-
-        elif data_request_4 == "temp":
-            dates_4, data_4 = get_temp(season_4)
-            title_4 = "Temperature (F)"
-        else:
-            dates_4 = []
-            data_4 = []
-            title_4 = ''
-            y_label_4 = ''
-        return render_template('read.html', seasons=seasons,
-                               dates_1=json.dumps(dates_1), data_1=data_1, title_1=json.dumps(title_1),
-                               y_label_1=json.dumps(title_1),
-                               dates_2=json.dumps(dates_2), data_2=data_2, title_2=json.dumps(title_2),
-                               y_label_2=json.dumps(title_2),
-                               dates_3=json.dumps(dates_3), data_3=data_3, title_3=json.dumps(title_3),
-                               y_label_3=json.dumps(title_3),
-                               dates_4=json.dumps(dates_4), data_4=data_4, title_4=json.dumps(title_4),
-                               y_label_4=json.dumps(title_4))
-
-    title_1 = "YTD Snow for 24-25 season"
-    title_2 = title_1
+    # If the form has not been submitted, set default values for the graphs
+    title_1 = "YTD Snow" + " for " + seasons[0] + " season"
     dates_1, data_1 = get_hn24_ytd_snow(seasons[0])
-    dates_2 = dates_1
-    data_2 = data_1
+    title_2 = "YTD Swe" + " for " + seasons[0] + " season"
+    dates_2, data_2 = get_swe_ytd_swe(seasons[0])
+    title_3 = "HN24" + " for " + seasons[0] + " season"
+    dates_3, data_3 = get_hn24(seasons[0])
+    title_4 = "HS" + " for " + seasons[0] + " season"
+    dates_4, data_4 = get_hs(seasons[0])
+    previous_request = {
+        'data_1': "YTD Snow",
+        'season_1': seasons[0],
+        'data_2': "YTD Swe",
+        'season_2': seasons[0],
+        'data_3': "hn24",
+        'season_3': seasons[0],
+        'data_4': "hs",
+        'season_4': seasons[0],
+    }
 
-    title_3 = "YTD Snow for 24-25 season"
-    title_4 = title_3
-    dates_3=dates_2
-    data_3=data_2
-    dates_4 = dates_3
-    data_4 = data_3
-    return render_template('read.html', seasons=seasons,
-                           dates_1=json.dumps(dates_1), data_1=data_1, title_1=json.dumps(title_1),
-                           y_label_1=json.dumps(title_1),
-                           dates_2=json.dumps(dates_2), data_2=data_2, title_2=json.dumps(title_2),
-                           y_label_2=json.dumps(title_2),
-                           dates_3=json.dumps(dates_3), data_3=data_3, title_3=json.dumps(title_3),
-                           y_label_3=json.dumps(title_3),
-                           dates_4=json.dumps(dates_4), data_4=data_4, title_4=json.dumps(title_4),
-                           y_label_4=json.dumps(title_4))
-
+    # Render the template with default values
+    return render_template(
+        'read.html',
+        seasons=seasons,
+        dates_1=json.dumps(dates_1), data_1=data_1, title_1=json.dumps(title_1),
+        y_label_1=json.dumps(title_1),
+        dates_2=json.dumps(dates_2), data_2=data_2, title_2=json.dumps(title_2),
+        y_label_2=json.dumps(title_2),
+        dates_3=json.dumps(dates_3), data_3=data_3, title_3=json.dumps(title_3),
+        y_label_3=json.dumps(title_3),
+        dates_4=json.dumps(dates_4), data_4=data_4, title_4=json.dumps(title_4),
+        y_label_4=json.dumps(title_4),
+        previous_request=previous_request
+    )
 
 def get_ytd_snow(start_date,end_date):
     ytd_snow = db.session.query(Snow.ytd_snow, Snow.date).filter(Snow.date.between(start_date,end_date)).order_by(Snow.date)
@@ -263,3 +205,17 @@ def get_hs(season):
         # else:
         #     hs_snow.append(0)
     return dates, hs_snow
+
+def get_data_and_title(data_request, season):
+    if data_request == "YTD Snow":
+        return get_hn24_ytd_snow(season)[0], get_hn24_ytd_snow(season)[1]
+    elif data_request == "YTD Swe":
+        return get_swe_ytd_swe(season)[0],  get_swe_ytd_swe(season)[1]
+    elif data_request == "hn24":
+        return get_hn24(season)[0],get_hn24(season)[1]
+    elif data_request == "hs":
+        return get_hs(season)[0], get_hs(season)[1]
+    elif data_request == "temp":
+        return get_temp(season)[0], get_temp(season)[1]
+    else:
+        return [], []
