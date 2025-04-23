@@ -30,6 +30,10 @@ def view():
     }
 
     query = Snow.query
+    if search_column =='date' and sort_order =='desc':
+        query = query.order_by(Snow.date.desc())
+    if search_column =='date' and sort_order =='asc':
+        query = query.order_by(Snow.date.asc())
     if search_query and search_column in column_map:
         column_attr = column_map[search_column]
         like_pattern = f"%{search_query}%"

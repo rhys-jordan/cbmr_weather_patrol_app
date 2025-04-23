@@ -47,12 +47,14 @@
         <th>Season</th>
         <th>HS (in) (Snow Height)</th>
         <th>HN24 (24-hour new snow)</th>
+        <th>HN24 SWE</th>
         <th>HST (Total storm snow)</th>
         <th>YTD (Year-to-date snow)</th>
-        <th>Sky Condition</th>
-        <th>Temperature °F</th>
+        <th>YTD SWE</th>
+        <th>Temp</th>
         <th>Wind Speed</th>
         <th>Wind Direction</th>
+        <th>Peak Gust</th>
 
     </tr>
     </thead>
@@ -61,14 +63,16 @@
         <tr>
             <td> {{ i.date }}</td>
             <td>{{ i.season }}</td>
-            <td>{{ i.hs }}</td>
+           <td>{{ i.hs }}</td>
             <td>{{ i.hn24 }}</td>
+            <td>{{ i.swe }}</td>
             <td>{{ i.hst }}</td>
             <td>{{ i.ytd_snow }}</td>
-            <td>{{ i.sky }}</td>
+            <td>{{ i.ytd_swe }}</td>
             <td>{{ i.temperature }}</td>
             <td>{{ i.wind_mph }}</td>
             <td>{{ i.wind_direction }}</td>
+            <td>{{ i.past_24_peak_gust_mph }}</td>
         </tr>
     {%endfor%}
 
@@ -83,7 +87,7 @@
     <tr>
         <th>Date</th>
         <th>PM-Form</th>
-       <th>HS</th>
+        <th>HS</th>
         <th>HN24</th>
         <th>HN24 SWE</th>
         <th>HST</th>
