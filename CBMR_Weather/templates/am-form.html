@@ -14,7 +14,7 @@
         <label>Forecaster: </label> <input type="text" id="forecaster" name="forecaster"><br>
     </div>
     <div class = "snow_row">
-        <label>HS:</label> <input type="number" id="hs" name="hs" step="any">
+        <label>HS:</label> <input type="number" id="hs" name="hs" step="any" value='{{hs}}'>
         <label>HN24:</label><input type="number" id="hn24" name="hn24" step="any" oninput="calculate_ytd_snow({{ytd_snowPre}})">
         <label>SWE:</label><input type="number" id="swe" name="swe" step="any" oninput="calculate_ytd_swe({{ytd_swePre}})">
         <label>HST:</label> <input type="number" id="hst" name="hst" step="any">
@@ -328,6 +328,7 @@
     <div id="pwl_div" style="display: none;">
     <label>Type:</label><select id="pwl" name="pwl">
                 <option value="" hidden="true"></option>
+                <option value="" >None</option>
                 <option value="SH">Surface Hoar</option>
                 <option value="NSF">Near Surface Facets</option>
                 <option value="MF">Melt Freeze</option>
@@ -343,6 +344,7 @@
         <label>Danger Rating Resort:</label>
                 <select id="avalanche_danger_resort" name="avalanche_danger_resort">
                     <option value="" hidden="true"></option>
+                    <option value="" >None</option>
                     <option value="low">Low</option>
                     <option value="moderate">Moderate</option>
                     <option value="considerable">Considerable</option>
@@ -353,6 +355,7 @@
         <label>Danger Rating Backcountry:</label>
                 <select id="avalanche_danger_backcountry" name="avalanche_danger_backcountry">
                     <option value="" hidden="true"></option>
+                    <option value="" >None</option>
                     <option value="low">Low</option>
                     <option value="moderate">Moderate</option>
                     <option value="considerable">Considerable</option>
@@ -361,6 +364,7 @@
                 </select>
     </div>
     <div id="problems-container">
+
             <div id="problem_1">
                 <h3>Avalanche Problem 1:</h3>
                 <label>Location:</label>
@@ -440,9 +444,11 @@
                 <label>Likelihood:</label>
                 <input type="text" id="likelihood_1" name="likelihood_1">
             </div>
-        </div>
-    <button type="button" onclick="addAvalancheProblem()">Add Avalanche Problem</button>
 
+        </div>
+    <button type="button" onclick="removeAvalancheProblem1('problem_1')" id="remove_1" name="remove_1">Remove Problem 1</button>
+    <button type="button" onclick="addAvalancheProblem()" id="add_avy" name="add_avy">Add Avalanche Problem</button>
+    <button type="button" onclick="restoreProblem1()" id="restore" name="restore" hidden="true">Restore Problem 1</button>
     <h1>Avalanche Forecast and discussion, How it relates to our Mtn and Our Strategic Mindset:</h1><br>
     <textarea id="avalanche_forecast_discussion" name="avalanche_forecast_discussion">{{avalanche_forecast_discussion}}</textarea>
 

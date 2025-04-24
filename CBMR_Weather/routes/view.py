@@ -16,8 +16,48 @@ from CBMR_Weather.models import Snow, Avalanche, Pm_form
 
 @bp_view.route("/view",methods=['GET', 'POST'])
 def view():
-    snow = Snow.query.order_by(desc(Snow.date)).all()
-    return render_template('view.html', snow=snow)
+    search_query = request.args.get("search", "").strip()
+    search_column = request.args.get("column", "").strip()
+    sort_order = request.args.get("sort_order", "asc")
+    column_map = {
+        "date": Snow.date,
+        "season": Snow.season,
+        "hs": Snow.hs,
+        "hn24": Snow.hn24,
+        "hn24_swe":Snow.swe,
+        "hst": Snow.hst,
+        "ytd_snow": Snow.ytd_snow,
+        "ytd_swe": Snow.ytd_swe,
+        "temperature": Snow.temperature,
+        "wind_mph": Snow.wind_mph,
+        "wind_direction": Snow.wind_direction,
+        "peak_gust": Snow.current_peak_gust_mph,
+    }
+
+    query = Snow.query
+    if search_column =='date' and sort_order =='desc':
+        query = query.order_by(Snow.date.desc())
+    if search_column =='date' and sort_order =='asc':
+        query = query.order_by(Snow.date.asc())
+    if search_query and search_column in column_map:
+        column_attr = column_map[search_column]
+        like_pattern = f"%{search_query}%"
+        query = query.filter(db.cast(column_attr, db.String).like(like_pattern))
+    if search_column in column_map:
+        column_attr = column_map[search_column]
+        query = query.filter(column_attr.isnot(None))
+    if search_column in column_map:
+        column_attr = column_map[search_column]
+        if sort_order == "desc":
+            query = query.order_by(db.cast(column_attr, db.Float).desc())
+        else:
+            query = query.order_by(db.cast(column_attr, db.Float).asc())
+    else:
+        query = query.order_by(Snow.date.desc())
+
+    snow = query.all()
+    pm_form_dates = [str(i.date) for i in Pm_form.query.all()]
+    return render_template("view.html", snow=snow, search=search_query, column=search_column, sort_order=sort_order,pm_form_dates=pm_form_dates)
 
 @bp_view.route('/view_am/<inputDate>', methods=['GET', 'POST'])
 @login_required
@@ -28,8 +68,11 @@ def delete_am_data(inputDate):
             Avalanche.query.filter_by(Snow_id=dateCheck.id).delete(synchronize_session=False)
             db.session.delete(dateCheck)
             db.session.commit()
+            dateCheck_pm = Pm_form.query.filter_by(date=inputDate).first()
+            if dateCheck_pm:
+                db.session.delete(dateCheck_pm)
+                db.session.commit()
     snow = Snow.query.order_by(desc(Snow.date)).all()
-
     return redirect(url_for('view.view', snow=snow))
 
 @bp_view.route('/view_pm/<inputDate>', methods=['GET', 'POST'])

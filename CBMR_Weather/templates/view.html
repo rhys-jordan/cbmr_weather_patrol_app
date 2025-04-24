@@ -1,23 +1,60 @@
 {% extends "base.html" %}
 {% block title%} View {%endblock%}
 {% block content%}
+<script>
+    // Pass the pm_form_dates list as a JavaScript array
+    const pm_form_dates = {{ pm_form_dates | tojson }};
+</script>
 <h1 id="title"> View Data</h1><br>
 
-
+<form method="get" action="{{ url_for('view.view') }}" id="view_search">
+    <a href="{{ url_for('view.view') }}"><button type="button" id="reset_button">Reset</button></a>
+    <div id="column_search">
+    <label for="column" id="column_label">Search In:</label>
+    <select name="column" id="column">
+        <option value="date" {% if column == 'date' %}selected{% endif %}>Date</option>
+        <option value="season" {% if column == 'season' %}selected{% endif %}>Season</option>
+        <option value="hs" {% if column == 'hs' %}selected{% endif %}>HS</option>
+        <option value="hn24" {% if column == 'hn24' %}selected{% endif %}>HN24</option>
+        <option value="hn24_swe" {% if column == 'hn24_swe' %}selected{% endif %}>HN24 SWE</option>
+        <option value="hst" {% if column == 'hst' %}selected{% endif %}>HST</option>
+        <option value="ytd_snow" {% if column == 'ytd_snow' %}selected{% endif %}>YTD Snow</option>
+        <option value="ytd_swe" {% if column == 'ytd_swe' %}selected{% endif %}>YTD SWE</option>
+        <option value="temperature" {% if column == 'temperature' %}selected{% endif %}>Temp</option>
+        <option value="wind_mph" {% if column == 'wind_mph' %}selected{% endif %}>Wind Speed</option>
+        <option value="wind_direction" {% if column == 'wind_direction' %}selected{% endif %}>Wind Direction</option>
+        <option value="peak_gust" {% if column == 'peak_gust' %}selected{% endif %}>Peak Gust</option>
+    </select>
+    </div>
+    <div id="search_for">
+        <label>Search For:</label>
+    <input type="text" name="search" placeholder="Search..." value="{{ search }}">
+    </div>
+    <div id="sort_order">
+        <label for="sort_order">Sort:</label>
+        <select name="sort_order" id="sort_order">
+            <option value="asc" {% if sort_order == 'asc' %}selected{% endif %}>Ascending</option>
+            <option value="desc" {% if sort_order == 'desc' %}selected{% endif %}>Descending</option>
+        </select>
+    </div>
+    <button type="submit">Search</button>
+</form>
 {% if current_user.is_authenticated == False %}
     <table class="sortable" id="snowTable">
     <thead>
     <tr>
-        <th onclick="sortTable(0)">Date</th>
-        <th onclick="sortTable(1)">Season</th>
-        <th onclick="sortTable(2)">HS (in) (Snow Height)</th>
-        <th onclick="sortTable(3)">HN24 (24-hour new snow)</th>
-        <th onclick="sortTable(4)">HST (Total storm snow)</th>
-        <th onclick="sortTable(5)">YTD (Year-to-date snow)</th>
-        <th onclick="sortTable(6)">Sky Condition</th>
-        <th onclick="sortTable(7)">Temperature °F</th>
-        <th onclick="sortTable(8)">Wind Speed</th>
-        <th onclick="sortTable(9)">Wind Direction</th>
+        <th>Date</th>
+        <th>Season</th>
+        <th>HS (in) (Snow Height)</th>
+        <th>HN24 (24-hour new snow)</th>
+        <th>HN24 SWE</th>
+        <th>HST (Total storm snow)</th>
+        <th>YTD (Year-to-date snow)</th>
+        <th>YTD SWE</th>
+        <th>Temp</th>
+        <th>Wind Speed</th>
+        <th>Wind Direction</th>
+        <th>Peak Gust</th>
 
     </tr>
     </thead>
@@ -26,14 +63,16 @@
         <tr>
             <td> {{ i.date }}</td>
             <td>{{ i.season }}</td>
-            <td>{{ i.hs }}</td>
+           <td>{{ i.hs }}</td>
             <td>{{ i.hn24 }}</td>
+            <td>{{ i.swe }}</td>
             <td>{{ i.hst }}</td>
             <td>{{ i.ytd_snow }}</td>
-            <td>{{ i.sky }}</td>
+            <td>{{ i.ytd_swe }}</td>
             <td>{{ i.temperature }}</td>
             <td>{{ i.wind_mph }}</td>
             <td>{{ i.wind_direction }}</td>
+            <td>{{ i.past_24_peak_gust_mph }}</td>
         </tr>
     {%endfor%}
 
@@ -64,6 +103,22 @@
             <th onclick="sortTable(12)">DELETE</th>
             <th onclick="sortTable(13)">DELETE</th>
             <th> </th>
+    <tr>
+        <th>Date</th>
+        <th>PM-Form</th>
+        <th>HS</th>
+        <th>HN24</th>
+        <th>HN24 SWE</th>
+        <th>HST</th>
+        <th>YTD</th>
+        <th>YTD SWE</th>
+        <th>Temp</th>
+        <th>Wind Speed</th>
+        <th>Wind Direction</th>
+        <th>Peak Gust</th>
+        <th>DELETE</th>
+        <th>DELETE</th>
+        <th> </th>
 
         </tr>
     </thead>
@@ -71,7 +126,7 @@
     {% for i in snow%}
         <tr>
             <td> <a href="/update-form/{{i.date}}">{{ i.date }}</a></td>
-            <td><a href="/update-pm-form/{{i.date}}">Update</a></td>
+            <td onclick="update_pm_form(pm_form_dates,'{{i.date}}')"> <a href="javascript:void(0)">Update</a></td>
             <td>{{ i.hs }}</td>
             <td>{{ i.hn24 }}</td>
             <td>{{ i.swe }}</td>
@@ -81,7 +136,7 @@
             <td>{{ i.temperature }}</td>
             <td>{{ i.wind_mph }}</td>
             <td>{{ i.wind_direction }}</td>
-            <td>{{ i.current_peak_gust_mph }}</td>
+            <td>{{ i.past_24_peak_gust_mph }}</td>
             <td onclick="confirm_data_delete_am('{{i.date}}')"> <a href="javascript:void(0)">AM</a></td>
             <td onclick="confirm_data_delete_pm('{{i.date}}')"> <a href="javascript:void(0)">PM</a></td>
         </tr>
