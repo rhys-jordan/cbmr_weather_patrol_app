@@ -100,6 +100,26 @@ function confirm_data_delete_am(date){
     }
 }
 
+function submit_loginReset(event) {
+    event.preventDefault();
+    alert("A reset link has been sent to snowsafetycb@gmail.com.\n Check this email for your current username/password, or to change it")
+    document.getElementById("resetLogin").submit();
+
+}
+
+function submit_loginResetConfirmation(event) {
+    event.preventDefault();
+    alert("Your username/password has been changed")
+    document.getElementById("loginReset").submit();
+
+}
+
+function confirm_data_delete(){
+    //alert("Are you sure you want to delete the data for this date?")
+    return confirm("Are you sure you want to delete the data for this date?")
+
+}
+
 function confirm_data_delete_pm(date){
     if (confirm("Are you sure you want to delete the PM Form for "+date+" ?")) {
         window.location.href = "/view_pm/" + date;
