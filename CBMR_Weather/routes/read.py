@@ -59,13 +59,13 @@ def read():
             'read.html',
             seasons=seasons,
             dates_1=json.dumps(dates_1), data_1=data_1, title_1=json.dumps(title_1),
-            y_label_1=json.dumps(title_1),
+            y_label_1=json.dumps(data_request_1),
             dates_2=json.dumps(dates_2), data_2=data_2, title_2=json.dumps(title_2),
-            y_label_2=json.dumps(title_2),
+            y_label_2=json.dumps(data_request_2),
             dates_3=json.dumps(dates_3), data_3=data_3, title_3=json.dumps(title_3),
-            y_label_3=json.dumps(title_3),
+            y_label_3=json.dumps(data_request_3),
             dates_4=json.dumps(dates_4), data_4=data_4, title_4=json.dumps(title_4),
-            y_label_4=json.dumps(title_4),
+            y_label_4=json.dumps(data_request_4),
             previous_request=previous_request  # Keep track of previous form data
         )
 
@@ -94,13 +94,13 @@ def read():
         'read.html',
         seasons=seasons,
         dates_1=json.dumps(dates_1), data_1=data_1, title_1=json.dumps(title_1),
-        y_label_1=json.dumps(title_1),
+        y_label_1=json.dumps("YTD Snow"),
         dates_2=json.dumps(dates_2), data_2=data_2, title_2=json.dumps(title_2),
-        y_label_2=json.dumps(title_2),
+        y_label_2=json.dumps("YTD SWE"),
         dates_3=json.dumps(dates_3), data_3=data_3, title_3=json.dumps(title_3),
-        y_label_3=json.dumps(title_3),
+        y_label_3=json.dumps("HN24 (in)"),
         dates_4=json.dumps(dates_4), data_4=data_4, title_4=json.dumps(title_4),
-        y_label_4=json.dumps(title_4),
+        y_label_4=json.dumps("HS (in)"),
         previous_request=previous_request
     )
 

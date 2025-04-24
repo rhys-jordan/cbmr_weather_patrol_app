@@ -10,88 +10,104 @@
 
 <script src="/static/graphs.js"></script>
 
-<form action="/read" method="post">
-    <div id="graph_1_input">
-        <label for="data_1">Data 1:</label>
-        <select id="data_1" name="data_1">
-            <option value="None" {% if previous_request.data_1 == "None" %}selected{% endif %}>None</option>
-            <option value="YTD Snow" {% if previous_request.data_1 == "YTD Snow" %}selected{% endif %}>YTD Snow</option>
-            <option value="YTD Swe" {% if previous_request.data_1 == "YTD Swe" %}selected{% endif %}>YTD Swe</option>
-            <option value="hn24" {% if previous_request.data_1 == "hn24" %}selected{% endif %}>hn24</option>
-            <option value="hs" {% if previous_request.data_1 == "hs" %}selected{% endif %}>hs</option>
-            <option value="temp" {% if previous_request.data_1 == "temp" %}selected{% endif %}>Temperature</option>
-        </select>
+<form action="/read" method="post" id="graphForm">
+    <table id="graph_input_table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Data</th>
+            <th>Season</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>Graph 1</th>
+            <td>
+                <select id="data_1" name="data_1">
+                    <option value="None" {% if previous_request.data_1 == "None" %}selected{% endif %}>None</option>
+                    <option value="YTD Snow" {% if previous_request.data_1 == "YTD Snow" %}selected{% endif %}>YTD Snow</option>
+                    <option value="YTD Swe" {% if previous_request.data_1 == "YTD Swe" %}selected{% endif %}>YTD Swe</option>
+                    <option value="hn24" {% if previous_request.data_1 == "hn24" %}selected{% endif %}>hn24</option>
+                    <option value="hs" {% if previous_request.data_1 == "hs" %}selected{% endif %}>hs</option>
+                    <option value="temp" {% if previous_request.data_1 == "temp" %}selected{% endif %}>Temperature</option>
+                </select>
+            </td>
+            <td>
+                <select id="season_1" name="season_1">
+                    <option value="None" {% if previous_request.season_1 == "None" %}selected{% endif %}>None</option>
+                    {% for i in seasons %}
+                        <option value="{{ i }}" {% if previous_request.season_1 == i %}selected{% endif %}>{{ i }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>Graph 2</th>
+            <td>
+                <select id="data_2" name="data_2">
+                    <option value="None" {% if previous_request.data_2 == "None" %}selected{% endif %}>None</option>
+                    <option value="YTD Snow" {% if previous_request.data_2 == "YTD Snow" %}selected{% endif %}>YTD Snow</option>
+                    <option value="YTD Swe" {% if previous_request.data_2 == "YTD Swe" %}selected{% endif %}>YTD Swe</option>
+                    <option value="hn24" {% if previous_request.data_2 == "hn24" %}selected{% endif %}>hn24</option>
+                    <option value="hs" {% if previous_request.data_2 == "hs" %}selected{% endif %}>hs</option>
+                    <option value="temp" {% if previous_request.data_2 == "temp" %}selected{% endif %}>Temperature</option>
+                </select>
+            </td>
+            <td>
+                <select id="season_2" name="season_2">
+                    <option value="None" {% if previous_request.season_2 == "None" %}selected{% endif %}>None</option>
+                    {% for i in seasons %}
+                        <option value="{{ i }}" {% if previous_request.season_2 == i %}selected{% endif %}>{{ i }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>Graph 3</th>
+            <td>
+                <select id="data_3" name="data_3">
+                    <option value="None" {% if previous_request.data_3 == "None" %}selected{% endif %}>None</option>
+                    <option value="YTD Snow" {% if previous_request.data_3 == "YTD Snow" %}selected{% endif %}>YTD Snow</option>
+                    <option value="YTD Swe" {% if previous_request.data_3 == "YTD Swe" %}selected{% endif %}>YTD Swe</option>
+                    <option value="hn24" {% if previous_request.data_3 == "hn24" %}selected{% endif %}>hn24</option>
+                    <option value="hs" {% if previous_request.data_3 == "hs" %}selected{% endif %}>hs</option>
+                    <option value="temp" {% if previous_request.data_3 == "temp" %}selected{% endif %}>Temperature</option>
+                </select>
+            </td>
+            <td>
+                <select id="season_3" name="season_3">
+                    <option value="None" {% if previous_request.season_3 == "None" %}selected{% endif %}>None</option>
+                    {% for i in seasons %}
+                        <option value="{{ i }}" {% if previous_request.season_3 == i %}selected{% endif %}>{{ i }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>Graph 4</th>
+            <td>
+                <select id="data_4" name="data_4">
+                    <option value="None" {% if previous_request.data_4 == "None" %}selected{% endif %}>None</option>
+                    <option value="YTD Snow" {% if previous_request.data_4 == "YTD Snow" %}selected{% endif %}>YTD Snow</option>
+                    <option value="YTD Swe" {% if previous_request.data_4 == "YTD Swe" %}selected{% endif %}>YTD Swe</option>
+                    <option value="hn24" {% if previous_request.data_4 == "hn24" %}selected{% endif %}>hn24</option>
+                    <option value="hs" {% if previous_request.data_4 == "hs" %}selected{% endif %}>hs</option>
+                    <option value="temp" {% if previous_request.data_4 == "temp" %}selected{% endif %}>Temperature</option>
+                </select>
+            </td>
+            <td>
+                <select id="season_4" name="season_4">
+                    <option value="None" {% if previous_request.season_4 == "None" %}selected{% endif %}>None</option>
+                    {% for i in seasons %}
+                        <option value="{{ i }}" {% if previous_request.season_4 == i %}selected{% endif %}>{{ i }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
-        <label for="season_1">Season 1:</label>
-        <select id="season_1" name="season_1">
-            <option value="None" {% if previous_request.season_1 == "None" %}selected{% endif %}>None</option>
-            {% for i in seasons %}
-                <option value="{{ i }}" {% if previous_request.season_1 == i %}selected{% endif %}>{{ i }}</option>
-            {% endfor %}
-        </select>
-    </div>
-
-    <div id="graph_2_input">
-        <label for="data_2">Data 2:</label>
-        <select id="data_2" name="data_2">
-            <option value="None" {% if previous_request.data_2 == "None" %}selected{% endif %}>None</option>
-            <option value="YTD Snow" {% if previous_request.data_2 == "YTD Snow" %}selected{% endif %}>YTD Snow</option>
-            <option value="YTD Swe" {% if previous_request.data_2 == "YTD Swe" %}selected{% endif %}>YTD Swe</option>
-            <option value="hn24" {% if previous_request.data_2 == "hn24" %}selected{% endif %}>hn24</option>
-            <option value="hs" {% if previous_request.data_2 == "hs" %}selected{% endif %}>hs</option>
-            <option value="temp" {% if previous_request.data_2 == "temp" %}selected{% endif %}>Temperature</option>
-        </select>
-
-        <label for="season_2">Season 2:</label>
-        <select id="season_2" name="season_2">
-            <option value="None" {% if previous_request.season_2 == "None" %}selected{% endif %}>None</option>
-            {% for i in seasons %}
-                <option value="{{ i }}" {% if previous_request.season_2 == i %}selected{% endif %}>{{ i }}</option>
-            {% endfor %}
-        </select>
-    </div>
-
-    <div id="graph_3_input">
-        <label for="data_3">Data 3:</label>
-        <select id="data_3" name="data_3">
-            <option value="None" {% if previous_request.data_3 == "None" %}selected{% endif %}>None</option>
-            <option value="YTD Snow" {% if previous_request.data_3 == "YTD Snow" %}selected{% endif %}>YTD Snow</option>
-            <option value="YTD Swe" {% if previous_request.data_3 == "YTD Swe" %}selected{% endif %}>YTD Swe</option>
-            <option value="hn24" {% if previous_request.data_3 == "hn24" %}selected{% endif %}>hn24</option>
-            <option value="hs" {% if previous_request.data_3 == "hs" %}selected{% endif %}>hs</option>
-            <option value="temp" {% if previous_request.data_3 == "temp" %}selected{% endif %}>Temperature</option>
-        </select>
-
-        <label for="season_3">Season 3:</label>
-        <select id="season_3" name="season_3">
-            <option value="None" {% if previous_request.season_3 == "None" %}selected{% endif %}>None</option>
-            {% for i in seasons %}
-                <option value="{{ i }}" {% if previous_request.season_3 == i %}selected{% endif %}>{{ i }}</option>
-            {% endfor %}
-        </select>
-    </div>
-
-    <div id="graph_4_input">
-        <label for="data_4">Data 4:</label>
-        <select id="data_4" name="data_4">
-            <option value="None" {% if previous_request.data_4 == "None" %}selected{% endif %}>None</option>
-            <option value="YTD Snow" {% if previous_request.data_4 == "YTD Snow" %}selected{% endif %}>YTD Snow</option>
-            <option value="YTD Swe" {% if previous_request.data_4 == "YTD Swe" %}selected{% endif %}>YTD Swe</option>
-            <option value="hn24" {% if previous_request.data_4 == "hn24" %}selected{% endif %}>hn24</option>
-            <option value="hs" {% if previous_request.data_4 == "hs" %}selected{% endif %}>hs</option>
-            <option value="temp" {% if previous_request.data_4 == "temp" %}selected{% endif %}>Temperature</option>
-        </select>
-
-        <label for="season_4">Season 4:</label>
-        <select id="season_4" name="season_4">
-            <option value="None" {% if previous_request.season_4 == "None" %}selected{% endif %}>None</option>
-            {% for i in seasons %}
-                <option value="{{ i }}" {% if previous_request.season_4 == i %}selected{% endif %}>{{ i }}</option>
-            {% endfor %}
-        </select>
-    </div>
-
-    <button type="submit">Submit</button>
+   <br> <button type="submit">Submit</button>
 </form>
 
 <div id="leftHalf">

@@ -3,9 +3,8 @@ function graph(x, y, element_id, chart_title, y_label){
     const yValues = y;
 //    console.log(xValues)
 //    console.log(yValues)
-    const y_max = Math.max(...yValues)
-    const y_min = Math.min(...yValues)
-
+    const y_max = Math.max(...yValues);
+    const y_min = Math.min(...yValues);
     new Chart(document.getElementById(element_id).getContext('2d'), {
       type: "line",
       data: {
@@ -38,7 +37,7 @@ function graph(x, y, element_id, chart_title, y_label){
             scaleLabel: {
               display: true,
               labelString: y_label,
-              fontSize: 14
+              fontSize: 14,
             }
           }]
         }
