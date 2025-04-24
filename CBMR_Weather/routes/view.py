@@ -49,23 +49,22 @@ def delete_pm_data(inputDate):
 def download_excel():
 
     snow = Snow.query.order_by(desc(Snow.date)).all()
-    # data = [s.__dict__ for s in snow]
-    # for d in data:
-    #     d.pop('_sa_instance_state', None)
-    # df = pd.DataFrame(data)
+    snow_columns = [col.name for col in Snow.__table__.columns]
+    snow_data = [{col: getattr(s, col) for col in snow_columns} for s in snow]
+    snow_df = pd.DataFrame(snow_data)
 
-    columns = [col.name for col in Snow.__table__.columns]
-    data = [{col: getattr(s, col) for col in columns} for s in snow]
-    df = pd.DataFrame(data)
-
-    print(df.iloc[0])
+    avy = Avalanche.query.order_by(desc(Avalanche.Snow_id)).all()
+    avy_columns = [col.name for col in Avalanche.__table__.columns]
+    avy_data = [{col: getattr(s, col) for col in avy_columns} for s in avy]
+    avy_df = pd.DataFrame(avy_data)
 
     output = io.BytesIO()
-    with pd.ExcelWriter(output) as writer:  # No need to specify engine
-        df.to_excel(writer, index=False, sheet_name='CBMR_allData')
+    with pd.ExcelWriter(output) as writer:
+        snow_df.to_excel(writer, index=False, sheet_name='Snow_Weather')
+        avy_df.to_excel(writer, index=False, sheet_name='Avalanche')
     output.seek(0)
 
-    fileName = "CBMR_allData_" + datetime.now().date().strftime('%Y-%m-%d')
+    fileName = "CBMR_allData_" + datetime.now().date().strftime('%Y-%m-%d') + ".xlsx"
 
     return send_file(output,
                      download_name=fileName,
