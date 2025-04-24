@@ -98,6 +98,21 @@ function confirm_data_delete_am(date){
     if (confirm("Are you sure you want to delete the AM and PM Form for "+date+" ?")) {
         window.location.href = "/view_am/" + date;
     }
+
+function submit_loginReset() {
+    alert("A reset link has been sent to snowsafetycb@gmail.com.\n Check this email for your current username/password, or to change it")
+
+}
+
+function submit_loginResetConfirmation() {
+    alert("Your username/password has been changed")
+
+}
+
+function confirm_data_delete(){
+    //alert("Are you sure you want to delete the data for this date?")
+    return confirm("Are you sure you want to delete the data for this date?")
+
 }
 
 function confirm_data_delete_pm(date){
