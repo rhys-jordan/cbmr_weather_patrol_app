@@ -25,6 +25,8 @@ function togglePwl() {
         div.style.display = "block";
     } else {
         div.style.display = "none";
+        document.getElementById("pwl").value = "";
+        document.getElementById("pwl_date").value = "";
     }
 }
 document.addEventListener("DOMContentLoaded", function() {

@@ -55,7 +55,6 @@ def am_form():
         #checking if data input has already happened
         dateCheck = Snow.query.filter_by(date=date).first()
         if not dateCheck:
-            print(avalanche_problem_1, avalanche_problem_2, avalanche_problem_3, avalanche_problem_4)
             snow = Snow(dateTime=dateTime,date=date, day=day, month=month, year=year,
                         time=time, season=season, forecaster=forecaster, hs=hs, hn24=hn24,
                         swe=swe, hst=hst, ytd_snow=ytd_snow, ytd_swe=ytd_swe, sky=sky,

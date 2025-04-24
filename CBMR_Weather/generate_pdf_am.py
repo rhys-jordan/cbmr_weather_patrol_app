@@ -16,7 +16,7 @@ db_path = os.path.join("instance", "CBMR_Weather.db") #Local
 #db_path = "/home/CBMRPatrolApp/database/CBMR_Weather.db" #pythonAnywhere
 connection = sqlite3.connect(db_path, check_same_thread=False)
 cursor = connection.cursor()
-print(db_path)
+#print(db_path)
 pdf_date =  ''
 
 styles = getSampleStyleSheet()
@@ -239,25 +239,11 @@ def create_weather_forcast_table():
 
 
 
-def create_avalanche_danger_ratings_pwl():
-    command = ('SELECT avalanche_danger_resort, avalanche_danger_backcountry, pwl, pwl_date'
-               ' FROM snow '
-               'WHERE date = "') + str(pdf_date) + '"'
-    cursor.execute(command)
-    results = cursor.fetchall()
-    date = ' '
-    if (results[0][3] != None):
-        date_components = results[0][3].split('-')
-        date = date_components[1] + '-' + date_components[2] + '-' + date_components[0]
-        if date == '01-01-0001':
-            date = ' '
 
-    pwl_date = 'Date: ' + str(date)
-    pwl_type = 'Type: ' + str(results[0][2])
+def create_avalanche_danger_wo_pwl(avalanche_danger_resort, avalanche_danger_backcountry):
+    data = [['Resort Danger', avalanche_danger_resort, 'Backcountry Danger', avalanche_danger_backcountry]]
 
-    data = [['Resort Danger', results[0][0],'Backcountry Danger',results[0][1], 'PWL', pwl_type, pwl_date]]
-
-    t = Table(data, colWidths=[85,85,110,85, 40, 85,95 ], spaceAfter=10)
+    t = Table(data, colWidths=[146,146,146,146], spaceAfter=10)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (1, -1), colors.black),
                            ('OUTLINE', (0, 0), (3, 0), 1.5, colors.black),
                            ('LINEBEFORE', (1, 0), (1, 0), 1, colors.black, None, (3, 4)),
@@ -269,11 +255,58 @@ def create_avalanche_danger_ratings_pwl():
                            ('LINEBEFORE', (5, 0), (5, 0), 1, colors.black, None, (3, 4)),
                            ('LINEBEFORE', (6, 0), (6, 0), 1, colors.black, None, (3, 4)),
 
+                           ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                           ('VALIGN', (0, 0), (0, 0), 'MIDDLE')]))
+    return t
 
+def create_avalanche_danger_w_pwl(avalanche_danger_resort, avalanche_danger_backcountry, pwl, pwl_date):
+    pwl_date = 'Date: ' + str(pwl_date)
+    pwl_type = 'Type: ' + str(pwl)
 
+    data = [['Resort Danger', avalanche_danger_resort, 'Backcountry Danger', avalanche_danger_backcountry, 'PWL', pwl_type, pwl_date]]
+
+    t = Table(data, colWidths=[85, 85, 110, 85, 40, 85, 95], spaceAfter=10)
+    t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (1, -1), colors.black),
+                           ('OUTLINE', (0, 0), (3, 0), 1.5, colors.black),
+                           ('LINEBEFORE', (1, 0), (1, 0), 1, colors.black, None, (3, 4)),
+                           ('LINEBEFORE', (2, 0), (2, 0), 1, colors.black, None),
+                           ('LINEBEFORE', (3, 0), (3, 0), 1, colors.black, None, (3, 4)),
+                           ('LINEBEFORE', (4, 0), (4, 0), 1, colors.black, None),
+
+                           ('OUTLINE', (4, 0), (6, 0), 1.5, colors.black),
+                           ('LINEBEFORE', (5, 0), (5, 0), 1, colors.black, None, (3, 4)),
+                           ('LINEBEFORE', (6, 0), (6, 0), 1, colors.black, None, (3, 4)),
 
                            ('ALIGN', (0, 0), (0, 0), 'CENTER'),
                            ('VALIGN', (0, 0), (0, 0), 'MIDDLE')]))
+
+
+    return t
+def create_avalanche_danger_ratings_pwl():
+    command = ('SELECT avalanche_danger_resort, avalanche_danger_backcountry, pwl, pwl_date'
+               ' FROM snow '
+               'WHERE date = "') + str(pdf_date) + '"'
+    cursor.execute(command)
+    results = cursor.fetchall()
+    date = ' '
+    resort_danger = results[0][0]
+    bc_danger = results[0][1]
+    if resort_danger == "" and bc_danger == "":
+        return None
+    elif resort_danger == "":
+        resort_danger = "None"
+    elif bc_danger == "":
+        bc_danger = "None"
+
+    if results[0][3] is not None:
+        date_components = results[0][3].split('-')
+        date = date_components[1] + '-' + date_components[2] + '-' + date_components[0]
+        if date == '01-01-0001':
+            date = ''
+    if results[0][2] == "":
+        t = create_avalanche_danger_wo_pwl(resort_danger, bc_danger)
+    else:
+        t = create_avalanche_danger_w_pwl(resort_danger, bc_danger, results[0][2], date)
     return t
 
 
@@ -295,7 +328,6 @@ def create_avalanche_danger_table(ava_results):
     data = [['Avalanche Problems','','','','',''],
             ['', 'Location', 'Problem', 'Elevation: Aspect', 'Size','Likelihood' ]]
 
-
     for i in range(len(ava_results)):
         ava_problem_name = 'Problem ' + str(i + 1)
         ava_prob = Paragraph(ava_problem_name, styles['Normal'])
@@ -309,14 +341,10 @@ def create_avalanche_danger_table(ava_results):
         data.append([ava_prob,ava_results[i][1], ava_prob_type, aspects,
                      size_data, likelihood_data])
 
-
-    #t = Table(data, colWidths=[65,110,65,65,65,65,65,65] colWidths=[71 for x in range(len(data[0]))],
-              #rowHeights=[30 for x in range(len(data))], spaceAfter= 20)
     row_heights = [20,20]
     for x in range(len(data)-2):
         row_heights.append(40)
-    #t = Table(data, colWidths=[83.5 for x in range(len(data[0]))],
-              #spaceAfter= 20)
+
     t = Table(data, colWidths=[71, 71,120,190,66,66],
           spaceAfter= 20)
     t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
@@ -332,7 +360,23 @@ def create_avalanche_danger_table(ava_results):
                            ]))
     return t
 
+def create_avalanche_danger_table_empty():
+    data = [['Avalanche Problems: NONE','','','','','']]
 
+    row_heights = [20,20]
+    for x in range(len(data)-2):
+        row_heights.append(40)
+    t = Table(data, colWidths=[71, 71,120,190,66,66],
+          spaceAfter= 20)
+    t.setStyle(TableStyle([('TEXTCOLOR', (0, 0), (2, -1), colors.black),
+                           ('GRID', (0, 0), (5, 1), 1.5, colors.black),
+                           ('OUTLINE', (0, 0), (5, len(data)), 1.5, colors.black),
+                           ('GRID', (0, 2), (5, len(data)), 1, colors.black),
+                           ('SPAN', (0, 0), (5, 0)),
+                           ('ALIGN', (0, 0), (5, len(data)+1), 'CENTER'),
+                           ('VALIGN', (0, 0), (5, len(data)+1), 'MIDDLE')
+                           ]))
+    return t
 
 def create_discuss_box(heading, summary):
     sum_paragraph = Paragraph(summary, styles['Normal'])
@@ -426,13 +470,15 @@ def generate_pdf(date):
     elements.append(weather_forecast)
 
 
-
-    #ava_danger_rating = create_avalanche_danger_ratings()
     ava_danger_rating = create_avalanche_danger_ratings_pwl()
-    elements.append(ava_danger_rating)
+    if(ava_danger_rating is not None):
+        elements.append(ava_danger_rating)
+
     ava_results = get_avalanche_danger_data()
-    #ava_danger_rate = get_avalanche_danger_ratings()
-    ava_danger = create_avalanche_danger_table(ava_results)
+    if len(ava_results) != 0:
+        ava_danger = create_avalanche_danger_table(ava_results)
+    else:
+        ava_danger = create_avalanche_danger_table_empty()
     elements.append(ava_danger)
 
     ava_forecast = create_discuss_box(
