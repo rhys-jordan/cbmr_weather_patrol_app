@@ -443,6 +443,13 @@ button {
         font-size: 4vw;
     }
 }
+#leftHalf, #rightHalf {
+    width: 48%;
+    display: inline-block;
+    vertical-align: top;
+    padding: 10px;
+}
+
 
 
 #snowTable {
