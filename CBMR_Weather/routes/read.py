@@ -110,7 +110,6 @@ def get_ytd_snow(start_date,end_date):
     snow = []
     for row in ytd_snow:
         date_format = datetime.strftime(row[1], '%m-%d-%Y')
-
         if (row[0] != None):
             dates.append(date_format)
             snow.append(row[0])
@@ -129,22 +128,38 @@ def get_swe_snow():
 
 def get_hn24_ytd_snow(season):
     hn24_snow = db.session.query(Snow.hn24, Snow.date).filter(Snow.season == season).order_by(Snow.date)
+    ytd = db.session.query(Snow.ytd_snow, Snow.date).filter(Snow.season == season).order_by(Snow.date)
     dates = []
     ytd_snow = []
     past_hn24 = 0
-    for row in hn24_snow:
-        date_format = datetime.strftime(row[1], '%m-%d-%Y')
-        dates.append(date_format)
-        if (row[0] != None ):
-            try:
-                hn24=float(row[0])
-                ytd_snow.append(hn24 + past_hn24)
-                past_hn24 = hn24 + past_hn24
-            except:
-                hn24=0
-        else:
+    if season=='23-24' or season=='24-25':
+        for row in hn24_snow:
+            date_format = datetime.strftime(row[1], '%m-%d-%Y')
+            dates.append(date_format)
+            if (row[0] != None):
+                try:
+                    hn24 = float(row[0])
+                    ytd_snow.append(hn24 + past_hn24)
+                    past_hn24 = hn24 + past_hn24
+                except:
+                    hn24 = 0
+            else:
 
-            ytd_snow.append(0 + past_hn24 )
+                ytd_snow.append(0 + past_hn24)
+    else:
+        for row in ytd:
+            date_format = datetime.strftime(row[1], '%m-%d-%Y')
+            dates.append(date_format)
+            if (row[0] != None ):
+                try:
+                    hn24=float(row[0])
+                    ytd_snow.append(hn24 + past_hn24)
+                    past_hn24 = hn24 + past_hn24
+                except:
+                    hn24=0
+            else:
+
+                ytd_snow.append(0 + past_hn24 )
     return dates, ytd_snow
 
 
@@ -200,10 +215,12 @@ def get_hs(season):
     for row in hs_snow_results:
         date_format = datetime.strftime(row[1], '%m-%d-%Y')
         dates.append(date_format)
+        if row[0] == 0:
+            hs_snow.append(hs_snow[-1] if hs_snow else 0)
         if (row[0] != None and type(row[0]) != str):
-            hs_snow.append(row[0] )
-        # else:
-        #     hs_snow.append(0)
+            hs_snow.append(row[0])
+        else:
+            hs_snow.append(0)
     return dates, hs_snow
 
 def get_data_and_title(data_request, season):
