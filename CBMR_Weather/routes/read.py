@@ -1,12 +1,12 @@
 from CBMR_Weather.routes import bp_read
 from flask import render_template
 from CBMR_Weather.models import User, Snow
-from sqlalchemy import desc, asc
+from sqlalchemy import desc, asc, cast, Float
 
 @bp_read.route("/read", methods=['GET', 'POST'])
 def read():
 
-    snow1 = Snow.query.filter(Snow.hn24 != None).order_by(desc(Snow.hn24)).first()
+    snow1 = Snow.query.filter(Snow.hn24 != None).order_by(desc(cast(Snow.hn24, Float))).first()
     hn24Greatest = snow1.hn24
     hn24Greatest_date = snow1.date
     snow2 = Snow.query.filter(Snow.past_24_temp_low != None).order_by(asc(Snow.past_24_temp_low)).first()
