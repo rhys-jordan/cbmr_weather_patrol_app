@@ -82,8 +82,27 @@
 
 {% endif %}
 {% if current_user.is_authenticated %}
+
+    <button onclick="window.location.href='/view/export'"> Export</button>
+    
     <table class="sortable" id="snowTable">
     <thead>
+        <tr>
+            <th onclick="sortTable(0)">Date</th>
+            <th onclick="sortTable(1)">PM-Form</th>
+            <th onclick="sortTable(2)">HS</th>
+            <th onclick="sortTable(3)">HN24</th>
+            <th onclick="sortTable(4)">HN24 SWE</th>
+            <th onclick="sortTable(5)">HST</th>
+            <th onclick="sortTable(6)">YTD</th>
+            <th onclick="sortTable(7)">YTD SWE</th>
+            <th onclick="sortTable(8)">Temp</th>
+            <th onclick="sortTable(9)">Wind Speed</th>
+            <th onclick="sortTable(10)">Wind Direction</th>
+            <th onclick="sortTable(11)">Peak Gust</th>
+            <th onclick="sortTable(12)">DELETE</th>
+            <th onclick="sortTable(13)">DELETE</th>
+            <th> </th>
     <tr>
         <th>Date</th>
         <th>PM-Form</th>
@@ -101,7 +120,7 @@
         <th>DELETE</th>
         <th> </th>
 
-    </tr>
+        </tr>
     </thead>
     <tbody>
     {% for i in snow%}

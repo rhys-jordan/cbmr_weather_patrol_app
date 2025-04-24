@@ -1,6 +1,6 @@
 import datetime
 from flask import Flask, render_template, request, redirect, jsonify
-from flask import Flask, render_template, request, redirect, send_file, after_this_request, session, url_for
+from flask import Flask, render_template, request, redirect, send_file, after_this_request, session, url_for, session
 from flask_json import FlaskJSON, json_response, as_json, JsonError
 from sqlalchemy import ForeignKey, desc
 from sqlalchemy.dialects.mysql import insert
@@ -9,6 +9,7 @@ from flask_login import LoginManager, UserMixin, login_user,logout_user,current_
 from datetime import datetime, timedelta
 from CBMR_Weather.extensions import db, login_manager
 from flask_apscheduler import APScheduler
+from CBMR_Weather.models import User, Snow
 
 
 
@@ -25,7 +26,6 @@ def create_app():
 
     db.init_app(app)
 
-
     from CBMR_Weather.routes import bp_home, bp_am_form, bp_forms, bp_read, bp_view, bp_pm_form, bp_update_form, bp_past_form, bp_update_pm_form
     app.register_blueprint(bp_home)
     app.register_blueprint(bp_am_form)
@@ -40,7 +40,16 @@ def create_app():
     login_manager.login_view = "/"
     login_manager.init_app(app)
 
+    @app.context_processor
+    def inject_user():
+
+        snow = Snow.query.order_by(desc(Snow.date)).first()
+        hs = snow.hs
+        ytd_snow = snow.ytd_snow
+        return dict(hs=hs, ytd_snow=ytd_snow)
+
     return app
+
 
 
 

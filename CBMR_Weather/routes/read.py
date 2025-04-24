@@ -1,8 +1,9 @@
+
 from CBMR_Weather.routes import bp_read
 from flask import render_template, request
 from CBMR_Weather.extensions import db
 from CBMR_Weather.models import Snow, Avalanche
-from sqlalchemy import desc
+from sqlalchemy import desc, asc, cast, Float
 from sqlalchemy import create_engine
 #import streamlit as st
 import pandas as pd
@@ -88,10 +89,30 @@ def read():
         'data_4': "hs",
         'season_4': seasons[0],
     }
+    
+    #Top Data
+    snow1 = Snow.query.filter(Snow.hn24 != None).order_by(desc(cast(Snow.hn24, Float))).first()
+    hn24Greatest = snow1.hn24
+    hn24Greatest_date = snow1.date
+    snow2 = Snow.query.filter(Snow.past_24_temp_low != None).order_by(asc(Snow.past_24_temp_low)).first()
+    temperatureColdest = snow2.past_24_temp_low
+    temperatureColdest_date = snow2.date
+    snow3 = Snow.query.filter(Snow.hs != None).order_by(desc(Snow.hs)).first()
+    hsDeepest = snow3.hs
+    hsDeepest_date = snow3.date
+    stats = {
+        'hn24Greatest': hn24Greatest,
+        'hn24Greatest_date': hn24Greatest_date,
+        'temperatureColdest': temperatureColdest,
+        'temperatureColdest_date': temperatureColdest_date,
+        'hsDeepest': hsDeepest,
+        'hsDeepest_date': hsDeepest_date,
+    }
 
     # Render the template with default values
     return render_template(
-        'read.html',
+        'read.html', 
+        stats=stats,
         seasons=seasons,
         dates_1=json.dumps(dates_1), data_1=data_1, title_1=json.dumps(title_1),
         y_label_1=json.dumps("YTD Snow"),
