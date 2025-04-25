@@ -450,3 +450,22 @@ button {
     padding: 10px;
 }
 
+#graphForm {
+    text-align: center; /* center child inline elements like button */
+}
+
+#graphForm button {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #0077b6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#graphForm button:hover {
+    background-color: #005f87;
+}
