@@ -14,6 +14,9 @@ import json
 
 @bp_read.route("/read", methods=['GET', 'POST'])
 def read():
+
+    stats = get_topStats()
+
     seasons_db = db.session.query(Snow.season).distinct()
     seasons = []
     for s in seasons_db:
@@ -58,6 +61,7 @@ def read():
         # Render the template with the form data and graphs
         return render_template(
             'read.html',
+            stats=stats,
             seasons=seasons,
             dates_1=json.dumps(dates_1), data_1=data_1, title_1=json.dumps(title_1),
             y_label_1=json.dumps(data_request_1),
@@ -88,25 +92,6 @@ def read():
         'season_3': seasons[0],
         'data_4': "hs",
         'season_4': seasons[0],
-    }
-    
-    #Top Data
-    snow1 = Snow.query.filter(Snow.hn24 != None).order_by(desc(cast(Snow.hn24, Float))).first()
-    hn24Greatest = snow1.hn24
-    hn24Greatest_date = snow1.date
-    snow2 = Snow.query.filter(Snow.past_24_temp_low != None).order_by(asc(Snow.past_24_temp_low)).first()
-    temperatureColdest = snow2.past_24_temp_low
-    temperatureColdest_date = snow2.date
-    snow3 = Snow.query.filter(Snow.hs != None).order_by(desc(Snow.hs)).first()
-    hsDeepest = snow3.hs
-    hsDeepest_date = snow3.date
-    stats = {
-        'hn24Greatest': hn24Greatest,
-        'hn24Greatest_date': hn24Greatest_date,
-        'temperatureColdest': temperatureColdest,
-        'temperatureColdest_date': temperatureColdest_date,
-        'hsDeepest': hsDeepest,
-        'hsDeepest_date': hsDeepest_date,
     }
 
     # Render the template with default values
@@ -257,3 +242,26 @@ def get_data_and_title(data_request, season):
         return get_temp(season)[0], get_temp(season)[1]
     else:
         return [], []
+
+def get_topStats():
+    # Top Data
+    snow1 = Snow.query.filter(Snow.hn24 != None).order_by(desc(cast(Snow.hn24, Float))).first()
+    hn24Greatest = snow1.hn24
+    hn24Greatest_date = snow1.date
+    snow2 = Snow.query.filter(Snow.past_24_temp_low != None).order_by(asc(Snow.past_24_temp_low)).first()
+    temperatureColdest = snow2.past_24_temp_low
+    temperatureColdest_date = snow2.date
+    snow3 = Snow.query.filter(Snow.hs != None).order_by(desc(Snow.hs)).first()
+    hsDeepest = snow3.hs
+    hsDeepest_date = snow3.date
+
+    stats = {
+        'hn24Greatest': hn24Greatest,
+        'hn24Greatest_date': hn24Greatest_date,
+        'temperatureColdest': temperatureColdest,
+        'temperatureColdest_date': temperatureColdest_date,
+        'hsDeepest': hsDeepest,
+        'hsDeepest_date': hsDeepest_date,
+    }
+
+    return stats

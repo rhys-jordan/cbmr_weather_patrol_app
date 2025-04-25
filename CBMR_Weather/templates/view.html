@@ -10,21 +10,21 @@
 <form method="get" action="{{ url_for('view.view') }}" id="view_search">
     <a href="{{ url_for('view.view') }}"><button type="button" id="reset_button">Reset</button></a>
     <div id="column_search">
-    <label for="column" id="column_label">Search In:</label>
-    <select name="column" id="column">
-        <option value="date" {% if column == 'date' %}selected{% endif %}>Date</option>
-        <option value="season" {% if column == 'season' %}selected{% endif %}>Season</option>
-        <option value="hs" {% if column == 'hs' %}selected{% endif %}>HS</option>
-        <option value="hn24" {% if column == 'hn24' %}selected{% endif %}>HN24</option>
-        <option value="hn24_swe" {% if column == 'hn24_swe' %}selected{% endif %}>HN24 SWE</option>
-        <option value="hst" {% if column == 'hst' %}selected{% endif %}>HST</option>
-        <option value="ytd_snow" {% if column == 'ytd_snow' %}selected{% endif %}>YTD Snow</option>
-        <option value="ytd_swe" {% if column == 'ytd_swe' %}selected{% endif %}>YTD SWE</option>
-        <option value="temperature" {% if column == 'temperature' %}selected{% endif %}>Temp</option>
-        <option value="wind_mph" {% if column == 'wind_mph' %}selected{% endif %}>Wind Speed</option>
-        <option value="wind_direction" {% if column == 'wind_direction' %}selected{% endif %}>Wind Direction</option>
-        <option value="peak_gust" {% if column == 'peak_gust' %}selected{% endif %}>Peak Gust</option>
-    </select>
+        <label for="column" id="column_label">Search In:</label>
+        <select name="column" id="column">
+            <option value="date" {% if column == 'date' %}selected{% endif %}>Date</option>
+            <option value="season" {% if column == 'season' %}selected{% endif %}>Season</option>
+            <option value="hs" {% if column == 'hs' %}selected{% endif %}>HS</option>
+            <option value="hn24" {% if column == 'hn24' %}selected{% endif %}>HN24</option>
+            <option value="hn24_swe" {% if column == 'hn24_swe' %}selected{% endif %}>HN24 SWE</option>
+            <option value="hst" {% if column == 'hst' %}selected{% endif %}>HST</option>
+            <option value="ytd_snow" {% if column == 'ytd_snow' %}selected{% endif %}>YTD Snow</option>
+            <option value="ytd_swe" {% if column == 'ytd_swe' %}selected{% endif %}>YTD SWE</option>
+            <option value="temperature" {% if column == 'temperature' %}selected{% endif %}>Temp</option>
+            <option value="wind_mph" {% if column == 'wind_mph' %}selected{% endif %}>Wind Speed</option>
+            <option value="wind_direction" {% if column == 'wind_direction' %}selected{% endif %}>Wind Direction</option>
+            <option value="peak_gust" {% if column == 'peak_gust' %}selected{% endif %}>Peak Gust</option>
+        </select>
     </div>
     <div id="search_for">
         <label>Search For:</label>
@@ -88,38 +88,21 @@
     <table class="sortable" id="snowTable">
     <thead>
         <tr>
-            <th onclick="sortTable(0)">Date</th>
-            <th onclick="sortTable(1)">PM-Form</th>
-            <th onclick="sortTable(2)">HS</th>
-            <th onclick="sortTable(3)">HN24</th>
-            <th onclick="sortTable(4)">HN24 SWE</th>
-            <th onclick="sortTable(5)">HST</th>
-            <th onclick="sortTable(6)">YTD</th>
-            <th onclick="sortTable(7)">YTD SWE</th>
-            <th onclick="sortTable(8)">Temp</th>
-            <th onclick="sortTable(9)">Wind Speed</th>
-            <th onclick="sortTable(10)">Wind Direction</th>
-            <th onclick="sortTable(11)">Peak Gust</th>
-            <th onclick="sortTable(12)">DELETE</th>
-            <th onclick="sortTable(13)">DELETE</th>
+            <th>Date</th>
+            <th>PM-Form</th>
+            <th>HS</th>
+            <th>HN24</th>
+            <th>HN24 SWE</th>
+            <th>HST</th>
+            <th>YTD</th>
+            <th>YTD SWE</th>
+            <th>Temp</th>
+            <th>Wind Speed</th>
+            <th>Wind Direction</th>
+            <th>Peak Gust</th>
+            <th>DELETE</th>
+            <th>DELETE</th>
             <th> </th>
-    <tr>
-        <th>Date</th>
-        <th>PM-Form</th>
-        <th>HS</th>
-        <th>HN24</th>
-        <th>HN24 SWE</th>
-        <th>HST</th>
-        <th>YTD</th>
-        <th>YTD SWE</th>
-        <th>Temp</th>
-        <th>Wind Speed</th>
-        <th>Wind Direction</th>
-        <th>Peak Gust</th>
-        <th>DELETE</th>
-        <th>DELETE</th>
-        <th> </th>
-
         </tr>
     </thead>
     <tbody>

@@ -11,10 +11,7 @@
 <script src="/static/code.js"> </script>
 <nav> 
     <ul class="navbar">
-        <li class="nav-logo">
-            <img src="/static/CB_Logo.jpg" alt="Logo" class="nav-img">
-        </li>
-        <li><a href='/'>HOME</a></li>
+        <li><a href='/'><img src="/static/CB_Logo.jpg" alt="Logo" class="nav-img"></a></li>
         {% if current_user.is_authenticated == False %}
             <li><a href='/read'>READ</a></li>
             <li><a href='/view'>VIEW</a></li>

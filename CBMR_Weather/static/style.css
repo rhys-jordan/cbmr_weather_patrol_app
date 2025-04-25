@@ -591,6 +591,12 @@ button {
     box-sizing: border-box;
 }
 
+#readDataBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 #graphForm {
     display: flex;
     flex-direction: column;

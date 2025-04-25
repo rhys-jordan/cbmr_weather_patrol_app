@@ -10,12 +10,33 @@
 
 <script src="/static/graphs.js"></script>
 
-<div>
-        <ul>
-            <li><strong>Greatest 24hr Snowfall:</strong> {{stats.hn24Greatest}}in. <strong>on</strong> {{stats.hn24Greatest_date}}</li>
-            <li><strong>Coldest Temperature:</strong> {{stats.temperatureColdest}}° <strong>on</strong> {{stats.temperatureColdest_date}}</li>
-            <li><strong>Deepest Snowpack:</strong> {{stats.hsDeepest}}in. <strong>on</strong> {{stats.hsDeepest_date}}</li>
-        </ul>
+<div id="readDataBox">
+    <table id="graph_input_table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Value</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th><strong>Greatest 24hr Snowfall</strong></th>
+                <td>{{stats.hn24Greatest}}in.</td>
+                <td>{{stats.hn24Greatest_date}}</td>
+            </tr>
+            <tr>
+                <th><strong>Coldest Temperature</strong></th>
+                <td>{{stats.temperatureColdest}}°</td>
+                <td>{{stats.temperatureColdest_date}}</td>
+            </tr>
+            <tr>
+                <th><strong>Deepest Snowpack</strong></th>
+                <td>{{stats.hsDeepest}}in.</td>
+                <td>{{stats.hsDeepest_date}}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <form action="/read" method="post" id="graphForm">
@@ -115,7 +136,8 @@
     </tbody>
 </table>
 
-   <br> <button type="submit">Submit</button>
+<br> 
+<button type="submit">Submit</button>
 </form>
 
 <div id="leftHalf">
