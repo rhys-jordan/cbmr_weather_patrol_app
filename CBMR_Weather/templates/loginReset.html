@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% block title%} LOGIN RESET {% endblock %}
 {% block content %}
-
 <body style="background: url(/static/Mount_crested_butte_1988.jpg); background-repeat: no-repeat; background-size: cover; height: 100vh; justify-content: center; align-items: center;">
 
+{% block head %}
+   <link href="/static/loginResetStyling.css" rel="stylesheet">
+{% endblock %}
     <div id="loginReset_container">
         <h1 id="title_reset"> Reset Your Username/Password </h1>
 
