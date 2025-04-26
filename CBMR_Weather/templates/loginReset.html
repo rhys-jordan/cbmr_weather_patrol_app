@@ -1,33 +1,50 @@
 {% extends "base.html" %}
-{% block title%} LOGIN RESET {%endblock%}
-{% block content%}
+{% block title%} LOGIN RESET {% endblock %}
+{% block content %}
 
+<body style="background: url(/static/Mount_crested_butte_1988.jpg); background-repeat: no-repeat; background-size: cover; height: 100vh; justify-content: center; align-items: center;">
 
-<body style="background:url(/static/Mount_crested_butte_1988.jpg); background-repeat:no-repeat; background-size:cover;">
+    <div id="loginReset_container">
+        <h1 id="title_reset"> Reset Your Username/Password </h1>
 
-    <h1 id="title"> Reset Your Username/Password </h1>
-    Enter your Confirmation Key from the email.
-    Leave the Username fields empty to keep your current username.
+        <form id="loginReset" action="/loginReset" method="post">
+            <div class="form-group">
+                    <strong class="red-text">Enter your Confirmation Key from the email.</strong><br>
+                <label for="resetCode">Reset Code:</label>
+                <input type="text" id="resetCode" required name="resetCode" value="{{resetCode}}">
+            </div>
+
+            <div class="form-group">
+                <label for="new_username">New Username:</label>
+                <input type="text" id="new_username" name="new_username" value="{{new_username}}">
+                    <p class="small-red-text">Leave the Username fields empty to keep your current username.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_username">Confirm Username:</label>
+                <input type="text" id="confirm_username" name="confirm_username" value="{{confirm_username}}">
+            </div>
+
+            <div class="form-group">
+                <label for="new_password">New Password:</label>
+                <input type="password" id="new_password" required name="new_password" value="{{new_password}}">
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" id="confirm_password" required name="confirm_password" value="{{confirm_password}}">
+            </div>
+
+            <p class="error-message">{{error_message}}</p>
+
+            <button type="submit" class="submit-btn">Reset Password</button>
+        </form>
+
+        <a href="/login">
+            <button class="return-btn">Return to Login Page</button>
+        </a>
+    </div>
 
 </body>
-
-<div id="loginReset_container">
-        <form id="loginReset" action="/loginReset" method="post">
-                <label> Reset Code:</label>
-                <input type="resetCode" required="required" name="resetCode" value={{resetCode}}><br>
-                <label> New Username:</label>
-                <input type="username" name="new_username" value={{new_username}}><br>
-                <label> Confirm Username:</label>
-                <input type="password" name="confirm_username" value={{confirm_username}}><br>
-                <label> New Password:</label>
-                <input type="password" required="required" name="new_password" value={{new_password}}><br>
-                <label> Confirm Password:</label>
-                <input type="password" required="required" name="confirm_password" value={{confirm_password}}><br>
-                <p name="reset_password_error">{{error_message}}</p>
-                <button type="submit" name="action" value="submit_query" onclick="submit_loginResetConfirmation(event)">Reset Password</button>
-        </form>
-</div>
-
-<a href="/login"><button>Return to Login Page</button></a>
 
 {% endblock %}

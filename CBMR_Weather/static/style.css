@@ -3,45 +3,28 @@ nav {
     width: 100%;
 }
 
-.navbar {
-    list-style-type: none;
+nav ul {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    align-items: center;
-    padding: 0;
-    margin: 0;
 }
 
-.navbar li {
+nav ul li {
+    display: inline;
     padding: 10px;
 }
-
-.navbar li a:link,
-.navbar li a:visited {
-    color: white;
-    text-decoration: none;
-}
-
-.navbar li a:hover {
-    color: green;
-}
-
-.snow-data {
-    margin-left: auto;
-    color: white;
-    font-weight: normal;
-    padding: 10px;
-    white-space: nowrap;
-}
-
-.nav-logo {
-    padding: 0 10px;
-}
-
 .nav-img {
     height: 30px;
     width: 90px;
     vertical-align: middle;
+}
+
+nav ul li a:link, nav ul li a:visited{
+    color: white;
+}
+
+nav ul li a:hover{
+    color: green;
 }
 
 input{
@@ -70,7 +53,6 @@ p.error-text {
 }
 
 p{ color: purple;}
-
 img.correct{
     border: 5px solid green;
 }
@@ -191,23 +173,55 @@ form {
     min-width: 100px;
     padding: 5px;
 }
-
-#loginForm_container{
-  width: 25%;
-  margin: 20px auto;
-  text-align: center;
-  font-size:1.5vw;
-  padding: 20px;
+#loginForm_container {
+    max-width: 400px;
+    margin: 50px auto;
+    background-color: #f9f9f9;
+    border-radius: 8px;
 }
 
-#loginForm_container form{
-    text-align: center;
+#loginForm {
+    display: flex;
+    flex-direction: column;
 }
 
-#loginForm_container button{
-    margin-top: 10px;
-    text-align: center;
-    font-size: 1.5vw;
+.input_div {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input_div label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.input_div input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.button_div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button_div button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    background-color: #0077b6;
+    color: white;
+    width: 48%;
+}
+
+.button_div button:hover {
+    background-color: #005f87;
 }
 
 #title{
@@ -475,19 +489,6 @@ button {
     text-align: center;
 }
 
-
-.info-box {
-    position: fixed;
-    top: 20px; 
-    left: 50%;
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-    font-size: 18px;
-    max-width: 400px;
-    text-align: left;
-
 #view_search {
     display: flex;
     align-items: center;
@@ -591,12 +592,6 @@ button {
     box-sizing: border-box;
 }
 
-#readDataBox {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 #graphForm {
     display: flex;
     flex-direction: column;
@@ -617,5 +612,253 @@ button {
 
 #graphForm button:hover {
     background-color: #005f87;
+}
 
+.snow-data {
+     margin-left: auto;
+     color: white;
+     font-weight: normal;
+     padding: 10px;
+     white-space: nowrap;
+ }
+
+
+
+#readDataForm {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+#readDataBox_div {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+#readDataBox {
+    width: 60%; /* Reduced width */
+    margin: 0 auto;
+    border-collapse: collapse;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #fdfdfd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#readDataBox thead {
+    background-color: #0077b6;
+    color: white;
+    font-size: 0.9rem; /* Smaller font size */
+}
+
+#readDataBox th,
+#readDataBox td {
+    padding: 8px 12px; /* Reduced padding */
+    border: 1px solid #ddd;
+}
+
+#readDataBox tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#readDataBox th {
+    font-weight: bold;
+}
+
+#readDataBox td {
+    font-size: 0.9rem; /* Smaller font size */
+}
+
+#loginReset_container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin: 0 auto;
+}
+
+#title_reset {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.intro-text {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.intro-text strong {
+    font-size: 1.5rem; /* Make the "Enter your Confirmation Key" text larger */
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    font-size: 1rem;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+input[type="password"] {
+    font-family: 'Arial', sans-serif;
+}
+
+.error-message {
+    color: red;
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+.submit-btn {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    background-color: #0077b6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    background-color: #005f87;
+}
+
+.return-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.return-btn:hover {
+    background-color: #d32f2f;
+}
+
+#loginReset_container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+#title_reset {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.intro-text {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.intro-text strong {
+    font-size: 1.5rem; /* Make the "Enter your Confirmation Key" text larger */
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    font-size: 1rem;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+input[type="password"] {
+    font-family: 'Arial', sans-serif;
+}
+
+.error-message {
+    color: red;
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+.submit-btn {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    background-color: #0077b6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    background-color: #005f87;
+}
+
+.return-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.return-btn:hover {
+    background-color: #d32f2f;
+}
+
+.small-red-text {
+    color: red;
+    font-size: 0.8rem; /* Makes the text smaller */
+    margin-top: 5px; /* Optional: adds a little spacing between the input and the text */
+}
+.red-text {
+    color: red; /* Makes the text red */
 }

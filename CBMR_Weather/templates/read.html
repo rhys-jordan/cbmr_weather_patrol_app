@@ -10,19 +10,19 @@
 
 <script src="/static/graphs.js"></script>
 
-<div id="readDataBox">
-    <table id="graph_input_table">
+<div id="readDataBox_div">
+    <table id="readDataBox">
         <thead>
             <tr>
-                <th></th>
-                <th>Value</th>
+                <th>Metric</th>
+                <th>Measure</th>
                 <th>Date</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <th><strong>Greatest 24hr Snowfall</strong></th>
-                <td>{{stats.hn24Greatest}}in.</td>
+                <td>{{stats.hn24Greatest}} in.</td>
                 <td>{{stats.hn24Greatest_date}}</td>
             </tr>
             <tr>
@@ -32,7 +32,7 @@
             </tr>
             <tr>
                 <th><strong>Deepest Snowpack</strong></th>
-                <td>{{stats.hsDeepest}}in.</td>
+                <td>{{stats.hsDeepest}} in.</td>
                 <td>{{stats.hsDeepest_date}}</td>
             </tr>
         </tbody>

@@ -5,18 +5,20 @@
 
 <div id="loginForm_container">
         <form id="loginForm" action="/login" method="post">
-                <label for="username"> Username:</label>
-                <input type="text" required="required" name="username" id="username" value={{username}}><br>
-                <label for="password"> Password:</label>
-                <input type="password" required="required" name="password" id="password" value={{password}}><br>
+                <div id="username_div">
+                        <label for="username"> Username:</label>
+                        <input type="text" required="required" name="username" id="username" value={{username}}><br>
+                </div>
+                <div id="password_div">
+                        <label for="password"> Password:</label>
+                        <input type="password" required="required" name="password" id="password" value={{password}}><br>
+                        </div>
+                <div id="login_button_div">
                 <button type="submit" name="action" value="submit_query">Login</button>
+                <button type="submit" name="action" value="submit_query" onclick="submit_loginReset(event)">Forgot/Reset Login</button>
+                        </div>
         </form>
 </div>
 
-<div id="loginForm_container">
-        <form id="resetLogin" action="/resetEmail" method="post">
-              <button type="submit" name="action" value="submit_query" onclick="submit_loginReset(event)">Forgot/Reset Login</button>
-        </form>
-</div>
 
 {% endblock %}
