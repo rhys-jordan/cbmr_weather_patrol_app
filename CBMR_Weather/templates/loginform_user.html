@@ -15,10 +15,16 @@
                         </div>
                 <div id="login_button_div">
                 <button type="submit" name="action" value="submit_query">Login</button>
-                <button type="submit" name="action" value="submit_query" onclick="submit_loginReset(event)">Reset Login</button>
                         </div>
         </form>
+
 </div>
+<div id="loginForm_container_reset">
+        <form id="resetLogin" action="/resetEmail" method="post">
+              <button type="submit" name="action" value="submit_query" onclick="submit_loginReset(event)">Reset Login</button>
+        </form>
+</div>
+
 
 
 {% endblock %}

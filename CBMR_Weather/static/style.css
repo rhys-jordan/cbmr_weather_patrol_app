@@ -675,3 +675,7 @@ button {
 #readDataBox td {
     font-size: 0.9rem; /* Smaller font size */
 }
+
+#resetLogin{
+    width: 20%;
+}
