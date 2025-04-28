@@ -109,6 +109,6 @@ def update_form(inputDate):
         snow=Snow.query.filter_by(date=inputDate).first()
         snowId=snow.id
         avalanche=Avalanche.query.filter_by(Snow_id=snowId).all()
-        print(avalanche)
-        return render_template('update-form.html', oldSnow=snow,avalanches=avalanche)
+        formatted_snow_datetime = snow.dateTime.strftime("%Y-%m-%dT%H:%M")
+        return render_template('update-form.html', oldSnow=snow,avalanches=avalanche,formatted_snow_datetime=formatted_snow_datetime)
 

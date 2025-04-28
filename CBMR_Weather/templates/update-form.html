@@ -10,7 +10,7 @@
 
 <br><form action="/update-form/{{oldSnow.dateTime}}" method="post" onkeydown="return event.key != 'Enter';">
     <div class= "date_row">
-        <label>Date: </label> <input type="datetime-local" id="datetime" name="datetime" value='{{oldSnow.dateTime}}'>
+        <label>Date: </label> <input type="datetime-local" id="datetime" name="datetime" value='{{formatted_snow_datetime}}'>
         <label>Forecaster: </label> <input type="text" id="forecaster" name="forecaster" value='{{oldSnow.forecaster}}'><br>
     </div>
     <div class = "snow_row">
