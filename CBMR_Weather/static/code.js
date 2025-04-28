@@ -300,3 +300,25 @@ function resetProblem4Fields() {
     document.getElementById("size_4").value = "";
     document.getElementById("likelihood_4").value = "";
 }
+
+
+function openAMForm() {
+    const userChoice = confirm("Would you like to use today's date?\nClick 'OK' for today or 'Cancel' to enter your own date.");
+
+    let selectedDate;
+
+    if (userChoice) {
+      // Use today's date in YYYY-MM-DD format
+      const today = new Date();
+      selectedDate = today.toISOString().split('T')[0];
+    } else {
+      selectedDate = prompt("Please enter a date (YYYY-MM-DD):", "");
+      if (!selectedDate) {
+        alert("No date entered. Action cancelled.");
+        return;
+      }
+    }
+
+    // Open the form in a new tab with the selected date as a query parameter
+    window.open(`/am-form?date=${selectedDate}`, '_blank');
+  }
