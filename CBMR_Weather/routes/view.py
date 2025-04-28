@@ -46,12 +46,18 @@ def view():
     if search_column in column_map:
         column_attr = column_map[search_column]
         query = query.filter(column_attr.isnot(None))
-    if search_column in column_map:
-        column_attr = column_map[search_column]
-        if sort_order == "desc":
-            query = query.order_by(db.cast(column_attr, db.Float).desc())
+        numeric_columns = ["hs", "hn24", "hn24_swe", "hst", "ytd_snow", "ytd_swe", "temperature", "wind_mph",
+                           "peak_gust"]
+        if search_column in numeric_columns:
+            if sort_order == "desc":
+                query = query.order_by(db.cast(column_attr, db.Float).desc())
+            else:
+                query = query.order_by(db.cast(column_attr, db.Float).asc())
         else:
-            query = query.order_by(db.cast(column_attr, db.Float).asc())
+            if sort_order == "desc":
+                query = query.order_by(column_attr.desc())
+            else:
+                query = query.order_by(column_attr.asc())
     else:
         query = query.order_by(Snow.date.desc())
 
