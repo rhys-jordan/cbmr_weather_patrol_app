@@ -11,6 +11,3 @@ The Crested Butte Mountain Resort Weather Application is a collaborative project
 The purpose of this project is to help expedite the Crested Butte Ski Patrol weather tracking and record keeping. The goal is to reduce the time and energy spent by CBMR entering their weather data. CBMR does not use the data currently stored in their excel sheet, so another objective of this project is to produce visuals and summaries of existing data for later use.  
 
 
-
-# <ins> Hosting steps </ins>
-
