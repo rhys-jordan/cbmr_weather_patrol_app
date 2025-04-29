@@ -20,7 +20,8 @@
             <option value="hst" {% if column == 'hst' %}selected{% endif %}>HST</option>
             <option value="ytd_snow" {% if column == 'ytd_snow' %}selected{% endif %}>YTD Snow</option>
             <option value="ytd_swe" {% if column == 'ytd_swe' %}selected{% endif %}>YTD SWE</option>
-            <option value="temperature" {% if column == 'temperature' %}selected{% endif %}>Temp</option>
+            <option value="temperature_low" {% if column == 'temperature_low' %}selected{% endif %}>Temp Low</option>
+            <option value="temperature_high" {% if column == 'temperature_high' %}selected{% endif %}>Temp High</option>
             <option value="wind_mph" {% if column == 'wind_mph' %}selected{% endif %}>Wind Speed</option>
             <option value="wind_direction" {% if column == 'wind_direction' %}selected{% endif %}>Wind Direction</option>
             <option value="peak_gust" {% if column == 'peak_gust' %}selected{% endif %}>Peak Gust</option>
@@ -51,7 +52,8 @@
         <th>HST (Total storm snow)</th>
         <th>YTD (Year-to-date snow)</th>
         <th>YTD SWE</th>
-        <th>Temp</th>
+        <th>Temp Low</th>
+        <th>Temp High</th>
         <th>Wind Speed</th>
         <th>Wind Direction</th>
         <th>Peak Gust</th>
@@ -69,7 +71,8 @@
             <td>{{ i.hst }}</td>
             <td>{{ i.ytd_snow }}</td>
             <td>{{ i.ytd_swe }}</td>
-            <td>{{ i.temperature }}</td>
+            <td>{{ i.past_24_temp_low }}</td>
+            <td>{{ i.past_24_temp_high }}</td>
             <td>{{ i.wind_mph }}</td>
             <td>{{ i.wind_direction }}</td>
             <td>{{ i.current_peak_gust_mph }}</td>
@@ -96,7 +99,8 @@
             <th>HST</th>
             <th>YTD</th>
             <th>YTD SWE</th>
-            <th>Temp</th>
+            <th>Temp Low</th>
+            <th>Temp High</th>
             <th>Wind Speed</th>
             <th>Wind Direction</th>
             <th>Peak Gust</th>
@@ -116,7 +120,8 @@
             <td>{{ i.hst }}</td>
             <td>{{ i.ytd_snow }}</td>
             <td>{{ i.ytd_swe }}</td>
-            <td>{{ i.temperature }}</td>
+            <td>{{ i.past_24_temp_low }}</td>
+            <td>{{ i.past_24_temp_high }}</td>
             <td>{{ i.wind_mph }}</td>
             <td>{{ i.wind_direction }}</td>
             <td>{{ i.current_peak_gust_mph }}</td>

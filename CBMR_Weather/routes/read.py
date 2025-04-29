@@ -100,9 +100,9 @@ def read():
         stats=stats,
         seasons=seasons,
         dates_1=json.dumps(dates_1), data_1=data_1, title_1=json.dumps(title_1),
-        y_label_1=json.dumps("YTD Snow"),
+        y_label_1=json.dumps("YTD Snow (in)"),
         dates_2=json.dumps(dates_2), data_2=data_2, title_2=json.dumps(title_2),
-        y_label_2=json.dumps("YTD SWE"),
+        y_label_2=json.dumps("YTD SWE (in)"),
         dates_3=json.dumps(dates_3), data_3=data_3, title_3=json.dumps(title_3),
         y_label_3=json.dumps("HN24 (in)"),
         dates_4=json.dumps(dates_4), data_4=data_4, title_4=json.dumps(title_4),
@@ -184,8 +184,20 @@ def get_swe_ytd_swe(season):
             ytd_swe.append(0 + past_hn24 )
     return dates, ytd_swe
 
-def get_temp(season):
-    temps = db.session.query(Snow.temperature, Snow.date).filter(Snow.season == season).order_by(Snow.date)
+def get_temp_high(season):
+    temps = db.session.query(Snow.past_24_temp_high, Snow.date).filter(Snow.season == season).order_by(Snow.date)
+    dates = []
+    temperatures = []
+    for row in temps:
+        date_format = datetime.strftime(row[1], '%m-%d-%Y')
+        if (row[0] != None):
+            dates.append(date_format)
+            # dates.append(str(inct))
+            temperatures.append(row[0])
+    return dates, temperatures
+
+def get_temp_low(season):
+    temps = db.session.query(Snow.past_24_temp_low, Snow.date).filter(Snow.season == season).order_by(Snow.date)
     dates = []
     temperatures = []
     for row in temps:
@@ -238,8 +250,10 @@ def get_data_and_title(data_request, season):
         return get_hn24(season)[0],get_hn24(season)[1]
     elif data_request == "hs":
         return get_hs(season)[0], get_hs(season)[1]
-    elif data_request == "temp":
-        return get_temp(season)[0], get_temp(season)[1]
+    elif data_request == "temp low":
+        return get_temp_low(season)[0], get_temp_low(season)[1]
+    elif data_request == "temp high":
+        return get_temp_low(season)[0], get_temp_high(season)[1]
     else:
         return [], []
 
