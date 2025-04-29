@@ -28,7 +28,8 @@ def view():
         "hst": Snow.hst,
         "ytd_snow": Snow.ytd_snow,
         "ytd_swe": Snow.ytd_swe,
-        "temperature": Snow.temperature,
+        "temperature_low": Snow.past_24_temp_low,
+        "temperature_high": Snow.past_24_temp_high,
         "wind_mph": Snow.wind_mph,
         "wind_direction": Snow.wind_direction,
         "peak_gust": Snow.current_peak_gust_mph,
@@ -46,7 +47,7 @@ def view():
     if search_column in column_map:
         column_attr = column_map[search_column]
         query = query.filter(column_attr.isnot(None))
-        numeric_columns = ["hs", "hn24", "hn24_swe", "hst", "ytd_snow", "ytd_swe", "temperature", "wind_mph",
+        numeric_columns = ["hs", "hn24", "hn24_swe", "hst", "ytd_snow", "ytd_swe", "temperature_low","temperature_high", "wind_mph",
                            "peak_gust"]
         if search_column in numeric_columns:
             if sort_order == "desc":
