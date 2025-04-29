@@ -496,8 +496,8 @@ def generate_pdf(date):
 
     doc.build(elements)
 
-    #local
-    return 'past_pdfs/' + pdf_file_name
+    return 'past_pdfs/' + pdf_file_name #local
+    #return '/home/CBMRPatrolApp/past_pdfs/' + pdf_file_name  # pythonAnywhere
 
 
 def main():

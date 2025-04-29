@@ -48,12 +48,13 @@ def reset_email():
     subject = "CBMR Patrol App Reset Login"
 
     link = "http://127.0.0.1:5000/loginReset"  # local
-    # link = "https://cbmrpatrolapp.pythonanywhere.com/loginReset.html" #pythonAnywhere
-    confirmation_key = "8493"
+    # link = "https://cbmrpatrolapp.pythonanywhere.com/loginReset" #pythonAnywhere
+
 
     user = User.query.filter_by(id=1).first()
     username = user.username
     password = user.password
+    confirmation_key = user.password
 
     body = f"""
         Hello,
@@ -107,7 +108,7 @@ def login_reset():
         new_password = request.form.get('new_password', None)
         confirm_password = request.form.get('confirm_password', None)
         user = User.query.filter_by(username=username).first()
-        if (resetCode != '8493'):
+        if (resetCode != password):
             return render_template('loginReset.html', error_message="Invalid Reset Code")
         if (new_username != confirm_username):
             return render_template('loginReset.html', error_message="Usernames do not match")
