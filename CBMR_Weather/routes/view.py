@@ -79,7 +79,7 @@ def delete_am_data(inputDate):
                 db.session.delete(dateCheck_pm)
                 db.session.commit()
     snow = Snow.query.order_by(desc(Snow.date)).all()
-    return redirect(url_for('view.view', snow=snow))
+    return redirect(url_for('view.view'))
 
 @bp_view.route('/view_pm/<inputDate>', methods=['GET', 'POST'])
 @login_required
@@ -91,7 +91,7 @@ def delete_pm_data(inputDate):
             db.session.commit()
     snow = Snow.query.order_by(desc(Snow.date)).all()
 
-    return redirect(url_for('view.view', snow=snow))
+    return redirect(url_for('view.view'))
 
 @bp_view.route('/view/export')
 @login_required
