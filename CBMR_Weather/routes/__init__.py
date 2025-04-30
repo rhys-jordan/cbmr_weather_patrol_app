@@ -9,8 +9,11 @@ bp_pm_form = Blueprint('pm_form', __name__)
 bp_update_form = Blueprint('update_form', __name__)
 bp_past_form = Blueprint('past_form', __name__)
 bp_update_pm_form = Blueprint('update_pm_form',__name__)
+bp_rankings = Blueprint('rankings',__name__)
 
-from CBMR_Weather.routes import home, am_form, forms, read, view, pm_form, update_form, past_data_form, update_pm_form
+
+from CBMR_Weather.routes import (home, am_form, forms, read, view, rankings,
+                                 pm_form, update_form, past_data_form, update_pm_form)
 
 from CBMR_Weather import login_manager
 from CBMR_Weather.models import User

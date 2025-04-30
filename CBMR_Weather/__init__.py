@@ -26,7 +26,8 @@ def create_app():
 
     db.init_app(app)
 
-    from CBMR_Weather.routes import bp_home, bp_am_form, bp_forms, bp_read, bp_view, bp_pm_form, bp_update_form, bp_past_form, bp_update_pm_form
+    from CBMR_Weather.routes import (bp_home, bp_am_form, bp_forms, bp_read, bp_view, bp_rankings,
+                                     bp_pm_form, bp_update_form, bp_past_form, bp_update_pm_form)
     app.register_blueprint(bp_home)
     app.register_blueprint(bp_am_form)
     app.register_blueprint(bp_forms)
@@ -36,6 +37,7 @@ def create_app():
     app.register_blueprint(bp_update_form)
     app.register_blueprint(bp_past_form)
     app.register_blueprint(bp_update_pm_form)
+    app.register_blueprint(bp_rankings)
 
     login_manager.login_view = "/"
     login_manager.init_app(app)
