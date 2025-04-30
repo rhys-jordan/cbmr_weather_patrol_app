@@ -7,6 +7,41 @@
 </script>
 <h1 id="title"> View Data</h1><br>
 
+<div id="readDataBox_div">
+    <table id="readDataBox">
+        <caption id="title_season">Monthly Snow Totals and YTD Snow Total for each Season</caption>
+        <thead>
+            <tr>
+                <th>Ranking</th>
+                <th>Season</th>
+                <th>Oct-Sep</th>
+                <th>November</th>
+                <th>January</th>
+                <th>February</th>
+                <th>March</th>
+                <th>April</th>
+                <th>YTD Total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+           {% for i in ytd_snow_total%}
+            <tr>
+                <td> {{ loop.index }}</td>
+                <td> {{ i[0] }}</td>
+                <td>{{ i[1] }}</td>
+                <td>{{ i[3] }}</td>
+                <td>{{ i[4] }}</td>
+                <td>{{ i[5] }}</td>
+                <td>{{ i[6] }}</td>
+                <td>{{ i[7]}}</td>
+                <td>{{ i[8] }}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+
 <form method="get" action="{{ url_for('view.view') }}" id="view_search">
     <a href="{{ url_for('view.view') }}"><button type="button" id="reset_button">Reset</button></a>
     <div id="column_search">

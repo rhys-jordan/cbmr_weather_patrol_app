@@ -676,6 +676,11 @@ button {
     font-size: 0.9rem; /* Smaller font size */
 }
 
+#title_season {
+    background-color: #f2f2f2;
+    font-size: 1.5rem;
+}
+
 #resetLogin{
     width: 20%;
 }
