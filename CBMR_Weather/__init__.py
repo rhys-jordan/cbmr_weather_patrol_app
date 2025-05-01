@@ -15,9 +15,6 @@ from CBMR_Weather.models import User, Snow
 
 def create_app():
     app = Flask(__name__, static_url_path='/static')
-    #json = FlaskJSON(app)
-    #"C:\Users\rhysj\OneDrive\Desktop\cbmr_weather_patrol_app\CBMR_Weather\instance\CBMR_Weather.db"
-    #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CBMR_Weather.db'  # Local
     #sqlite:///C:\Users\rhysj\OneDrive\Desktop\cbmr_weather_patrol_app\CBMR_Weather\instance\CBMR_Weather.db
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CBMR_Weather.db'  # Local
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/CBMRPatrolApp/database/CBMR_Weather.db' #pythonAnywhere

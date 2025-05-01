@@ -1,14 +1,47 @@
 {% extends "base.html" %}
-{% block title%} View {%endblock%}
+{% block title%}Rankings{%endblock%}
 {% block content%}
-<h1 id="title"> Rankings</h1><br>
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
+<h1 id="title"> View Monthly and Yearly Totals</h1><br>
+
+
+<div id="readDataBox_div">
+    <table id="readDataBox">
+        <caption id="title_season">Monthly Snow Totals and YTD Snow Total for each Season</caption>
+        <thead>
+            <tr>
+                <th>Ranking</th>
+                <th>Season</th>
+                <th>Sep-Oct</th>
+                <th>November</th>
+                <th>December</th>
+                <th>January</th>
+                <th>February</th>
+                <th>March</th>
+                <th>April</th>
+                <th>YTD Total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+           {% for i in ytd_snow_total%}
+            <tr>
+                <td> {{ loop.index }}</td>
+                <td> {{ i[0] }}</td>
+                <td>{{ i[1] }}</td>
+                <td>{{ i[2] }}</td>
+                <td>{{ i[3] }}</td>
+                <td>{{ i[4] }}</td>
+                <td>{{ i[5] }}</td>
+                <td>{{ i[6] }}</td>
+                <td>{{ i[7]}}</td>
+                <td>{{ i[8] }}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
+
 
 
 {% endblock %}

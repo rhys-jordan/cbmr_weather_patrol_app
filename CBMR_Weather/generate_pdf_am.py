@@ -45,9 +45,9 @@ def get_information(category_name):
         return ''
 
 def create_header():
-    img_path = os.path.join("CBMR_Weather","static", 'CB_Logo.jpg')
-    img = Image(img_path, width=100, height=50)
-    #img = Image('./CBMR_Weather/static/CB_Logo.jpg', width=100, height=50)  # local
+    #img_path = os.path.join("CBMR_Weather","static", 'CB_Logo.jpg')
+    #img = Image(img_path, width=100, height=50)
+    img = Image('./CBMR_Weather/static/CB_Logo.jpg', width=100, height=50)  # local
     #img = Image('/home/CBMRPatrolApp/cbmr_weather_patrol_app/CBMR_Weather/static/CB_Logo.jpg', width=100, height=50)  # pythonAnywhere
     data = [[img, 'CBSP Morning Weather and Avalanche Report', '']]
     t = Table(data)

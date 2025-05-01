@@ -16,12 +16,7 @@ from CBMR_Weather.models import Snow, Avalanche, Pm_form
 
 
 
-def get_month_by_ytd(month, season):
-    total_month_ytd = db.session.query(Snow.ytd_snow).filter(Snow.season == season, Snow.month == month).order_by(Snow.date.desc()).first()
-    if total_month_ytd is None or total_month_ytd[0] is None:
-        return 0
-    else:
-        return total_month_ytd[0]
+
 
 def get_month_by_hn24(month, season):
     total_month_hn24 = db.session.query(func.sum(Snow.hn24)).filter(Snow.season == season, Snow.month == month).scalar()
@@ -89,22 +84,10 @@ def view():
         query = query.order_by(Snow.date.desc())
 
     snow = query.all()
-    pm_form_dates = [str(i.date) for i in Pm_form.query.all()]
-    seasons_db = db.session.query(Snow.season).distinct()
-    seasons_totals = []
-    months = ['10','11','12','1','2','3','4']
-    for s in seasons_db:
-        season_monthly_totals = [s[0]]
-        prev_month = 0
-        for m in months:
-            month_total= get_month_by_ytd(m, s[0])
-            season_monthly_totals.append(month_total - prev_month)
-            prev_month = month_total
-        season_monthly_totals.append(prev_month)
-        seasons_totals.append(season_monthly_totals)
 
-    seasons_totals.sort(key=lambda x: x[-1], reverse=True)
-    return render_template("view.html",ytd_snow_total = seasons_totals, snow=snow, search=search_query, column=search_column, sort_order=sort_order,pm_form_dates=pm_form_dates)
+    pm_form_dates = [str(i.date) for i in Pm_form.query.all()]
+
+    return render_template("view.html", snow=snow, search=search_query, column=search_column, sort_order=sort_order,pm_form_dates=pm_form_dates)
 
 @bp_view.route('/view_am/<inputDate>', methods=['GET', 'POST'])
 @login_required
