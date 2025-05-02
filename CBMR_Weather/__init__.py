@@ -15,9 +15,6 @@ from CBMR_Weather.models import User, Snow
 
 def create_app():
     app = Flask(__name__, static_url_path='/static')
-    #json = FlaskJSON(app)
-    #"C:\Users\rhysj\OneDrive\Desktop\cbmr_weather_patrol_app\CBMR_Weather\instance\CBMR_Weather.db"
-    #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CBMR_Weather.db'  # Local
     #sqlite:///C:\Users\rhysj\OneDrive\Desktop\cbmr_weather_patrol_app\CBMR_Weather\instance\CBMR_Weather.db
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CBMR_Weather.db'  # Local
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/CBMRPatrolApp/database/CBMR_Weather.db' #pythonAnywhere
@@ -26,7 +23,8 @@ def create_app():
 
     db.init_app(app)
 
-    from CBMR_Weather.routes import bp_home, bp_am_form, bp_forms, bp_read, bp_view, bp_pm_form, bp_update_form, bp_past_form, bp_update_pm_form
+    from CBMR_Weather.routes import (bp_home, bp_am_form, bp_forms, bp_read, bp_view, bp_rankings,
+                                     bp_pm_form, bp_update_form, bp_past_form, bp_update_pm_form)
     app.register_blueprint(bp_home)
     app.register_blueprint(bp_am_form)
     app.register_blueprint(bp_forms)
@@ -36,6 +34,7 @@ def create_app():
     app.register_blueprint(bp_update_form)
     app.register_blueprint(bp_past_form)
     app.register_blueprint(bp_update_pm_form)
+    app.register_blueprint(bp_rankings)
 
     login_manager.login_view = "/"
     login_manager.init_app(app)

@@ -5,6 +5,7 @@ from flask import request, redirect, url_for, send_file
 import pandas as pd
 from datetime import datetime
 import io
+from sqlalchemy import func
 
 # from CBMR_Weather.app import Pm_form
 from CBMR_Weather.routes import bp_view
@@ -12,6 +13,27 @@ from flask import render_template
 from sqlalchemy import desc
 from CBMR_Weather.extensions import db
 from CBMR_Weather.models import Snow, Avalanche, Pm_form
+
+
+
+
+
+def get_month_by_hn24(month, season):
+    total_month_hn24 = db.session.query(func.sum(Snow.hn24)).filter(Snow.season == season, Snow.month == month).scalar()
+    if total_month_hn24 is None:
+        return 0
+    return total_month_hn24
+
+
+def get_month_totals(month, season):
+    total_month_ytd = None#get_month_by_ytd(month,season)
+    if total_month_ytd is None:
+        total_month = get_month_by_hn24(month,season)
+    else:
+        total_month = total_month_ytd
+    if total_month is None:
+        return 0
+    return total_month
 
 
 @bp_view.route("/view",methods=['GET', 'POST'])
@@ -63,7 +85,9 @@ def view():
         query = query.order_by(Snow.date.desc())
 
     snow = query.all()
+
     pm_form_dates = [str(i.date) for i in Pm_form.query.all()]
+
     return render_template("view.html", snow=snow, search=search_query, column=search_column, sort_order=sort_order,pm_form_dates=pm_form_dates)
 
 @bp_view.route('/view_am/<inputDate>', methods=['GET', 'POST'])
