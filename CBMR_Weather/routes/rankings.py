@@ -17,7 +17,6 @@ def get_month_by_ytd(month, season):
 
 @bp_rankings.route("/rankings",methods=['GET', 'POST'])
 def rankings():
-
     seasons_db = db.session.query(Snow.season).distinct()
     seasons_totals = []
     months = ['10', '11', '12', '1', '2', '3', '4']

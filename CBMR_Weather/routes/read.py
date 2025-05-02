@@ -16,11 +16,8 @@ import json
 def read():
 
     stats = get_topStats()
-
-    seasons_db = db.session.query(Snow.season).distinct()
-    seasons = []
-    for s in seasons_db:
-        seasons.append(s[0])
+    seasons_db = db.session.query(Snow.season).distinct().order_by(Snow.date.desc())
+    seasons = [row.season for row in seasons_db]
     if request.method == 'POST':
         # Get form values and store them in previous_request
         previous_request = {
@@ -133,34 +130,17 @@ def get_swe_snow():
     return dates, swe
 
 def get_hn24_ytd_snow(season):
-    hn24_snow = db.session.query(Snow.hn24, Snow.date).filter(Snow.season == season).order_by(Snow.date)
     ytd = db.session.query(Snow.ytd_snow, Snow.date).filter(Snow.season == season).order_by(Snow.date)
     dates = []
     ytd_snow = []
     past_hn24 = 0
-    if season=='23-24' or season=='24-25':
-        for row in hn24_snow:
-            date_format = datetime.strftime(row[1], '%m-%d-%Y')
-            dates.append(date_format)
-            if (row[0] != None):
-                try:
-                    hn24 = float(row[0])
-                    ytd_snow.append(hn24 + past_hn24)
-                    past_hn24 = hn24 + past_hn24
-                except:
-                    hn24 = 0
-            else:
-
-                ytd_snow.append(0 + past_hn24)
-    else:
-        for row in ytd:
+    for row in ytd:
             date_format = datetime.strftime(row[1], '%m-%d-%Y')
             dates.append(date_format)
             if (row[0] != None ):
                 try:
                     hn24=float(row[0])
-                    ytd_snow.append(hn24 + past_hn24)
-                    past_hn24 = hn24 + past_hn24
+                    ytd_snow.append(hn24)
                 except:
                     hn24=0
             else:
