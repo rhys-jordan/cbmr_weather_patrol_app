@@ -1,3 +1,6 @@
+
+import requests
+import os
 from flask import render_template, request, redirect, session
 from flask_login import  login_user,logout_user,current_user,login_required
 from sqlalchemy import desc, asc
@@ -38,59 +41,57 @@ def handle_post_login():
 
 @bp_home.route('/resetEmail', methods=['POST'])
 def reset_email():
-    # snowsafetycb@gmail.com
-    # CB email_key:
-
-    sender_email = "clynckejje328@gmail.com"
-    receiver_email = "clynckejje328@gmail.com"
-    email_key = "rmzx qdnl ovtr psmu"
-
-    subject = "CBMR Patrol App Reset Login"
-
-    link = "http://127.0.0.1:5000/loginReset"  # local
-    # link = "https://cbmrpatrolapp.pythonanywhere.com/loginReset" #pythonAnywhere
-
 
     user = User.query.filter_by(id=1).first()
     username = user.username
     password = user.password
     confirmation_key = user.password
 
-    body = f"""
-        Hello,
+    # Mailgun credentials
 
-        Your current username is: {username}
-        Your current password is: {password}
+    #PUT KEY HERE !!!!
+    #key = ''
 
-        If you want to change your username and password:
-        Use the link and confirmation key below.
+    DOMAIN = 'sandbox3dc3a9492c9e4cc38595dcfb7c65b4e0.mailgun.org'
+    sender = f"CBMR Ski Patrol <mailgun@{DOMAIN}>"
+    receiver = "snowsafetycb@gmail.com"
 
-        Here is the password reset link: {link}
-        Your confirmation key is: {confirmation_key}
+    # Compose the email content
+    subject = "CBMR Patrol App Reset Login"
+    text = f"""Hello,
 
-        Please do not share this information.
+    Your current username is: {username}
+    Your current password is: {password}
 
-        Hoping for snow,
-        CBMR Ski Patrol
-    """
+    Use the link and confirmation key below.
 
-    msg = MIMEMultipart()
-    msg['From'] = sender_email
-    msg['To'] = receiver_email
-    msg['Subject'] = subject
+    Reset link: https://cbmrpatrolapp.pythonanywhere.com/loginReset
+    Confirmation key: {confirmation_key}
 
-    msg.attach(MIMEText(body, 'plain'))
+    Please do not share this information.
+
+    Hoping for snow,
+    CBMR Ski Patrol"""
 
     try:
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(sender_email, email_key)
-        text = msg.as_string()
-        server.sendmail(sender_email, receiver_email, text)
-        server.quit()
-        print("Email sent successfully!")
+        response = requests.post(
+            f"https://api.mailgun.net/v3/{DOMAIN}/messages",
+            auth=("api", key),
+            data={
+                "from": sender,
+                "to": receiver,
+                "subject": subject,
+                "text": text
+            }
+        )
+
+        if response.status_code == 200:
+            print("Email sent successfully!")
+        else:
+            print(f"Failed to send email. Status: {response.status_code}, Response: {response.text}")
+
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error sending email: {e}")
 
     return redirect("/login")
 
