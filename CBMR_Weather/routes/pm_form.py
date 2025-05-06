@@ -1,7 +1,7 @@
 from flask import render_template, request, send_file
 from flask_login import login_required
 from CBMR_Weather.generate_pdf_pm import generate_pdf_pm
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from CBMR_Weather.routes import bp_pm_form
 from CBMR_Weather.models import Snow, Pm_form
@@ -53,7 +53,8 @@ def pm_form():
 
 
     else:
-        now = datetime.now()
+        now = datetime.now()  #Local
+        #now = datetime.now() - timedelta(hours=6) #pythonAnywhere
         formatted_now = now.strftime("%Y-%m-%dT%H:%M")
         snow = Snow.query.filter_by(date=now.strftime("%Y-%m-%d")).first()
         return render_template('pm-form.html', now=formatted_now, snow=snow)
