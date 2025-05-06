@@ -99,7 +99,8 @@ def am_form():
         else:
             return render_template('confirm.html', flash_message=True)
     else:
-        now = datetime.now()
+        now = datetime.now() #Local
+        #now = datetime.now() - timedelta(hours=6) #pythonAnywhere
         formatted_now = now.strftime("%Y-%m-%dT%H:%M")
         day_before = now - timedelta(days=1)
         dateBefore = day_before.strftime("%Y-%m-%d")
