@@ -4,7 +4,7 @@
 run main.py
 
 ### Introduction:
-The Crested Butte Mountain Resort Weather Application is a collaborative project between the Western Computer Science Capstone students Nathaniel Rengo, Rhys Jordan, Joshua Clyncke, and the Crested Butte Ski Patrol under the direction of Krista Hildebrandt. This project will result in an online application that allows CBMR Ski Patrol to better control their collection, storage, and use of data regarding snow and weather on the Resort. 
+The Crested Butte Mountain Resort Weather Application is a collaborative project between the Western Computer Science Capstone students Nathaniel Rengo, Rhys Jordan, Joshua Clyncke, and the Crested Butte Ski Patrol under the direction of Krista Hildebrandt. This project will result in an online application that allows CBMR Ski Patrol to better control their collection, storage, and use of data regarding snow and weather on the Resort. You can see a presentation linked above labled CBMR_presentation.pdf
 
 
 ### Purpose and objectives:
